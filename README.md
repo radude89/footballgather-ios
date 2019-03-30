@@ -29,7 +29,7 @@ This repo contains the iOS App logic. For the server side version, please check 
 ## Screens
 
 <p align="center">
-    <img src="https://github.com/radude89/footballgather-ios/blob/master/Screenshots/FootballGather-db-mockups-v01.png" width="50%" height="50%" alt="FootballGather-db-diagram" />
+    <img src="https://github.com/radude89/footballgather-ios/blob/master/Screenshots/FootballGather-db-mockups-v01.png" width="70%" height="70%" alt="FootballGather-db-diagram" />
 </p>
 
 ## Author

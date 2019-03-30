@@ -7,7 +7,6 @@
                                                                                                                          
 FootballGather is a demo project for friends to get together and play football matches as quick as possible.
 My intention is to to try out different iOS Architecture Patterns and use server side Swift (Vapor this time).
-I created the mocks using Balsamiq.
 
 This repo contains the iOS App logic. For the server side version, please check <a href="https://github.com/radude89/footballgather-ws" target="_blank">Football Gather - iOS Side</a>.
 

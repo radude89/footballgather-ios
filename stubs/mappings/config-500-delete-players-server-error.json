@@ -1,0 +1,18 @@
+{
+    "request": {
+        "method": "DELETE",
+        "url": "/api/server-error/4",
+        "headers": {
+          "Accept" : {
+            "equalTo" : "application/json"
+          },
+          "Content-Type": {
+            "equalTo" : "application/json"
+          }
+        }
+    },
+    "response": {
+        "status": 500,
+        "fault": "MALFORMED_RESPONSE_CHUNK"
+    }
+}

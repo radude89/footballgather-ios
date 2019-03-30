@@ -1,0 +1,21 @@
+{
+    "request": {
+        "method": "PUT",
+        "url": "/api/invalid-status-code/E88FE54F-AEE4-4160-8410-CB538BC04E9F",
+        "headers": {
+          "Accept" : {
+            "equalTo" : "application/json"
+          },
+          "Content-Type": {
+            "equalTo" : "application/json"
+          }
+        }
+    },
+    "response": {
+        "status": 205,
+        "headers": {
+            "Content-Type": "application/json; charset=utf-8",
+            "Location": "/api/939C0E30-7C25-436D-9AC6-571C2E339AB7"
+        }
+    }
+}

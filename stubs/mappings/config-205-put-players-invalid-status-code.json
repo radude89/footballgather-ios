@@ -1,0 +1,21 @@
+{
+    "request": {
+        "method": "PUT",
+        "url": "/api/invalid-status-code/4",
+        "headers": {
+          "Accept" : {
+            "equalTo" : "application/json"
+          },
+          "Content-Type": {
+            "equalTo" : "application/json"
+          }
+        }
+    },
+    "response": {
+        "status": 205,
+        "headers": {
+            "Content-Type": "application/json; charset=utf-8",
+            "Location": "/api/939C0E30-7C25-436D-9AC6-571C2E339AB7"
+        }
+    }
+}

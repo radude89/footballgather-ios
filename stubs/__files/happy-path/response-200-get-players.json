@@ -1,0 +1,65 @@
+[
+    {
+        "userId": "07C3E7A9-7B0B-4CD8-97E0-93AEC7093862",
+        "skill": "beginner",
+        "id": 1,
+        "age": 18,
+        "favouriteTeam": "FC Team United",
+        "name": "John",
+        "preferredPosition": "goalkeeper"
+    },
+    {
+        "userId": "07C3E7A9-7B0B-4CD8-97E0-93AEC7093862",
+        "skill": "amateur",
+        "id": 2,
+        "age": 20,
+        "favouriteTeam": "Goalie CF",
+        "name": "Joe",
+        "preferredPosition": "defender"
+    },
+    {
+        "userId": "07C3E7A9-7B0B-4CD8-97E0-93AEC7093862",
+        "skill": "amateur",
+        "id": 3,
+        "age": 35,
+        "favouriteTeam": "Goalie CF",
+        "name": "Robert",
+        "preferredPosition": "defender"
+    },
+    {
+        "userId": "07C3E7A9-7B0B-4CD8-97E0-93AEC7093862",
+        "skill": "professional",
+        "id": 4,
+        "age": 20,
+        "favouriteTeam": "FC Team",
+        "name": "Perry",
+        "preferredPosition": "midfielder"
+    },
+    {
+        "userId": "07C3E7A9-7B0B-4CD8-97E0-93AEC7093862",
+        "skill": "beginner",
+        "id": 5,
+        "age": 28,
+        "favouriteTeam": "Nacional",
+        "name": "Lou",
+        "preferredPosition": "winger"
+    },
+    {
+        "userId": "07C3E7A9-7B0B-4CD8-97E0-93AEC7093862",
+        "skill": "professional",
+        "id": 6,
+        "age": 17,
+        "favouriteTeam": "School Team CF",
+        "name": "Michael",
+        "preferredPosition": "winger"
+    },
+    {
+        "userId": "07C3E7A9-7B0B-4CD8-97E0-93AEC7093862",
+        "skill": "beginner",
+        "id": 6,
+        "age": 19,
+        "favouriteTeam": "FC Team",
+        "name": "Richard",
+        "preferredPosition": "strike"
+    }
+]

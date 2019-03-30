@@ -1,0 +1,26 @@
+{
+    "request": {
+        "method": "PUT",
+        "url": "/api/players/success/4",
+        "headers": {
+          "Accept" : {
+            "equalTo" : "application/json"
+          },
+          "Content-Type": {
+            "equalTo" : "application/json"
+          },
+          "Authorization": {
+            "equalTo" : "Bearer v2s4o0XcRgDHF/VojbAmGQ=="
+          }
+        },
+        "bodyPatterns": [{
+          "equalToJson": "{\"name\": \"John\", \"favouriteTeam\": \"FC Team United\", \"age\": 18, \"skill\": \"beginner\", \"preferredPosition\": \"goalkeeper\"}"
+        }]
+    },
+    "response": {
+        "status": 204,
+        "headers": {
+            "Content-Type": "application/json; charset=utf-8"
+        }
+    }
+}

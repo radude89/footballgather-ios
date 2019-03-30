@@ -1,0 +1,21 @@
+{
+    "request": {
+        "method": "POST",
+        "url": "/api/invalid-uuid",
+        "headers": {
+          "Accept" : {
+            "equalTo" : "application/json"
+          },
+          "Content-Type": {
+            "equalTo" : "application/json"
+          }
+        }
+    },
+    "response": {
+        "status": 201,
+        "headers": {
+            "Content-Type": "application/json; charset=utf-8",
+            "Location": "/api/@#"
+        }
+    }
+}

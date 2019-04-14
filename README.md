@@ -9,7 +9,7 @@ FootballGather is a demo project for friends to get together and play football m
 My intention is to to try out different iOS Architecture Patterns and use server side Swift (Vapor this time).
 I used Balsamiq for creating mockups for the screens.
 
-This repo contains the iOS App logic. For the server side version, please check <a href="https://github.com/radude89/footballgather-ws" target="_blank">Football Gather - iOS Side</a>.
+This repo contains the iOS App logic. For the server side version, please check <a href="https://github.com/radude89/footballgather-ws" target="_blank">Football Gather - Server Side</a>.
 
 ## Features
 * Ability to add players
@@ -20,7 +20,7 @@ This repo contains the iOS App logic. For the server side version, please check 
 ## TODOs
 
 - [ ] MVC - Write the iOS app using MVC 
-- [ ] MVVM - Rewrite the iOS app on a different branch using MVVM with manual binding
+- [ ] MVVM - Rewrite the iOS app using MVVM with manual binding
 - [ ] MVVM with Coordinators - Clone the MVVM branch and add Coordinators
 - [ ] MVP - Rewrite the iOS  app using MVP
 - [ ] VIPER - Rewrite the iOS  app using VIPER

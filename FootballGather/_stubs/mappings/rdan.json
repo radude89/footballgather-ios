@@ -1,0 +1,10 @@
+{
+    "request": {
+        "method": "GET",
+        "url": "/api/rdan"
+    },
+    "response": {
+        "status": 201,
+        "body": "More content"
+    }
+}

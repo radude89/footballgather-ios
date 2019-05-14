@@ -13,6 +13,7 @@ enum ServiceError: Error {
     case unexpectedResponse
     case locationHeaderNotFound
     case userIdNotFound
+    case expectedDataInResponse
 }
 
 // MARK: - Network Session
@@ -47,30 +48,3 @@ struct Endpoint {
     }
 }
 
-// MARK: - ServiceRequest
-protocol URLRequestFactory {
-    func makeURLRequest() -> URLRequest
-}
-
-struct StandardURLRequestFactory: URLRequestFactory {
-    private let endpoint: Endpoint
-    private let headers: [String: String]
-    
-    init(endpoint: Endpoint,
-         headers: [String: String] = ["Content-Type": "application/json",
-                                      "Accept": "application/json"]) {
-        self.endpoint = endpoint
-        self.headers = headers
-    }
-    
-    func makeURLRequest() -> URLRequest {
-        guard let url = endpoint.url else {
-            fatalError("Unable to make url request")
-        }
-        
-        var urlRequest = URLRequest(url: url)
-        urlRequest.allHTTPHeaderFields = headers
-        
-        return urlRequest
-    }
-}

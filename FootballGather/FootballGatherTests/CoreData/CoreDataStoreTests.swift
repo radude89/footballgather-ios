@@ -81,7 +81,7 @@ final class CoreDataStoreTests: XCTestCase {
         XCTAssertEqual(gathers.count, 0)
     }
     
-    func test_retrieveManagedObjectsInBackground_HasZeroElements() {
+    func test_retrieveManagedObjectsInBackground_hasZeroElements() {
         let exp = expectation(description: "Fetch objects in background expectation")
         
         sut.createBackgroundQueue { [weak self] in
@@ -92,7 +92,7 @@ final class CoreDataStoreTests: XCTestCase {
         wait(for: [exp], timeout: TestConfigurator.defaultTimeout)
     }
     
-    func test_retrieveManagedObjects_HasZeroElements() {
+    func test_retrieveManagedObjects_hasZeroElements() {
         retrieveAndCheckObjectsCountIsZero()
     }
     

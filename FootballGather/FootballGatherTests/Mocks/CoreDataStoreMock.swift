@@ -1,5 +1,5 @@
 //
-//  Mock.swift
+//  CoreDataStoreMock.swift
 //  FootballGatherTests
 //
 //  Created by Dan, Radu-Ionut (RO - Bucharest) on 13/04/2019.

@@ -30,7 +30,7 @@ final class FootbalGatherKeychain {
             if let newValue = newValue {
                 storage.set(newValue, key: Keys.username)
             } else {
-                
+                storage.removeValue(forKey: Keys.username)
             }
         }
     }
@@ -43,7 +43,7 @@ final class FootbalGatherKeychain {
             if let newValue = newValue {
                 storage.set(newValue, key: Keys.password)
             } else {
-                
+                storage.removeValue(forKey: Keys.password)
             }
         }
     }

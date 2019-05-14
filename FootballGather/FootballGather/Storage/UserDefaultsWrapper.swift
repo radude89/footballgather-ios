@@ -40,7 +40,11 @@ extension UserDefaultsWrapper: KeyValueStorage {
     }
     
     func bool(forKey key: String) -> Bool? {
-        return userDefaults.bool(forKey: key)
+        if userDefaults.value(forKey: key) != nil {
+            return userDefaults.bool(forKey: key)
+        } else {
+            return nil
+        }
     }
     
     func removeValue(forKey key: String) {

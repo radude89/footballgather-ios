@@ -109,6 +109,7 @@ extension KeychainWrapper: KeyValueStorage {
         var query: [String: Any] = [:]
         query[kSecClass as String] = kSecClassGenericPassword
         query[kSecAttrAccount as String] = key
+        query[kSecAttrService as String] = service
         
         let status = SecItemDelete(query as CFDictionary)
         
@@ -120,6 +121,7 @@ extension KeychainWrapper: KeyValueStorage {
     func removeAll() {
         var query: [String: Any] = [:]
         query[kSecClass as String] = kSecClassGenericPassword
+        query[kSecAttrService as String] = service
         
         let status = SecItemDelete(query as CFDictionary)
         

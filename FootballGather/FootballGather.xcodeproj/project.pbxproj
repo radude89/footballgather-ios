@@ -14,6 +14,9 @@
 		F7034C5B22891C1B0003F506 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7034C4D22891C120003F506 /* User.swift */; };
 		F7034C5C22891C1B0003F506 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7034C4B22891C120003F506 /* Player.swift */; };
 		F7034C76228920AD0003F506 /* KeychainWrapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7034C75228920AD0003F506 /* KeychainWrapperTests.swift */; };
+		F7034C7A228A79060003F506 /* FootbalGatherKeychainTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7034C79228A79060003F506 /* FootbalGatherKeychainTests.swift */; };
+		F7034C7C228A7BA00003F506 /* UserDefaultsWrapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7034C7B228A7BA00003F506 /* UserDefaultsWrapperTests.swift */; };
+		F7034C7E228A9CC70003F506 /* FootballGatherUserDefaultsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7034C7D228A9CC70003F506 /* FootballGatherUserDefaultsTests.swift */; };
 		F762CA9122619C5C00947AED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F762CA9022619C5C00947AED /* AppDelegate.swift */; };
 		F762CA9322619C5C00947AED /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F762CA9222619C5C00947AED /* ViewController.swift */; };
 		F762CA9622619C5C00947AED /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F762CA9422619C5C00947AED /* Main.storyboard */; };
@@ -56,6 +59,9 @@
 		F7034C6322891F670003F506 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F7034C6F22891F690003F506 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F7034C75228920AD0003F506 /* KeychainWrapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWrapperTests.swift; sourceTree = "<group>"; };
+		F7034C79228A79060003F506 /* FootbalGatherKeychainTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootbalGatherKeychainTests.swift; sourceTree = "<group>"; };
+		F7034C7B228A7BA00003F506 /* UserDefaultsWrapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsWrapperTests.swift; sourceTree = "<group>"; };
+		F7034C7D228A9CC70003F506 /* FootballGatherUserDefaultsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootballGatherUserDefaultsTests.swift; sourceTree = "<group>"; };
 		F762CA8D22619C5C00947AED /* FootballGather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FootballGather.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F762CA9022619C5C00947AED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F762CA9222619C5C00947AED /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -104,6 +110,9 @@
 			children = (
 				F7034C492289192E0003F506 /* KeychainQueryFactoryTests.swift */,
 				F7034C75228920AD0003F506 /* KeychainWrapperTests.swift */,
+				F7034C79228A79060003F506 /* FootbalGatherKeychainTests.swift */,
+				F7034C7B228A7BA00003F506 /* UserDefaultsWrapperTests.swift */,
+				F7034C7D228A9CC70003F506 /* FootballGatherUserDefaultsTests.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -392,7 +401,10 @@
 				F782C8932261D7F90045EB2C /* CoreDataStoreTests.swift in Sources */,
 				F782C8992261F4640045EB2C /* FootballGather.xcdatamodeld in Sources */,
 				F7034C4A2289192E0003F506 /* KeychainQueryFactoryTests.swift in Sources */,
+				F7034C7A228A79060003F506 /* FootbalGatherKeychainTests.swift in Sources */,
+				F7034C7C228A7BA00003F506 /* UserDefaultsWrapperTests.swift in Sources */,
 				F782C8982261EC3E0045EB2C /* TestConfigurator.swift in Sources */,
+				F7034C7E228A9CC70003F506 /* FootballGatherUserDefaultsTests.swift in Sources */,
 				F782C8962261E11C0045EB2C /* CoreDataStoreMock.swift in Sources */,
 				F7034C76228920AD0003F506 /* KeychainWrapperTests.swift in Sources */,
 			);

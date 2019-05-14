@@ -86,7 +86,7 @@ final class KeychainWrapperTests: XCTestCase {
         XCTAssertEqual(actualValue, expectedValue)
     }
     
-    func test_keychainWrapper_overWritesBoolValue() {
+    func test_keychainWrapper_overwritesBoolValue() {
         let initialValue = false
         sut.set(initialValue, key: key)
         
@@ -96,6 +96,21 @@ final class KeychainWrapperTests: XCTestCase {
         let actualValue = sut.bool(forKey: key)
         
         XCTAssertEqual(actualValue, expectedValue)
+    }
+    
+    func test_keychainWrapper_removesValuesByService() {
+        let expectedValue = "test.value"
+        let keychainWrapper = KeychainWrapper(service: "\(service).two")
+        
+        sut.set(expectedValue, key: key)
+        keychainWrapper.set(expectedValue, key: key)
+        sut.removeAll()
+        let actualValue = keychainWrapper.string(forKey: key)
+        
+        XCTAssertNil(sut.string(forKey: key))
+        XCTAssertEqual(actualValue, expectedValue)
+        
+        keychainWrapper.removeAll()
     }
 
 }

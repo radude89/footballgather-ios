@@ -14,13 +14,14 @@ struct GetPlayersService {
     private let urlRequest: URLRequestFactory
     
     init(session: NetworkSession = URLSession.shared,
-         urlRequest: URLRequestFactory = StandardURLRequestFactory(endpoint: Endpoint(path: "api/players"))) {
+         urlRequest: URLRequestFactory = AuthURLRequestFactory(endpoint: Endpoint(path: "api/players"))) {
         self.session = session
         self.urlRequest = urlRequest
     }
     
     func getPlayers(completion: @escaping (Result<[PlayerResponseModel], Error>) -> Void) {
-        let request = urlRequest.makeURLRequest()
+        var request = urlRequest.makeURLRequest()
+        request.httpMethod = "GET"
         
         session.loadData(from: request) { (data, response, error) in
             if let error = error {
@@ -45,19 +46,34 @@ struct GetPlayersService {
 }
 
 // MARK: - Model
-struct PlayerResponseModel: Decodable {
+struct PlayerResponseModel {
     var id: Int
     var name: String
     var age: Int
-    var skill: Skill?
-    var preferredPosition: Position?
+    var skill: Player.Skill?
+    var preferredPosition: Player.Position?
     var favouriteTeam: String?
-    
-    enum Skill: String, Codable {
-        case beginner, amateur, professional
+}
+
+extension PlayerResponseModel: Decodable {
+    enum CodingKeys: String, CodingKey {
+        case id, name, age, skill, preferredPosition, favouriteTeam
     }
     
-    enum Position: String, Codable {
-        case goalkeeper, defender, midfielder, winger, striker
+    init(from decoder: Decoder) throws  {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        id = try container.decode(Int.self, forKey: .id)
+        name = try container.decode(String.self, forKey: .name)
+        age = try container.decode(Int.self, forKey: .age)
+        favouriteTeam = try container.decodeIfPresent(String.self, forKey: .favouriteTeam)
+        
+        if let skillDesc = try container.decodeIfPresent(String.self, forKey: .skill) {
+            skill = Player.Skill(rawValue: skillDesc)
+        }
+        
+        if let posDesc = try container.decodeIfPresent(String.self, forKey: .preferredPosition) {
+            preferredPosition = Player.Position(rawValue: posDesc)
+        }
     }
 }

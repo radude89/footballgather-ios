@@ -10,6 +10,7 @@
 import Foundation
 import CoreData
 
+// MARK: - Player
 final class Player: NSManagedObject {
     @nonobjc class func fetchRequest() -> NSFetchRequest<Player> {
         return NSFetchRequest<Player>(entityName: "Player")
@@ -17,16 +18,15 @@ final class Player: NSManagedObject {
     
     @NSManaged var age: Int32
     @NSManaged var favouriteTeam: String?
-    @NSManaged var name: String?
+    @NSManaged var name: String
     @NSManaged var preferredPosition: String?
-    @NSManaged var serverId: UUID?
+    @NSManaged var serverId: Int32
     @NSManaged var skill: String?
     @NSManaged var gathers: NSSet?
     @NSManaged var user: User?
-    
 }
 
-// MARK: Generated accessors for gathers
+// MARK: - Generated accessors for gathers
 extension Player {
     @objc(addGathersObject:)
     @NSManaged func addToGathers(_ value: Gather)
@@ -39,4 +39,41 @@ extension Player {
     
     @objc(removeGathers:)
     @NSManaged func removeFromGathers(_ values: NSSet)
+}
+
+// MARK: - Skill & Position enum wrappers
+extension Player {
+    enum Skill: String, Codable {
+        case beginner, amateur, professional
+    }
+    
+    enum Position: String, Codable {
+        case goalkeeper, defender, midfielder, winger, striker
+    }
+    
+    var skillOption: Skill? {
+        set {
+            skill = newValue?.rawValue
+        }
+        get {
+            if let skill = skill {
+                return Skill(rawValue: skill)
+            } else {
+                return nil
+            }
+        }
+    }
+    
+    var positionOption: Position? {
+        set {
+            preferredPosition = newValue?.rawValue
+        }
+        get {
+            if let preferredPosition = preferredPosition {
+                return Position(rawValue: preferredPosition)
+            } else {
+                return nil
+            }
+        }
+    }
 }

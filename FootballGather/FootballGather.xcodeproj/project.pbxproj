@@ -19,6 +19,8 @@
 		F7034C7E228A9CC70003F506 /* FootballGatherUserDefaultsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7034C7D228A9CC70003F506 /* FootballGatherUserDefaultsTests.swift */; };
 		F7034C80228ADC3C0003F506 /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7034C7F228ADC3C0003F506 /* Crypto.swift */; };
 		F7034C82228AF44C0003F506 /* CryptoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7034C81228AF44C0003F506 /* CryptoTests.swift */; };
+		F7034C84228BBCBF0003F506 /* CreatePlayerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7034C83228BBCBF0003F506 /* CreatePlayerService.swift */; };
+		F7034C86228BC2E90003F506 /* UpdatePlayerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7034C85228BC2E90003F506 /* UpdatePlayerService.swift */; };
 		F762CA9122619C5C00947AED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F762CA9022619C5C00947AED /* AppDelegate.swift */; };
 		F762CA9322619C5C00947AED /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F762CA9222619C5C00947AED /* ViewController.swift */; };
 		F762CA9622619C5C00947AED /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F762CA9422619C5C00947AED /* Main.storyboard */; };
@@ -64,6 +66,8 @@
 		F7034C7D228A9CC70003F506 /* FootballGatherUserDefaultsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootballGatherUserDefaultsTests.swift; sourceTree = "<group>"; };
 		F7034C7F228ADC3C0003F506 /* Crypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Crypto.swift; sourceTree = "<group>"; };
 		F7034C81228AF44C0003F506 /* CryptoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoTests.swift; sourceTree = "<group>"; };
+		F7034C83228BBCBF0003F506 /* CreatePlayerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePlayerService.swift; sourceTree = "<group>"; };
+		F7034C85228BC2E90003F506 /* UpdatePlayerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePlayerService.swift; sourceTree = "<group>"; };
 		F762CA8D22619C5C00947AED /* FootballGather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FootballGather.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F762CA9022619C5C00947AED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F762CA9222619C5C00947AED /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -118,6 +122,25 @@
 				F7034C7D228A9CC70003F506 /* FootballGatherUserDefaultsTests.swift */,
 			);
 			path = Storage;
+			sourceTree = "<group>";
+		};
+		F7034C87228BC2F10003F506 /* User */ = {
+			isa = PBXGroup;
+			children = (
+				F772265422620F8600445F67 /* CreateUserService.swift */,
+				F7ABD0AF2264702200AAEA87 /* LoginService.swift */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
+		F7034C88228BC2F80003F506 /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				F7D0B7AE22632F310059AA51 /* GetPlayersService.swift */,
+				F7034C83228BBCBF0003F506 /* CreatePlayerService.swift */,
+				F7034C85228BC2E90003F506 /* UpdatePlayerService.swift */,
+			);
+			path = Player;
 			sourceTree = "<group>";
 		};
 		F762CA8422619C5C00947AED = {
@@ -206,9 +229,8 @@
 			children = (
 				F77226582262248800445F67 /* NetworkSession.swift */,
 				F7E0D91E22644534002F4CE1 /* URLRequestFactory.swift */,
-				F772265422620F8600445F67 /* CreateUserService.swift */,
-				F7ABD0AF2264702200AAEA87 /* LoginService.swift */,
-				F7D0B7AE22632F310059AA51 /* GetPlayersService.swift */,
+				F7034C87228BC2F10003F506 /* User */,
+				F7034C88228BC2F80003F506 /* Player */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -374,9 +396,11 @@
 				F7D0B7AF22632F310059AA51 /* GetPlayersService.swift in Sources */,
 				F7034C80228ADC3C0003F506 /* Crypto.swift in Sources */,
 				F7ABD0B02264702200AAEA87 /* LoginService.swift in Sources */,
+				F7034C86228BC2E90003F506 /* UpdatePlayerService.swift in Sources */,
 				F7034C4522890DF40003F506 /* FootballGatherUserDefaults.swift in Sources */,
 				F772265522620F8600445F67 /* CreateUserService.swift in Sources */,
 				F7034C4722890E340003F506 /* UserDefaultsWrapper.swift in Sources */,
+				F7034C84228BBCBF0003F506 /* CreatePlayerService.swift in Sources */,
 				F7BF3B4F2280575E00F33913 /* KeychainWrapper.swift in Sources */,
 				F7034C5C22891C1B0003F506 /* Player.swift in Sources */,
 				F7BF3B5122805BA300F33913 /* KeychainQueryFactory.swift in Sources */,

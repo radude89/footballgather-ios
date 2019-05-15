@@ -65,5 +65,24 @@ final class FootbalGatherKeychainTests: XCTestCase {
         sut.password = nil
         XCTAssertNil(sut.password)
     }
+    
+    func test_keychain_tokenIsNil() {
+        XCTAssertNil(sut.token)
+    }
+    
+    func test_keychain_tokenIsNotNil() {
+        let expectedtoken = "test.token"
+        sut.token = expectedtoken
+        
+        XCTAssertEqual(sut.token, expectedtoken)
+    }
+    
+    func test_keychain_tokenIsRemoved() {
+        sut.token = "test.token"
+        XCTAssertNotNil(sut.token)
+        
+        sut.token = nil
+        XCTAssertNil(sut.token)
+    }
 
 }

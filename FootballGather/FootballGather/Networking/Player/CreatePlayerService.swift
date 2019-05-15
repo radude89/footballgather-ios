@@ -1,27 +1,28 @@
 //
-//  CreateUserService.swift
+//  CreatePlayerService.swift
 //  FootballGather
 //
-//  Created by Dan, Radu-Ionut (RO - Bucharest) on 13/04/2019.
+//  Created by Dan, Radu-Ionut (RO - Bucharest) on 15/05/2019.
 //  Copyright © 2019 Radu Dan. All rights reserved.
 //
 
 import Foundation
 
 // MARK: - Service
-struct CreateUserService {
+struct CreatePlayerService {
     private let session: NetworkSession
     private let urlRequest: URLRequestFactory
     
     init(session: NetworkSession = URLSession.shared,
-         urlRequest: URLRequestFactory = StandardURLRequestFactory(endpoint: Endpoint(path: "api/users"))) {
+         urlRequest: URLRequestFactory = AuthURLRequestFactory(endpoint: Endpoint(path: "api/players"))) {
         self.session = session
         self.urlRequest = urlRequest
     }
     
-    func create(user: RequestUserModel, completion: @escaping (Result<UUID, Error>) -> Void) {
+    func create(player: PlayerCreateData, completion: @escaping (Result<Int, Error>) -> Void) {
         var request = urlRequest.makeURLRequest()
-        request.httpBody = try? JSONEncoder().encode(user)
+        request.httpMethod = "POST"
+        request.httpBody = try? JSONEncoder().encode(player)
         
         session.loadData(from: request) { (data, response, error) in
             if let error = error {
@@ -34,25 +35,28 @@ struct CreateUserService {
                 return
             }
             
-            guard let userIdLocation = httpResponse.allHeaderFields["Location"] as? String else {
+            guard let playerIdLocation = httpResponse.allHeaderFields["Location"] as? String else {
                 completion(.failure(ServiceError.locationHeaderNotFound))
                 return
             }
             
-            guard let userId = userIdLocation.components(separatedBy: "/").last,
-                let userUUID = UUID(uuidString: userId) else {
-                    completion(.failure(ServiceError.userIdNotFound))
+            guard let playerIdValue = playerIdLocation.components(separatedBy: "/").last,
+                let playerId = Int(playerIdValue) else {
+                    completion(.failure(ServiceError.resourceIdNotFound))
                     return
             }
             
-            completion(.success(userUUID))
+            completion(.success(playerId))
         }
     }
     
 }
 
-// MARK: - Model
-struct RequestUserModel: Encodable {
-    let username: String
-    let password: String
+// MARK - Model
+struct PlayerCreateData: Encodable {
+    var name: String
+    var age: Int
+    var skill: Player.Skill?
+    var preferredPosition: Player.Position?
+    var favouriteTeam: String?
 }

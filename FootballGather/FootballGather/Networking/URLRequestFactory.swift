@@ -12,6 +12,7 @@ import Foundation
 protocol URLRequestFactory {
     func makeURLRequest() -> URLRequest
     var defaultHeaders: [String: String] { get }
+    var endpoint: Endpoint { get set }
 }
 
 extension URLRequestFactory {
@@ -22,7 +23,7 @@ extension URLRequestFactory {
 
 // MARK: - Default URL request factory
 struct StandardURLRequestFactory: URLRequestFactory {
-    private let endpoint: Endpoint
+    var endpoint: Endpoint
     
     init(endpoint: Endpoint) {
         self.endpoint = endpoint
@@ -35,6 +36,35 @@ struct StandardURLRequestFactory: URLRequestFactory {
         
         var urlRequest = URLRequest(url: url)
         urlRequest.allHTTPHeaderFields = defaultHeaders
+        
+        return urlRequest
+    }
+}
+
+// MARK: - AuthURLRequestFactory
+struct AuthURLRequestFactory: URLRequestFactory {
+    var endpoint: Endpoint
+    private let keychain: ApplicationKeychain
+    
+    init(endpoint: Endpoint,
+         keychain: ApplicationKeychain = FootbalGatherKeychain.shared) {
+        self.endpoint = endpoint
+        self.keychain = keychain
+    }
+    
+    func makeURLRequest() -> URLRequest {
+        guard let url = endpoint.url else {
+            fatalError("Unable to make url request")
+        }
+        
+        var headers = defaultHeaders
+        
+        if let token = keychain.token {
+            headers["Authorization"] = "Bearer " + token
+        }
+        
+        var urlRequest = URLRequest(url: url)
+        urlRequest.allHTTPHeaderFields = headers
         
         return urlRequest
     }

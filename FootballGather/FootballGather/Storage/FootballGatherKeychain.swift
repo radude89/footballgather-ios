@@ -8,11 +8,19 @@
 
 import Foundation
 
+protocol ApplicationKeychain {
+    var username: String? { get set }
+    var password: String? { get set }
+    var token: String? { get set }
+}
+
+
 final class FootbalGatherKeychain {
     
     private enum Keys {
         static let username = "footballgather_username"
         static let password = "footballgather_password"
+        static let token = "footballgather_token"
     }
     
     let storage: KeyValueStorage
@@ -21,6 +29,10 @@ final class FootbalGatherKeychain {
     init(storage: KeyValueStorage = KeychainWrapper()) {
         self.storage = storage
     }
+    
+}
+
+extension FootbalGatherKeychain: ApplicationKeychain {
     
     var username: String? {
         get {
@@ -48,5 +60,17 @@ final class FootbalGatherKeychain {
         }
     }
     
+    var token: String? {
+        get {
+            return storage.string(forKey: Keys.token)
+        }
+        set {
+            if let newValue = newValue {
+                storage.set(newValue, key: Keys.token)
+            } else {
+                storage.removeValue(forKey: Keys.token)
+            }
+        }
+    }
+    
 }
-

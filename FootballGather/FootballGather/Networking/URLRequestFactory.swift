@@ -25,10 +25,6 @@ extension URLRequestFactory {
 struct StandardURLRequestFactory: URLRequestFactory {
     var endpoint: Endpoint
     
-    init(endpoint: Endpoint) {
-        self.endpoint = endpoint
-    }
-    
     func makeURLRequest() -> URLRequest {
         guard let url = endpoint.url else {
             fatalError("Unable to make url request")

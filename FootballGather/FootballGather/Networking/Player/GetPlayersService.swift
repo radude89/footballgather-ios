@@ -9,7 +9,7 @@
 import Foundation
 
 // MARK: - Service
-struct GetPlayersService {
+final class GetPlayersService {
     private let session: NetworkSession
     private let urlRequest: URLRequestFactory
     

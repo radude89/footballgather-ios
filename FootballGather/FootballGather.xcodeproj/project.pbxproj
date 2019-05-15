@@ -126,16 +126,16 @@
 			path = Storage;
 			sourceTree = "<group>";
 		};
-		F7034C87228BC2F10003F506 /* User */ = {
+		F7034C87228BC2F10003F506 /* Users */ = {
 			isa = PBXGroup;
 			children = (
 				F772265422620F8600445F67 /* CreateUserService.swift */,
 				F7ABD0AF2264702200AAEA87 /* LoginService.swift */,
 			);
-			path = User;
+			path = Users;
 			sourceTree = "<group>";
 		};
-		F7034C88228BC2F80003F506 /* Player */ = {
+		F7034C88228BC2F80003F506 /* Players */ = {
 			isa = PBXGroup;
 			children = (
 				F7D0B7AE22632F310059AA51 /* GetPlayersService.swift */,
@@ -143,7 +143,7 @@
 				F7034C83228BBCBF0003F506 /* CreatePlayerService.swift */,
 				F7034C85228BC2E90003F506 /* UpdatePlayerService.swift */,
 			);
-			path = Player;
+			path = Players;
 			sourceTree = "<group>";
 		};
 		F762CA8422619C5C00947AED = {
@@ -232,8 +232,8 @@
 			children = (
 				F77226582262248800445F67 /* NetworkSession.swift */,
 				F7E0D91E22644534002F4CE1 /* URLRequestFactory.swift */,
-				F7034C87228BC2F10003F506 /* User */,
-				F7034C88228BC2F80003F506 /* Player */,
+				F7034C87228BC2F10003F506 /* Users */,
+				F7034C88228BC2F80003F506 /* Players */,
 			);
 			path = Networking;
 			sourceTree = "<group>";

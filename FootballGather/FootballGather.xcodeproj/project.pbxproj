@@ -330,7 +330,6 @@
 				F762CAA022619C5E00947AED /* Sources */,
 				F762CAA122619C5E00947AED /* Frameworks */,
 				F762CAA222619C5E00947AED /* Resources */,
-				F7D0B7AD226286490059AA51 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -400,26 +399,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		F7D0B7AD226286490059AA51 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#cd \"/${SRCROOT}/_stubs\"\n\n#osascript run-wiremocks.applescript \"/${SRCROOT}/_stubs\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		F762CA8922619C5C00947AED /* Sources */ = {

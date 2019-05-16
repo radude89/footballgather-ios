@@ -1,0 +1,24 @@
+{
+    "request": {
+        "method": "GET",
+        "url": "/api/gathers/E88FE54F-AEE4-4160-8410-CB538BC04E9F/players",
+        "headers": {
+          "Accept" : {
+            "equalTo" : "application/json"
+          },
+          "Content-Type": {
+            "equalTo" : "application/json"
+          },
+          "Authorization": {
+            "equalTo" : "Bearer v2s4o0XcRgDHF/VojbAmGQ=="
+          }
+        }
+    },
+    "response": {
+        "status": 200,
+        "headers": {
+            "Content-Type": "application/json; charset=utf-8"
+        },
+        "bodyFileName": "happy-path/response-200-get-gathers-players.json"
+    }
+}

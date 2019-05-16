@@ -264,10 +264,10 @@
 			children = (
 				F77226582262248800445F67 /* NetworkSession.swift */,
 				F7E0D91E22644534002F4CE1 /* URLRequestFactory.swift */,
-				F72749D9228D0C2B00698D0D /* GathersPlayers */,
-				F72749CE228C506400698D0D /* Gathers */,
 				F7034C87228BC2F10003F506 /* Users */,
+				F72749CE228C506400698D0D /* Gathers */,
 				F7034C88228BC2F80003F506 /* Players */,
+				F72749D9228D0C2B00698D0D /* GathersPlayers */,
 			);
 			path = Networking;
 			sourceTree = "<group>";

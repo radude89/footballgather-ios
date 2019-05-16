@@ -1,0 +1,20 @@
+[
+  {
+      "userId": "07C3E7A9-7B0B-4CD8-97E0-93AEC7093862",
+      "skill": "beginner",
+      "id": 1,
+      "age": 18,
+      "favouriteTeam": "FC Team United",
+      "name": "John",
+      "preferredPosition": "goalkeeper"
+  },
+  {
+      "userId": "07C3E7A9-7B0B-4CD8-97E0-93AEC7093862",
+      "skill": "amateur",
+      "id": 3,
+      "age": 35,
+      "favouriteTeam": "Goalie CF",
+      "name": "Robert",
+      "preferredPosition": "defender"
+  }
+]

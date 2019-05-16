@@ -1,0 +1,20 @@
+[
+    {
+        "id": "E88FE54F-AEE4-4160-8410-CB538BC04E9F",
+        "score": "1-1",
+        "userId": "07C3E7A9-7B0B-4CD8-97E0-93AEC7093862",
+        "winnerTeam": "None"
+    },
+    {
+        "id": "F88FE54F-AEE4-4160-8410-CB538BC04E9F",
+        "score": "1-0",
+        "userId": "07C3E7A9-7B0B-4CD8-97E0-93AEC7093862",
+        "winnerTeam": "Team A"
+    },
+    {
+        "id": "G88FE54F-AEE4-4160-8410-CB538BC04E9F",
+        "score": "2-5",
+        "userId": "07C3E7A9-7B0B-4CD8-97E0-93AEC7093862",
+        "winnerTeam": "Team B"
+    }
+]

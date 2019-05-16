@@ -1,0 +1,24 @@
+{
+    "request": {
+        "method": "POST",
+        "url": "/api/users",
+        "headers": {
+          "Accept" : {
+            "equalTo" : "application/json"
+          },
+          "Content-Type": {
+            "equalTo" : "application/json"
+          }
+        },
+        "bodyPatterns": [{
+          "equalToJson": "{\"username\": \"demo-user\", \"password\": \"demo-pass\"}"
+        }]
+    },
+    "response": {
+        "status": 201,
+        "headers": {
+            "Content-Type": "application/json; charset=utf-8",
+            "Location": "/api/users/939C0E30-7C25-436D-9AC6-571C2E339AB7"
+        }
+    }
+}

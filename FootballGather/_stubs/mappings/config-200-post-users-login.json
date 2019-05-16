@@ -1,0 +1,25 @@
+{
+    "request": {
+        "method": "POST",
+        "url": "/api/users/login",
+        "headers": {
+          "Accept" : {
+            "equalTo" : "application/json"
+          },
+          "Content-Type": {
+            "equalTo" : "application/json"
+          }
+        },
+        "basicAuthCredentials" : {
+          "username" : "demo-user",
+          "password" : "demo-pass"
+        }
+    },
+    "response": {
+        "status": 200,
+        "headers": {
+            "Content-Type": "application/json; charset=utf-8"
+        },
+        "bodyFileName": "happy-path/response-200-users-login.json"
+    }
+}

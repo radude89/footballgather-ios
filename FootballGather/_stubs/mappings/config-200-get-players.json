@@ -1,0 +1,24 @@
+{
+    "request": {
+        "method": "GET",
+        "url": "/api/players",
+        "headers": {
+          "Accept" : {
+            "equalTo" : "application/json"
+          },
+          "Content-Type": {
+            "equalTo" : "application/json"
+          },
+          "Authorization": {
+            "equalTo" : "Bearer v2s4o0XcRgDHF/VojbAmGQ=="
+          }
+        }
+    },
+    "response": {
+        "status": 200,
+        "headers": {
+            "Content-Type": "application/json; charset=utf-8"
+        },
+        "bodyFileName": "happy-path/response-200-get-players.json"
+    }
+}

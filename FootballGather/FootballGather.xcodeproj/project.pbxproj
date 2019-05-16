@@ -21,7 +21,13 @@
 		F7034C82228AF44C0003F506 /* CryptoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7034C81228AF44C0003F506 /* CryptoTests.swift */; };
 		F7034C84228BBCBF0003F506 /* CreatePlayerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7034C83228BBCBF0003F506 /* CreatePlayerService.swift */; };
 		F7034C86228BC2E90003F506 /* UpdatePlayerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7034C85228BC2E90003F506 /* UpdatePlayerService.swift */; };
-		F7034C8E228BCD200003F506 /* GetPlayerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7034C8D228BCD200003F506 /* GetPlayerService.swift */; };
+		F72749CD228C4DF100698D0D /* DeletePlayerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72749CC228C4DF100698D0D /* DeletePlayerService.swift */; };
+		F72749D0228C510000698D0D /* CreateGatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72749CF228C510000698D0D /* CreateGatherService.swift */; };
+		F72749D2228D078D00698D0D /* GetGathersService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72749D1228D078D00698D0D /* GetGathersService.swift */; };
+		F72749D6228D0A5400698D0D /* UpdateGatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72749D5228D0A5400698D0D /* UpdateGatherService.swift */; };
+		F72749D8228D0BCF00698D0D /* DeleteGatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72749D7228D0BCF00698D0D /* DeleteGatherService.swift */; };
+		F72749DB228D0C5100698D0D /* GetPlayersForGatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72749DA228D0C5100698D0D /* GetPlayersForGatherService.swift */; };
+		F72749DD228D0FC800698D0D /* AddPlayerToGatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72749DC228D0FC800698D0D /* AddPlayerToGatherService.swift */; };
 		F762CA9122619C5C00947AED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F762CA9022619C5C00947AED /* AppDelegate.swift */; };
 		F762CA9322619C5C00947AED /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F762CA9222619C5C00947AED /* ViewController.swift */; };
 		F762CA9622619C5C00947AED /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F762CA9422619C5C00947AED /* Main.storyboard */; };
@@ -69,7 +75,13 @@
 		F7034C81228AF44C0003F506 /* CryptoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoTests.swift; sourceTree = "<group>"; };
 		F7034C83228BBCBF0003F506 /* CreatePlayerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePlayerService.swift; sourceTree = "<group>"; };
 		F7034C85228BC2E90003F506 /* UpdatePlayerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePlayerService.swift; sourceTree = "<group>"; };
-		F7034C8D228BCD200003F506 /* GetPlayerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPlayerService.swift; sourceTree = "<group>"; };
+		F72749CC228C4DF100698D0D /* DeletePlayerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePlayerService.swift; sourceTree = "<group>"; };
+		F72749CF228C510000698D0D /* CreateGatherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateGatherService.swift; sourceTree = "<group>"; };
+		F72749D1228D078D00698D0D /* GetGathersService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetGathersService.swift; sourceTree = "<group>"; };
+		F72749D5228D0A5400698D0D /* UpdateGatherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateGatherService.swift; sourceTree = "<group>"; };
+		F72749D7228D0BCF00698D0D /* DeleteGatherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteGatherService.swift; sourceTree = "<group>"; };
+		F72749DA228D0C5100698D0D /* GetPlayersForGatherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPlayersForGatherService.swift; sourceTree = "<group>"; };
+		F72749DC228D0FC800698D0D /* AddPlayerToGatherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlayerToGatherService.swift; sourceTree = "<group>"; };
 		F762CA8D22619C5C00947AED /* FootballGather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FootballGather.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F762CA9022619C5C00947AED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F762CA9222619C5C00947AED /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -138,12 +150,32 @@
 		F7034C88228BC2F80003F506 /* Players */ = {
 			isa = PBXGroup;
 			children = (
-				F7D0B7AE22632F310059AA51 /* GetPlayersService.swift */,
-				F7034C8D228BCD200003F506 /* GetPlayerService.swift */,
 				F7034C83228BBCBF0003F506 /* CreatePlayerService.swift */,
+				F7D0B7AE22632F310059AA51 /* GetPlayersService.swift */,
 				F7034C85228BC2E90003F506 /* UpdatePlayerService.swift */,
+				F72749CC228C4DF100698D0D /* DeletePlayerService.swift */,
 			);
 			path = Players;
+			sourceTree = "<group>";
+		};
+		F72749CE228C506400698D0D /* Gathers */ = {
+			isa = PBXGroup;
+			children = (
+				F72749CF228C510000698D0D /* CreateGatherService.swift */,
+				F72749D1228D078D00698D0D /* GetGathersService.swift */,
+				F72749D5228D0A5400698D0D /* UpdateGatherService.swift */,
+				F72749D7228D0BCF00698D0D /* DeleteGatherService.swift */,
+			);
+			path = Gathers;
+			sourceTree = "<group>";
+		};
+		F72749D9228D0C2B00698D0D /* GathersPlayers */ = {
+			isa = PBXGroup;
+			children = (
+				F72749DA228D0C5100698D0D /* GetPlayersForGatherService.swift */,
+				F72749DC228D0FC800698D0D /* AddPlayerToGatherService.swift */,
+			);
+			path = GathersPlayers;
 			sourceTree = "<group>";
 		};
 		F762CA8422619C5C00947AED = {
@@ -232,6 +264,8 @@
 			children = (
 				F77226582262248800445F67 /* NetworkSession.swift */,
 				F7E0D91E22644534002F4CE1 /* URLRequestFactory.swift */,
+				F72749D9228D0C2B00698D0D /* GathersPlayers */,
+				F72749CE228C506400698D0D /* Gathers */,
 				F7034C87228BC2F10003F506 /* Users */,
 				F7034C88228BC2F80003F506 /* Players */,
 			);
@@ -393,14 +427,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				F77226592262248800445F67 /* NetworkSession.swift in Sources */,
-				F7034C8E228BCD200003F506 /* GetPlayerService.swift in Sources */,
+				F72749DB228D0C5100698D0D /* GetPlayersForGatherService.swift in Sources */,
 				F762CA9322619C5C00947AED /* ViewController.swift in Sources */,
 				F7E0D91F22644534002F4CE1 /* URLRequestFactory.swift in Sources */,
+				F72749D0228C510000698D0D /* CreateGatherService.swift in Sources */,
 				F762CA9922619C5C00947AED /* FootballGather.xcdatamodeld in Sources */,
 				F7D0B7AF22632F310059AA51 /* GetPlayersService.swift in Sources */,
 				F7034C80228ADC3C0003F506 /* Crypto.swift in Sources */,
 				F7ABD0B02264702200AAEA87 /* LoginService.swift in Sources */,
 				F7034C86228BC2E90003F506 /* UpdatePlayerService.swift in Sources */,
+				F72749DD228D0FC800698D0D /* AddPlayerToGatherService.swift in Sources */,
+				F72749D6228D0A5400698D0D /* UpdateGatherService.swift in Sources */,
+				F72749CD228C4DF100698D0D /* DeletePlayerService.swift in Sources */,
 				F7034C4522890DF40003F506 /* FootballGatherUserDefaults.swift in Sources */,
 				F772265522620F8600445F67 /* CreateUserService.swift in Sources */,
 				F7034C4722890E340003F506 /* UserDefaultsWrapper.swift in Sources */,
@@ -408,12 +446,14 @@
 				F7BF3B4F2280575E00F33913 /* KeychainWrapper.swift in Sources */,
 				F7034C5C22891C1B0003F506 /* Player.swift in Sources */,
 				F7BF3B5122805BA300F33913 /* KeychainQueryFactory.swift in Sources */,
+				F72749D2228D078D00698D0D /* GetGathersService.swift in Sources */,
 				F762CAC82261A23300947AED /* CoreDataStore.swift in Sources */,
 				F7034C5B22891C1B0003F506 /* User.swift in Sources */,
 				F7034C5A22891C1B0003F506 /* Gather.swift in Sources */,
 				F7ABD0B322648CCE00AAEA87 /* FootballGatherKeychain.swift in Sources */,
 				F762CA9122619C5C00947AED /* AppDelegate.swift in Sources */,
 				F7BF3B4D227ED0C600F33913 /* KeyValueStorage.swift in Sources */,
+				F72749D8228D0BCF00698D0D /* DeleteGatherService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

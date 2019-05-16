@@ -1,30 +1,31 @@
 //
-//  CreateUserService.swift
+//  CreateGatherService.swift
 //  FootballGather
 //
-//  Created by Dan, Radu-Ionut (RO - Bucharest) on 13/04/2019.
+//  Created by Dan, Radu-Ionut (RO - Bucharest) on 15/05/2019.
 //  Copyright © 2019 Radu Dan. All rights reserved.
 //
 
 import Foundation
 
 // MARK: - Service
-final class CreateUserService {
+final class CreateGatherService {
     private let session: NetworkSession
     private let urlRequest: URLRequestFactory
     
     init(session: NetworkSession = URLSession.shared,
-         urlRequest: URLRequestFactory = StandardURLRequestFactory(endpoint: Endpoint(path: "api/users"))) {
+         urlRequest: URLRequestFactory = AuthURLRequestFactory(endpoint: Endpoint(path: "api/gathers"))) {
         self.session = session
         self.urlRequest = urlRequest
     }
     
-    func createUser(_ user: RequestUserModel, completion: @escaping (Result<UUID, Error>) -> Void) {
+    func createGather(_ gather: GatherCreateData, completion: @escaping (Result<Int, Error>) -> Void) {
         var request = urlRequest.makeURLRequest()
-        // hashing password
-        let requestUser = RequestUserModel(userModel: user)
         request.httpMethod = "POST"
-        request.httpBody = try? JSONEncoder().encode(requestUser)
+        
+        if gather.score != nil && gather.winnerTeam != nil {
+            request.httpBody = try? JSONEncoder().encode(gather)            
+        }
         
         session.loadData(from: request) { (data, response, error) in
             if let error = error {
@@ -37,32 +38,30 @@ final class CreateUserService {
                 return
             }
             
-            guard let userIdLocation = httpResponse.allHeaderFields["Location"] as? String else {
+            guard let gatherIdLocation = httpResponse.allHeaderFields["Location"] as? String else {
                 completion(.failure(ServiceError.locationHeaderNotFound))
                 return
             }
             
-            guard let userId = userIdLocation.components(separatedBy: "/").last,
-                let userUUID = UUID(uuidString: userId) else {
+            guard let gatherIdValue = gatherIdLocation.components(separatedBy: "/").last,
+                let gatherId = Int(gatherIdValue) else {
                     completion(.failure(ServiceError.resourceIdNotFound))
                     return
             }
             
-            completion(.success(userUUID))
+            completion(.success(gatherId))
         }
     }
     
 }
 
 // MARK: - Model
-struct RequestUserModel: Encodable {
-    let username: String
-    let password: String
-}
-
-extension RequestUserModel {
-    init(userModel: RequestUserModel) {
-        self.username = userModel.username
-        self.password = Crypto.hash(message: userModel.password)!
+struct GatherCreateData: Codable {
+    let score: String?
+    let winnerTeam: String?
+    
+    init(score: String? = nil, winnerTeam: String? = nil) {
+        self.score = score
+        self.winnerTeam = winnerTeam
     }
 }

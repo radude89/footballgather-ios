@@ -14,6 +14,7 @@ enum ServiceError: Error {
     case locationHeaderNotFound
     case resourceIdNotFound
     case expectedDataInResponse
+    case invalidRequestData
 }
 
 // MARK: - Network Session

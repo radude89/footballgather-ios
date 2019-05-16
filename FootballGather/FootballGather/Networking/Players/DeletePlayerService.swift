@@ -1,5 +1,5 @@
 //
-//  UpdatePlayerService.swift
+//  DeletePlayerService.swift
 //  FootballGather
 //
 //  Created by Dan, Radu-Ionut (RO - Bucharest) on 15/05/2019.
@@ -9,7 +9,7 @@
 import Foundation
 
 // MARK: - Service
-final class UpdatePlayerService {
+final class DeletePlayerService {
     private let session: NetworkSession
     private var urlRequest: URLRequestFactory
     
@@ -19,19 +19,12 @@ final class UpdatePlayerService {
         self.urlRequest = urlRequest
     }
     
-    func updatePlayer(_ player: Player, completion: @escaping (Result<Bool, Error>) -> Void) {
-        let endpoint = Endpoint(path: "\(urlRequest.endpoint.path)/\(player.serverId)")
+    func deletePlayer(havingServerId serverId: Int, completion: @escaping (Result<Bool, Error>) -> Void) {
+        let endpoint = Endpoint(path: "\(urlRequest.endpoint.path)/\(serverId)")
         urlRequest.endpoint = endpoint
-  
-        let playerCreateModel = PlayerCreateData(name: player.name,
-                                                 age: Int(player.age),
-                                                 skill: player.skillOption,
-                                                 preferredPosition: player.positionOption,
-                                                 favouriteTeam: player.favouriteTeam)
         
         var request = urlRequest.makeURLRequest()
-        request.httpMethod = "PUT"
-        request.httpBody = try? JSONEncoder().encode(playerCreateModel)
+        request.httpMethod = "DELETE"
         
         session.loadData(from: request) { (data, response, error) in
             if let error = error {

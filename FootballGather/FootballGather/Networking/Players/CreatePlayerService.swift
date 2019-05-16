@@ -19,7 +19,7 @@ final class CreatePlayerService {
         self.urlRequest = urlRequest
     }
     
-    func create(player: PlayerCreateData, completion: @escaping (Result<Int, Error>) -> Void) {
+    func createPlayer(_ player: PlayerCreateData, completion: @escaping (Result<Int, Error>) -> Void) {
         var request = urlRequest.makeURLRequest()
         request.httpMethod = "POST"
         request.httpBody = try? JSONEncoder().encode(player)

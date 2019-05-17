@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14490.99" systemVersion="18E226" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Gather" representedClassName=".Gather" syncable="YES">
+        <attribute name="score" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="serverId" optional="YES" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="winnerTeam" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="players" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Player" inverseName="gathers" inverseEntity="Player" syncable="YES"/>
+        <relationship name="user" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="gathers" inverseEntity="User" syncable="YES"/>
+    </entity>
+    <entity name="Player" representedClassName=".Player" syncable="YES">
+        <attribute name="age" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="favouriteTeam" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="preferredPosition" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="serverId" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="skill" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="gathers" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Gather" inverseName="players" inverseEntity="Gather" syncable="YES"/>
+        <relationship name="user" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="players" inverseEntity="User" syncable="YES"/>
+    </entity>
+    <entity name="User" representedClassName=".User" syncable="YES">
+        <attribute name="serverId" optional="YES" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
+        <relationship name="gathers" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Gather" inverseName="user" inverseEntity="Gather" syncable="YES"/>
+        <relationship name="players" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Player" inverseName="user" inverseEntity="Player" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Gather" positionX="-167.6875" positionY="-5.0546875" width="128" height="120"/>
+        <element name="Player" positionX="-367.9296875" positionY="193.04296875" width="128" height="165"/>
+        <element name="User" positionX="-438.6171875" positionY="-156.7734375" width="128" height="90"/>
+    </elements>
+</model>

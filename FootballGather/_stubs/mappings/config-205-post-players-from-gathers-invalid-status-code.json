@@ -1,0 +1,20 @@
+{
+    "request": {
+        "method": "POST",
+        "url": "/api/invalid-status-code/E88FE54F-AEE4-4160-8410-CB538BC04E9F/players/4",
+        "headers": {
+          "Accept" : {
+            "equalTo" : "application/json"
+          },
+          "Content-Type": {
+            "equalTo" : "application/json"
+          }
+        }
+    },
+    "response": {
+        "status": 205,
+        "headers": {
+            "Content-Type": "application/json; charset=utf-8"
+        }
+    }
+}

@@ -1,7 +1,7 @@
 {
     "request": {
         "method": "PUT",
-        "url": "/api/players/4",
+        "url": "/api/players/success/4",
         "headers": {
           "Accept" : {
             "equalTo" : "application/json"
@@ -14,7 +14,7 @@
           }
         },
         "bodyPatterns": [{
-          "equalToJson": "{\"name\": \"Jane\", \"favouriteTeam\": \"CF No Team\", \"age\": 18, \"skill\": \"amateur\", \"preferredPosition\": \"goalkeeper\"}"
+          "equalToJson": "{\"name\": \"John\", \"favouriteTeam\": \"FC Team United\", \"age\": 18, \"skill\": \"beginner\", \"preferredPosition\": \"goalkeeper\"}"
         }]
     },
     "response": {

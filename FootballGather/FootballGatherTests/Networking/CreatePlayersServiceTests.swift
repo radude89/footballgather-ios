@@ -1,5 +1,5 @@
 //
-//  CreateUserServiceTests.swift
+//  CreatePlayersServiceTests.swift
 //  FootballGatherTests
 //
 //  Created by Dan, Radu-Ionut (RO - Bucharest) on 17/05/2019.
@@ -9,21 +9,33 @@
 import XCTest
 @testable import FootballGather
 
-final class CreateUserServiceTests: XCTestCase {
+final class CreatePlayersServiceTests: XCTestCase {
     
     private let session = URLSessionMockFactory.makeSession()
-    private let resourcePath = "/api/users"
+    private let resourcePath = "/api/players"
+    private let appKeychain = AppKeychainMockFactory.makeKeychain()
+    
+    override func setUp() {
+        super.setUp()
+        appKeychain.token = ModelsMock.token
+    }
+    
+    override func tearDown() {
+        appKeychain.storage.removeAll()
+        super.tearDown()
+    }
     
     func test_request_completesSuccessfully() {
         let endpoint = EndpointMockFactory.makeSuccessfulEndpoint(path: resourcePath)
-        let service = CreateUserService(session: session, urlRequest: StandardURLRequestFactory(endpoint: endpoint))
-        let user = ModelsMockFactory.makeUser()
+        let service = CreatePlayerService(session: session,
+                                          urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let player = ModelsMockFactory.makePlayer()
         let exp = expectation(description: "Waiting response expectation")
         
-        service.createUser(user) { result in
+        service.createPlayer(player) { result in
             switch result {
-            case .success(let uuid):
-                XCTAssertEqual(uuid, ModelsMock.userUUID)
+            case .success(let playerId):
+                XCTAssertEqual(playerId, ModelsMock.playerId)
                 exp.fulfill()
             case .failure(_):
                 XCTFail("Unexpected failure")
@@ -35,11 +47,12 @@ final class CreateUserServiceTests: XCTestCase {
     
     func test_request_completesWithError() {
         let endpoint = EndpointMockFactory.makeErrorEndpoint()
-        let service = CreateUserService(session: session, urlRequest: StandardURLRequestFactory(endpoint: endpoint))
-        let user = ModelsMockFactory.makeUser()
+        let service = CreatePlayerService(session: session,
+                                          urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let player = ModelsMockFactory.makePlayer()
         let exp = expectation(description: "Waiting response expectation")
         
-        service.createUser(user) { result in
+        service.createPlayer(player) { result in
             switch result {
             case .success(_):
                 XCTFail("Request should have failed")
@@ -54,11 +67,12 @@ final class CreateUserServiceTests: XCTestCase {
     
     func test_request_completesWithUnexpectedResponseStatusCode() {
         let endpoint = EndpointMockFactory.makeUnexpectedStatusCodeCreateEndpoint()
-        let service = CreateUserService(session: session, urlRequest: StandardURLRequestFactory(endpoint: endpoint))
-        let user = ModelsMockFactory.makeUser()
+        let service = CreatePlayerService(session: session,
+                                          urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let player = ModelsMockFactory.makePlayer()
         let exp = expectation(description: "Waiting response expectation")
         
-        service.createUser(user) { result in
+        service.createPlayer(player) { result in
             switch result {
             case .failure(let error as ServiceError):
                 XCTAssertEqual(error, .unexpectedResponse)
@@ -73,11 +87,12 @@ final class CreateUserServiceTests: XCTestCase {
     
     func test_request_completesWithoutLocationHeader() {
         let endpoint = EndpointMockFactory.makeLocationHeaderNotFoundEndpoint()
-        let service = CreateUserService(session: session, urlRequest: StandardURLRequestFactory(endpoint: endpoint))
-        let user = ModelsMockFactory.makeUser()
+        let service = CreatePlayerService(session: session,
+                                          urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let player = ModelsMockFactory.makePlayer()
         let exp = expectation(description: "Waiting response expectation")
         
-        service.createUser(user) { result in
+        service.createPlayer(player) { result in
             switch result {
             case .failure(let error as ServiceError):
                 XCTAssertEqual(error, .locationHeaderNotFound)
@@ -92,11 +107,12 @@ final class CreateUserServiceTests: XCTestCase {
     
     func test_request_completesWithInvalidResourceId() {
         let endpoint = EndpointMockFactory.makeInvalidResourceIDCreateEndpoint()
-        let service = CreateUserService(session: session, urlRequest: StandardURLRequestFactory(endpoint: endpoint))
-        let user = ModelsMockFactory.makeUser()
+        let service = CreatePlayerService(session: session,
+                                          urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let player = ModelsMockFactory.makePlayer()
         let exp = expectation(description: "Waiting response expectation")
         
-        service.createUser(user) { result in
+        service.createPlayer(player) { result in
             switch result {
             case .failure(let error as ServiceError):
                 XCTAssertEqual(error, .resourceIdNotFound)

@@ -39,7 +39,7 @@ enum EndpointMockFactory {
         return EndpointMock(path: routePath)
     }
     
-    static func makeEmptyResponseEndpoint() -> EndpointMock {
+    static func makeEmptyReÔsponseEndpoint() -> EndpointMock {
         let routePath = "/api/empty"
         return EndpointMock(path: routePath)
     }
@@ -49,18 +49,18 @@ enum EndpointMockFactory {
         return EndpointMock(path: routePath)
     }
     
-    static func makeUnexpectedStatusCodeCreateEndpoint(path: String) -> EndpointMock {
-        let routePath = "\(path)/create/invalid-status-code"
+    static func makeUnexpectedStatusCodeCreateEndpoint() -> EndpointMock {
+        let routePath = "/api/invalid-status-code"
         return EndpointMock(path: routePath)
     }
     
-    static func makeLocationHeaderNotFoundEndpoint(path: String) -> EndpointMock {
-        let routePath = "\(path)/create/location-not-found"
+    static func makeLocationHeaderNotFoundEndpoint() -> EndpointMock {
+        let routePath = "/api/location-not-found"
         return EndpointMock(path: routePath)
     }
     
-    static func makeInvalidResourceIDCreateEndpoint(path: String) -> EndpointMock {
-        let routePath = "\(path)/create/invalid-uuid"
+    static func makeInvalidResourceIDCreateEndpoint() -> EndpointMock {
+        let routePath = "/api/invalid-uuid"
         return EndpointMock(path: routePath)
     }
 }

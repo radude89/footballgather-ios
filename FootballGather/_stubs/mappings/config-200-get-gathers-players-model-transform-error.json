@@ -1,7 +1,7 @@
 {
     "request": {
-        "method": "POST",
-        "url": "/api/empty",
+        "method": "GET",
+        "url": "/api/model-transform-error/E88FE54F-AEE4-4160-8410-CB538BC04E9F/players",
         "headers": {
           "Accept" : {
             "equalTo" : "application/json"
@@ -12,6 +12,7 @@
         }
     },
     "response": {
-        "status": 200
+        "status": 200,
+        "body": "MALFORMED_MODEL_ERROR"
     }
 }

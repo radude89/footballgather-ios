@@ -1,7 +1,7 @@
 {
     "request": {
-        "method": "POST",
-        "url": "/api/users/create/invalid-uuid",
+        "method": "GET",
+        "url": "/api/invalid-status-code",
         "headers": {
           "Accept" : {
             "equalTo" : "application/json"
@@ -9,16 +9,13 @@
           "Content-Type": {
             "equalTo" : "application/json"
           }
-        },
-        "bodyPatterns": [{
-          "equalToJson": "{\"username\": \"demo-user\", \"password\": \"41bd876b085d6031cb0e04de35b88d77f83a4ba39f879fee40805ac19e356023\"}"
-        }]
+        }
     },
     "response": {
-        "status": 201,
+        "status": 205,
         "headers": {
             "Content-Type": "application/json; charset=utf-8",
-            "Location": "/api/users/@#"
+            "Location": "/api/939C0E30-7C25-436D-9AC6-571C2E339AB7"
         }
     }
 }

@@ -1,5 +1,5 @@
 //
-//  CreateUserServiceTests.swift
+//  CreateGatherServiceTests.swift
 //  FootballGatherTests
 //
 //  Created by Dan, Radu-Ionut (RO - Bucharest) on 17/05/2019.
@@ -9,21 +9,53 @@
 import XCTest
 @testable import FootballGather
 
-final class CreateUserServiceTests: XCTestCase {
+final class CreateGatherServiceTests: XCTestCase {
     
     private let session = URLSessionMockFactory.makeSession()
-    private let resourcePath = "/api/users"
+    private let resourcePath = "/api/gathers"
+    private let appKeychain = AppKeychainMockFactory.makeKeychain()
     
-    func test_request_completesSuccessfully() {
+    override func setUp() {
+        super.setUp()
+        appKeychain.token = ModelsMock.token
+    }
+    
+    override func tearDown() {
+        appKeychain.storage.removeAll()
+        super.tearDown()
+    }
+    
+    func test_request_completesSuccessfully_withoutGatherDetails() {
         let endpoint = EndpointMockFactory.makeSuccessfulEndpoint(path: resourcePath)
-        let service = CreateUserService(session: session, urlRequest: StandardURLRequestFactory(endpoint: endpoint))
-        let user = ModelsMockFactory.makeUser()
+        let service = CreateGatherService(session: session,
+                                          urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let gather = ModelsMockFactory.makeGather()
         let exp = expectation(description: "Waiting response expectation")
         
-        service.createUser(user) { result in
+        service.createGather(gather) { result in
             switch result {
             case .success(let uuid):
-                XCTAssertEqual(uuid, ModelsMock.userUUID)
+                XCTAssertEqual(uuid, ModelsMock.gatherUUID)
+                exp.fulfill()
+            case .failure(_):
+                XCTFail("Unexpected failure")
+            }
+        }
+        
+        wait(for: [exp], timeout: TestConfigurator.defaultTimeout)
+    }
+    
+    func test_request_completesSuccessfully_withGatherDetails() {
+        let endpoint = EndpointMockFactory.makeSuccessfulEndpoint(path: resourcePath)
+        let service = CreateGatherService(session: session,
+                                          urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let gather = ModelsMockFactory.makeGather()
+        let exp = expectation(description: "Waiting response expectation")
+        
+        service.createGather(gather) { result in
+            switch result {
+            case .success(let uuid):
+                XCTAssertEqual(uuid, ModelsMock.gatherUUID)
                 exp.fulfill()
             case .failure(_):
                 XCTFail("Unexpected failure")
@@ -35,11 +67,12 @@ final class CreateUserServiceTests: XCTestCase {
     
     func test_request_completesWithError() {
         let endpoint = EndpointMockFactory.makeErrorEndpoint()
-        let service = CreateUserService(session: session, urlRequest: StandardURLRequestFactory(endpoint: endpoint))
-        let user = ModelsMockFactory.makeUser()
+        let service = CreateGatherService(session: session,
+                                          urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let gather = ModelsMockFactory.makeGather()
         let exp = expectation(description: "Waiting response expectation")
         
-        service.createUser(user) { result in
+        service.createGather(gather) { result in
             switch result {
             case .success(_):
                 XCTFail("Request should have failed")
@@ -54,11 +87,12 @@ final class CreateUserServiceTests: XCTestCase {
     
     func test_request_completesWithUnexpectedResponseStatusCode() {
         let endpoint = EndpointMockFactory.makeUnexpectedStatusCodeCreateEndpoint()
-        let service = CreateUserService(session: session, urlRequest: StandardURLRequestFactory(endpoint: endpoint))
-        let user = ModelsMockFactory.makeUser()
+        let service = CreateGatherService(session: session,
+                                          urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let gather = ModelsMockFactory.makeGather()
         let exp = expectation(description: "Waiting response expectation")
         
-        service.createUser(user) { result in
+        service.createGather(gather) { result in
             switch result {
             case .failure(let error as ServiceError):
                 XCTAssertEqual(error, .unexpectedResponse)
@@ -73,11 +107,12 @@ final class CreateUserServiceTests: XCTestCase {
     
     func test_request_completesWithoutLocationHeader() {
         let endpoint = EndpointMockFactory.makeLocationHeaderNotFoundEndpoint()
-        let service = CreateUserService(session: session, urlRequest: StandardURLRequestFactory(endpoint: endpoint))
-        let user = ModelsMockFactory.makeUser()
+        let service = CreateGatherService(session: session,
+                                          urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let gather = ModelsMockFactory.makeGather()
         let exp = expectation(description: "Waiting response expectation")
         
-        service.createUser(user) { result in
+        service.createGather(gather) { result in
             switch result {
             case .failure(let error as ServiceError):
                 XCTAssertEqual(error, .locationHeaderNotFound)
@@ -92,11 +127,12 @@ final class CreateUserServiceTests: XCTestCase {
     
     func test_request_completesWithInvalidResourceId() {
         let endpoint = EndpointMockFactory.makeInvalidResourceIDCreateEndpoint()
-        let service = CreateUserService(session: session, urlRequest: StandardURLRequestFactory(endpoint: endpoint))
-        let user = ModelsMockFactory.makeUser()
+        let service = CreateGatherService(session: session,
+                                          urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let gather = ModelsMockFactory.makeGather()
         let exp = expectation(description: "Waiting response expectation")
         
-        service.createUser(user) { result in
+        service.createGather(gather) { result in
             switch result {
             case .failure(let error as ServiceError):
                 XCTAssertEqual(error, .resourceIdNotFound)

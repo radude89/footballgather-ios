@@ -1,7 +1,7 @@
 {
     "request": {
         "method": "POST",
-        "url": "/api/gathers/E88FE54F-AEE4-4160-8410-CB538BC04E9F/players/1",
+        "url": "/api/gathers/success/E88FE54F-AEE4-4160-8410-CB538BC04E9F/players/4",
         "headers": {
           "Accept" : {
             "equalTo" : "application/json"

@@ -1,23 +1,21 @@
 {
     "request": {
-        "method": "DELETE",
-        "url": "/api/players/success/4",
+        "method": "GET",
+        "url": "/api/invalid-status-code/E88FE54F-AEE4-4160-8410-CB538BC04E9F/players",
         "headers": {
           "Accept" : {
             "equalTo" : "application/json"
           },
           "Content-Type": {
             "equalTo" : "application/json"
-          },
-          "Authorization": {
-            "equalTo" : "Bearer v2s4o0XcRgDHF/VojbAmGQ=="
           }
         }
     },
     "response": {
-        "status": 204,
+        "status": 205,
         "headers": {
-            "Content-Type": "application/json; charset=utf-8"
+            "Content-Type": "application/json; charset=utf-8",
+            "Location": "/api/E88FE54F-AEE4-4160-8410-CB538BC04E9F"
         }
     }
 }

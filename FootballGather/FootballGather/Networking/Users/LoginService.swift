@@ -22,7 +22,7 @@ final class LoginService {
         self.appKeychain = appKeychain
     }
     
-    func login(user: RequestUserModel, completion: @escaping (Result<Bool, Error>) -> Void) {
+    func login(user: UserRequestModel, completion: @escaping (Result<Bool, Error>) -> Void) {
         var request = urlRequest.makeURLRequest()
         request.httpMethod = "POST"
         

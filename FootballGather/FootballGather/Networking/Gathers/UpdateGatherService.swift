@@ -19,16 +19,12 @@ final class UpdateGatherService {
         self.urlRequest = urlRequest
     }
     
-    func updateGather(_ gather: Gather, completion: @escaping (Result<Bool, Error>) -> Void) {
-        guard let serverUUID = gather.serverId else {
-            completion(.failure(ServiceError.invalidRequestData))
-            return
-        }
+    func updateGather(_ gather: GatherUpdateModel, completion: @escaping (Result<Bool, Error>) -> Void) {
+        var updatedEndpoint = urlRequest.endpoint
+        updatedEndpoint.path = "\(updatedEndpoint.path)/\(gather.serverUUID.uuidString)"
+        urlRequest.endpoint = updatedEndpoint
         
-        let endpoint = StandardEndpoint(path: "\(urlRequest.endpoint.path)/\(serverUUID.uuidString)")
-        urlRequest.endpoint = endpoint
-        
-        let gatherCreateModel = GatherCreateData(score: gather.score, winnerTeam: gather.winnerTeam)
+        let gatherCreateModel = GatherCreateModel(score: gather.score, winnerTeam: gather.winnerTeam)
         
         var request = urlRequest.makeURLRequest()
         request.httpMethod = "PUT"
@@ -49,4 +45,17 @@ final class UpdateGatherService {
         }
     }
     
+}
+
+// MARK: - Model
+struct GatherUpdateModel: Encodable {
+    let serverUUID: UUID
+    let score: String?
+    let winnerTeam: String?
+    
+    init(serverUUID: UUID, score: String? = nil, winnerTeam: String? = nil) {
+        self.serverUUID = serverUUID
+        self.score = score
+        self.winnerTeam = winnerTeam
+    }
 }

@@ -29,7 +29,7 @@ final class GetPlayersService {
                 return
             }
             
-            guard let data = data else {
+            guard let data = data, data.isEmpty == false else {
                 completion(.failure(ServiceError.unexpectedResponse))
                 return
             }
@@ -47,12 +47,12 @@ final class GetPlayersService {
 
 // MARK: - Model
 struct PlayerResponseModel {
-    var id: Int
-    var name: String
-    var age: Int
-    var skill: Player.Skill?
-    var preferredPosition: Player.Position?
-    var favouriteTeam: String?
+    let id: Int
+    let name: String
+    let age: Int?
+    let skill: Player.Skill?
+    let preferredPosition: Player.Position?
+    let favouriteTeam: String?
 }
 
 extension PlayerResponseModel: Decodable {
@@ -66,14 +66,18 @@ extension PlayerResponseModel: Decodable {
         id = try container.decode(Int.self, forKey: .id)
         name = try container.decode(String.self, forKey: .name)
         age = try container.decode(Int.self, forKey: .age)
-        favouriteTeam = try container.decodeIfPresent(String.self, forKey: .favouriteTeam)
+        favouriteTeam = try container.decodeIfPresent(String.self, forKey: .favouriteTeam) ?? nil
         
         if let skillDesc = try container.decodeIfPresent(String.self, forKey: .skill) {
             skill = Player.Skill(rawValue: skillDesc)
+        } else {
+            skill = nil
         }
         
         if let posDesc = try container.decodeIfPresent(String.self, forKey: .preferredPosition) {
             preferredPosition = Player.Position(rawValue: posDesc)
+        } else {
+            preferredPosition = nil
         }
     }
 }

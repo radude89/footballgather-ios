@@ -1,7 +1,7 @@
 {
     "request": {
         "method": "POST",
-        "url": "/api/players",
+        "url": "/api/players/success",
         "headers": {
           "Accept" : {
             "equalTo" : "application/json"

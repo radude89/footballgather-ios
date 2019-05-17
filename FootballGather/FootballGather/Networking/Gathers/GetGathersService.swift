@@ -29,7 +29,7 @@ final class GetGathersService {
                 return
             }
             
-            guard let data = data else {
+            guard let data = data, data.isEmpty == false else {
                 completion(.failure(ServiceError.unexpectedResponse))
                 return
             }

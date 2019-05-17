@@ -19,14 +19,10 @@ final class GetPlayersForGatherService {
         self.urlRequest = urlRequest
     }
     
-    func getPlayers(forGather gather: Gather, completion: @escaping (Result<[PlayerResponseModel], Error>) -> Void) {
-        guard let gatherUUID = gather.serverId else {
-            completion(.failure(ServiceError.invalidRequestData))
-            return
-        }
-        
-        let endpoint = StandardEndpoint(path: "\(urlRequest.endpoint.path)/\(gatherUUID.uuidString)/players")
-        urlRequest.endpoint = endpoint
+    func getPlayers(forGatherId gatherUUID: UUID, completion: @escaping (Result<[PlayerResponseModel], Error>) -> Void) {
+        var playersEndpoint = urlRequest.endpoint
+        playersEndpoint.path = "\(playersEndpoint.path)/\(gatherUUID.uuidString)/players"
+        urlRequest.endpoint = playersEndpoint
         
         var request = urlRequest.makeURLRequest()
         request.httpMethod = "GET"
@@ -37,7 +33,7 @@ final class GetPlayersForGatherService {
                 return
             }
             
-            guard let data = data else {
+            guard let data = data, data.isEmpty == false else {
                 completion(.failure(ServiceError.unexpectedResponse))
                 return
             }

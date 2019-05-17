@@ -19,15 +19,16 @@ final class UpdatePlayerService {
         self.urlRequest = urlRequest
     }
     
-    func updatePlayer(_ player: Player, completion: @escaping (Result<Bool, Error>) -> Void) {
-        let endpoint = StandardEndpoint(path: "\(urlRequest.endpoint.path)/\(player.serverId)")
-        urlRequest.endpoint = endpoint
-  
-        let playerCreateModel = PlayerCreateData(name: player.name,
-                                                 age: Int(player.age),
-                                                 skill: player.skillOption,
-                                                 preferredPosition: player.positionOption,
-                                                 favouriteTeam: player.favouriteTeam)
+    func updatePlayer(_ player: PlayerUpdateModel, completion: @escaping (Result<Bool, Error>) -> Void) {
+        var updatedEndpoint = urlRequest.endpoint
+        updatedEndpoint.path = "\(updatedEndpoint.path)/\(player.serverId)"
+        urlRequest.endpoint = updatedEndpoint
+        
+        let playerCreateModel = PlayerCreateModel(name: player.name,
+                                                  age: player.age,
+                                                  skill: player.skill,
+                                                  preferredPosition: player.preferredPosition,
+                                                  favouriteTeam: player.favouriteTeam)
         
         var request = urlRequest.makeURLRequest()
         request.httpMethod = "PUT"
@@ -48,4 +49,28 @@ final class UpdatePlayerService {
         }
     }
     
+}
+
+// MARK: - Model
+struct PlayerUpdateModel: Encodable {
+    let serverId: Int
+    var name: String
+    var age: Int?
+    var skill: Player.Skill?
+    var preferredPosition: Player.Position?
+    var favouriteTeam: String?
+    
+    init(serverId: Int,
+         name: String,
+         age: Int? = nil,
+         skill: Player.Skill? = nil,
+         preferredPosition: Player.Position? = nil,
+         favouriteTeam: String? = nil) {
+        self.serverId = serverId
+        self.name = name
+        self.age = age
+        self.skill = skill
+        self.preferredPosition = preferredPosition
+        self.favouriteTeam = favouriteTeam
+    }
 }

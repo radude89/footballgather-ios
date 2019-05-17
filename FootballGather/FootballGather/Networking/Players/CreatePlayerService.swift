@@ -19,7 +19,7 @@ final class CreatePlayerService {
         self.urlRequest = urlRequest
     }
     
-    func createPlayer(_ player: PlayerCreateData, completion: @escaping (Result<Int, Error>) -> Void) {
+    func createPlayer(_ player: PlayerCreateModel, completion: @escaping (Result<Int, Error>) -> Void) {
         var request = urlRequest.makeURLRequest()
         request.httpMethod = "POST"
         request.httpBody = try? JSONEncoder().encode(player)
@@ -53,10 +53,10 @@ final class CreatePlayerService {
 }
 
 // MARK - Model
-struct PlayerCreateData: Encodable {
-    var name: String
-    var age: Int
-    var skill: Player.Skill?
-    var preferredPosition: Player.Position?
-    var favouriteTeam: String?
+struct PlayerCreateModel: Encodable {
+    let name: String
+    let age: Int?
+    let skill: Player.Skill?
+    let preferredPosition: Player.Position?
+    let favouriteTeam: String?
 }

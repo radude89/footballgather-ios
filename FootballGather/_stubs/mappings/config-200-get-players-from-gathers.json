@@ -1,7 +1,7 @@
 {
     "request": {
-        "method": "DELETE",
-        "url": "/api/gathers/success/E88FE54F-AEE4-4160-8410-CB538BC04E9F",
+        "method": "GET",
+        "url": "/api/gathers/success/E88FE54F-AEE4-4160-8410-CB538BC04E9F/players",
         "headers": {
           "Accept" : {
             "equalTo" : "application/json"
@@ -15,9 +15,10 @@
         }
     },
     "response": {
-        "status": 204,
+        "status": 200,
         "headers": {
             "Content-Type": "application/json; charset=utf-8"
-        }
+        },
+        "bodyFileName": "happy-path/response-200-get-players-from-gathers.json"
     }
 }

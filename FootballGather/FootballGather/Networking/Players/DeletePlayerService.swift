@@ -20,8 +20,9 @@ final class DeletePlayerService {
     }
     
     func deletePlayer(havingServerId serverId: Int, completion: @escaping (Result<Bool, Error>) -> Void) {
-        let endpoint = StandardEndpoint(path: "\(urlRequest.endpoint.path)/\(serverId)")
-        urlRequest.endpoint = endpoint
+        var updatedEndpoint = urlRequest.endpoint
+        updatedEndpoint.path = "\(updatedEndpoint.path)/\(serverId)"
+        urlRequest.endpoint = updatedEndpoint
         
         var request = urlRequest.makeURLRequest()
         request.httpMethod = "DELETE"

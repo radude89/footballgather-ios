@@ -19,17 +19,17 @@ final class AddPlayerToGatherService {
         self.urlRequest = urlRequest
     }
     
-    func addPlayer(_ player: Player, to gather: Gather, completion: @escaping (Result<Bool, Error>) -> Void) {
-        guard let gatherUUID = gather.serverId else {
-            completion(.failure(ServiceError.invalidRequestData))
-            return
-        }
-        
-        let endpoint = StandardEndpoint(path: "\(urlRequest.endpoint.path)/\(gatherUUID.uuidString)/players/\(Int(player.serverId))")
-        urlRequest.endpoint = endpoint
+    func addPlayer(havingServerId playerServerId: Int,
+                   toGatherWithId gatherUUID: UUID,
+                   team: PlayerGatherTeam,
+                   completion: @escaping (Result<Bool, Error>) -> Void) {
+        var playersEndpoint = urlRequest.endpoint
+        playersEndpoint.path = "\(urlRequest.endpoint.path)/\(gatherUUID.uuidString)/players/\(playerServerId)"
+        urlRequest.endpoint = playersEndpoint
         
         var request = urlRequest.makeURLRequest()
         request.httpMethod = "POST"
+        request.httpBody = try? JSONEncoder().encode(team)
         
         session.loadData(from: request) { (data, response, error) in
             if let error = error {
@@ -46,4 +46,9 @@ final class AddPlayerToGatherService {
         }
     }
         
+}
+
+// MARK: - Model
+struct PlayerGatherTeam: Encodable {
+    let team: String
 }

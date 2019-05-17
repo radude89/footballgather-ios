@@ -1,7 +1,7 @@
 {
     "request": {
-        "method": "POST",
-        "url": "/api/empty",
+        "method": "GET",
+        "url": "/api/server-error/4",
         "headers": {
           "Accept" : {
             "equalTo" : "application/json"
@@ -12,6 +12,7 @@
         }
     },
     "response": {
-        "status": 200
+        "status": 500,
+        "fault": "MALFORMED_RESPONSE_CHUNK"
     }
 }

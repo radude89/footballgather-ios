@@ -1,7 +1,7 @@
 {
     "request": {
         "method": "POST",
-        "url": "/api/empty",
+        "url": "/api/server-error/E88FE54F-AEE4-4160-8410-CB538BC04E9F/players/4",
         "headers": {
           "Accept" : {
             "equalTo" : "application/json"
@@ -12,6 +12,7 @@
         }
     },
     "response": {
-        "status": 200
+        "status": 500,
+        "fault": "MALFORMED_RESPONSE_CHUNK"
     }
 }

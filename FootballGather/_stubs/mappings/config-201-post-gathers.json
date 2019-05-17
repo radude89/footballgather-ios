@@ -1,7 +1,7 @@
 {
     "request": {
         "method": "POST",
-        "url": "/api/gathers",
+        "url": "/api/gathers/success",
         "headers": {
           "Accept" : {
             "equalTo" : "application/json"

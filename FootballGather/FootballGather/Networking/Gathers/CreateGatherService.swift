@@ -19,11 +19,11 @@ final class CreateGatherService {
         self.urlRequest = urlRequest
     }
     
-    func createGather(_ gather: GatherCreateData, completion: @escaping (Result<Int, Error>) -> Void) {
+    func createGather(_ gather: GatherCreateModel, completion: @escaping (Result<UUID, Error>) -> Void) {
         var request = urlRequest.makeURLRequest()
         request.httpMethod = "POST"
         
-        if gather.score != nil && gather.winnerTeam != nil {
+        if gather.score != nil || gather.winnerTeam != nil {
             request.httpBody = try? JSONEncoder().encode(gather)            
         }
         
@@ -43,20 +43,20 @@ final class CreateGatherService {
                 return
             }
             
-            guard let gatherIdValue = gatherIdLocation.components(separatedBy: "/").last,
-                let gatherId = Int(gatherIdValue) else {
+            guard let gatherId = gatherIdLocation.components(separatedBy: "/").last,
+                let gatherUUID = UUID(uuidString: gatherId) else {
                     completion(.failure(ServiceError.resourceIdNotFound))
                     return
             }
             
-            completion(.success(gatherId))
+            completion(.success(gatherUUID))
         }
     }
     
 }
 
 // MARK: - Model
-struct GatherCreateData: Codable {
+struct GatherCreateModel: Encodable {
     let score: String?
     let winnerTeam: String?
     

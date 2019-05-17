@@ -19,10 +19,10 @@ final class CreateUserService {
         self.urlRequest = urlRequest
     }
     
-    func createUser(_ user: RequestUserModel, completion: @escaping (Result<UUID, Error>) -> Void) {
+    func createUser(_ user: UserRequestModel, completion: @escaping (Result<UUID, Error>) -> Void) {
         var request = urlRequest.makeURLRequest()
         // hashing password
-        let requestUser = RequestUserModel(userModel: user)
+        let requestUser = UserRequestModel(userModel: user)
         request.httpMethod = "POST"
         request.httpBody = try? JSONEncoder().encode(requestUser)
         
@@ -55,13 +55,13 @@ final class CreateUserService {
 }
 
 // MARK: - Model
-struct RequestUserModel: Encodable {
+struct UserRequestModel: Encodable {
     let username: String
     let password: String
 }
 
-extension RequestUserModel {
-    init(userModel: RequestUserModel) {
+extension UserRequestModel {
+    init(userModel: UserRequestModel) {
         self.username = userModel.username
         self.password = Crypto.hash(message: userModel.password)!
     }

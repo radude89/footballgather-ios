@@ -1,7 +1,7 @@
 {
     "request": {
         "method": "PUT",
-        "url": "/api/gathers/E88FE54F-AEE4-4160-8410-CB538BC04E9F",
+        "url": "/api/gathers/success/E88FE54F-AEE4-4160-8410-CB538BC04E9F",
         "headers": {
           "Accept" : {
             "equalTo" : "application/json"

@@ -23,7 +23,7 @@ final class CreateUserServiceTests: XCTestCase {
         service.createUser(user) { result in
             switch result {
             case .success(let uuid):
-                XCTAssertEqual(uuid, ModelsMockFactory.userUUID)
+                XCTAssertEqual(uuid, ModelsMock.userUUID)
                 exp.fulfill()
             case .failure(_):
                 XCTFail("Unexpected failure")
@@ -34,7 +34,7 @@ final class CreateUserServiceTests: XCTestCase {
     }
     
     func test_request_completesWithError() {
-        let endpoint = EndpointMockFactory.makeErrorEndpoint(path: resourcePath)
+        let endpoint = EndpointMockFactory.makeErrorEndpoint()
         let service = CreateUserService(session: session, urlRequest: StandardURLRequestFactory(endpoint: endpoint))
         let user = ModelsMockFactory.makeUser()
         let exp = expectation(description: "Waiting response expectation")

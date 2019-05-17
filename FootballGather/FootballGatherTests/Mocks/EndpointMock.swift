@@ -34,8 +34,18 @@ enum EndpointMockFactory {
         return EndpointMock(path: routePath)
     }
     
-    static func makeErrorEndpoint(path: String) -> EndpointMock {
-        let routePath = "\(path)/server-error"
+    static func makeErrorEndpoint() -> EndpointMock {
+        let routePath = "/api/server-error"
+        return EndpointMock(path: routePath)
+    }
+    
+    static func makeEmptyResponseEndpoint() -> EndpointMock {
+        let routePath = "/api/empty"
+        return EndpointMock(path: routePath)
+    }
+    
+    static func makeInvalidModelTansformEndpoint() -> EndpointMock {
+        let routePath = "/api/model-transform-error"
         return EndpointMock(path: routePath)
     }
     

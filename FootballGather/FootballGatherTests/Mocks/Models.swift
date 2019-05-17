@@ -13,5 +13,9 @@ enum ModelsMockFactory {
     static func makeUser(withUsername username: String = "demo-user", password: String = "demo-password") -> RequestUserModel {
         return RequestUserModel(username: username, password: password)
     }
+}
+
+enum ModelsMock {
     static let userUUID = UUID(uuidString: "939C0E30-7C25-436D-9AC6-571C2E339AB7")!
+    static let token = "v2s4o0XcRgDHF/VojbAmGQ=="
 }

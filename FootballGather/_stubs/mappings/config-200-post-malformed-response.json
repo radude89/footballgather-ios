@@ -1,0 +1,18 @@
+{
+    "request": {
+        "method": "POST",
+        "url": "/api/empty",
+        "headers": {
+          "Accept" : {
+            "equalTo" : "application/json"
+          },
+          "Content-Type": {
+            "equalTo" : "application/json"
+          }
+        }
+    },
+    "response": {
+        "status": 200,
+        "body": ""
+    }
+}

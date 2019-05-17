@@ -14,7 +14,7 @@ final class UpdateGatherService {
     private var urlRequest: URLRequestFactory
     
     init(session: NetworkSession = URLSession.shared,
-         urlRequest: URLRequestFactory = AuthURLRequestFactory(endpoint: StandardEndpoint(path: "api/gathers"))) {
+         urlRequest: URLRequestFactory = AuthURLRequestFactory(endpoint: StandardEndpoint(path: "/api/gathers"))) {
         self.session = session
         self.urlRequest = urlRequest
     }

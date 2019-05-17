@@ -32,6 +32,7 @@
 		F75CE92F228E6B6100871C47 /* CreateUserServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75CE92E228E6B6100871C47 /* CreateUserServiceTests.swift */; };
 		F75CE931228E6BDA00871C47 /* ApplicationKeychainMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75CE930228E6BDA00871C47 /* ApplicationKeychainMock.swift */; };
 		F75CE933228E717800871C47 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75CE932228E717800871C47 /* Models.swift */; };
+		F75CE935228E94F700871C47 /* LoginServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75CE934228E94F700871C47 /* LoginServiceTests.swift */; };
 		F762CA9122619C5C00947AED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F762CA9022619C5C00947AED /* AppDelegate.swift */; };
 		F762CA9322619C5C00947AED /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F762CA9222619C5C00947AED /* ViewController.swift */; };
 		F762CA9622619C5C00947AED /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F762CA9422619C5C00947AED /* Main.storyboard */; };
@@ -90,6 +91,7 @@
 		F75CE92E228E6B6100871C47 /* CreateUserServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateUserServiceTests.swift; sourceTree = "<group>"; };
 		F75CE930228E6BDA00871C47 /* ApplicationKeychainMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationKeychainMock.swift; sourceTree = "<group>"; };
 		F75CE932228E717800871C47 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		F75CE934228E94F700871C47 /* LoginServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginServiceTests.swift; sourceTree = "<group>"; };
 		F762CA8D22619C5C00947AED /* FootballGather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FootballGather.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F762CA9022619C5C00947AED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F762CA9222619C5C00947AED /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -190,6 +192,7 @@
 			isa = PBXGroup;
 			children = (
 				F75CE92E228E6B6100871C47 /* CreateUserServiceTests.swift */,
+				F75CE934228E94F700871C47 /* LoginServiceTests.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -463,6 +466,7 @@
 				F782C8932261D7F90045EB2C /* CoreDataStoreTests.swift in Sources */,
 				F782C8992261F4640045EB2C /* FootballGather.xcdatamodeld in Sources */,
 				F75CE92F228E6B6100871C47 /* CreateUserServiceTests.swift in Sources */,
+				F75CE935228E94F700871C47 /* LoginServiceTests.swift in Sources */,
 				F7034C4A2289192E0003F506 /* KeychainQueryFactoryTests.swift in Sources */,
 				F7034C7A228A79060003F506 /* FootbalGatherKeychainTests.swift in Sources */,
 				F7034C82228AF44C0003F506 /* CryptoTests.swift in Sources */,

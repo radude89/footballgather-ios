@@ -1,7 +1,7 @@
 {
     "request": {
         "method": "POST",
-        "url": "/api/users/login",
+        "url": "/api/users/login/success",
         "headers": {
           "Accept" : {
             "equalTo" : "application/json"

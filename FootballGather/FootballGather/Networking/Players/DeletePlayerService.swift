@@ -14,7 +14,7 @@ final class DeletePlayerService {
     private var urlRequest: URLRequestFactory
     
     init(session: NetworkSession = URLSession.shared,
-         urlRequest: URLRequestFactory = AuthURLRequestFactory(endpoint: StandardEndpoint(path: "api/players"))) {
+         urlRequest: URLRequestFactory = AuthURLRequestFactory(endpoint: StandardEndpoint(path: "/api/players"))) {
         self.session = session
         self.urlRequest = urlRequest
     }

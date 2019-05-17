@@ -15,7 +15,7 @@ final class LoginService {
     private var appKeychain: ApplicationKeychain
     
     init(session: NetworkSession = URLSession.shared,
-         urlRequest: URLRequestFactory = StandardURLRequestFactory(endpoint: StandardEndpoint(path: "api/users/login")),
+         urlRequest: URLRequestFactory = StandardURLRequestFactory(endpoint: StandardEndpoint(path: "/api/users/login")),
          appKeychain: ApplicationKeychain = FootbalGatherKeychain.shared) {
         self.session = session
         self.urlRequest = urlRequest
@@ -35,7 +35,7 @@ final class LoginService {
                 return
             }
             
-            guard let data = data else {
+            guard let data = data, data.isEmpty == false else {
                 completion(.failure(ServiceError.expectedDataInResponse))
                 return
             }

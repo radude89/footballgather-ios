@@ -14,7 +14,7 @@ final class CreateUserService {
     private let urlRequest: URLRequestFactory
     
     init(session: NetworkSession = URLSession.shared,
-         urlRequest: URLRequestFactory = StandardURLRequestFactory(endpoint: Endpoint(path: "api/users"))) {
+         urlRequest: URLRequestFactory = StandardURLRequestFactory(endpoint: StandardEndpoint(path: "/api/users"))) {
         self.session = session
         self.urlRequest = urlRequest
     }

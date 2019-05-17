@@ -14,13 +14,13 @@ final class DeleteGatherService {
     private var urlRequest: URLRequestFactory
     
     init(session: NetworkSession = URLSession.shared,
-         urlRequest: URLRequestFactory = AuthURLRequestFactory(endpoint: Endpoint(path: "api/gathers"))) {
+         urlRequest: URLRequestFactory = AuthURLRequestFactory(endpoint: StandardEndpoint(path: "api/gathers"))) {
         self.session = session
         self.urlRequest = urlRequest
     }
     
     func deleteGather(havingServerId serverId: UUID, completion: @escaping (Result<Bool, Error>) -> Void) {
-        let endpoint = Endpoint(path: "\(urlRequest.endpoint.path)/\(serverId.uuidString)")
+        let endpoint = StandardEndpoint(path: "\(urlRequest.endpoint.path)/\(serverId.uuidString)")
         urlRequest.endpoint = endpoint
         
         var request = urlRequest.makeURLRequest()

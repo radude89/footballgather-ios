@@ -14,7 +14,7 @@ final class GetPlayersForGatherService {
     private var urlRequest: URLRequestFactory
     
     init(session: NetworkSession = URLSession.shared,
-         urlRequest: URLRequestFactory = AuthURLRequestFactory(endpoint: Endpoint(path: "api/gathers"))) {
+         urlRequest: URLRequestFactory = AuthURLRequestFactory(endpoint: StandardEndpoint(path: "api/gathers"))) {
         self.session = session
         self.urlRequest = urlRequest
     }
@@ -25,7 +25,7 @@ final class GetPlayersForGatherService {
             return
         }
         
-        let endpoint = Endpoint(path: "\(urlRequest.endpoint.path)/\(gatherUUID.uuidString)/players")
+        let endpoint = StandardEndpoint(path: "\(urlRequest.endpoint.path)/\(gatherUUID.uuidString)/players")
         urlRequest.endpoint = endpoint
         
         var request = urlRequest.makeURLRequest()

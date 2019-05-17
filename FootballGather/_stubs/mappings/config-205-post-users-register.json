@@ -1,7 +1,7 @@
 {
     "request": {
         "method": "POST",
-        "url": "/api/users/success",
+        "url": "/api/users/create/invalid-status-code",
         "headers": {
           "Accept" : {
             "equalTo" : "application/json"
@@ -15,7 +15,7 @@
         }]
     },
     "response": {
-        "status": 201,
+        "status": 205,
         "headers": {
             "Content-Type": "application/json; charset=utf-8",
             "Location": "/api/users/939C0E30-7C25-436D-9AC6-571C2E339AB7"

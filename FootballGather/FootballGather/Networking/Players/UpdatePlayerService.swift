@@ -14,13 +14,13 @@ final class UpdatePlayerService {
     private var urlRequest: URLRequestFactory
     
     init(session: NetworkSession = URLSession.shared,
-         urlRequest: URLRequestFactory = AuthURLRequestFactory(endpoint: Endpoint(path: "api/players"))) {
+         urlRequest: URLRequestFactory = AuthURLRequestFactory(endpoint: StandardEndpoint(path: "api/players"))) {
         self.session = session
         self.urlRequest = urlRequest
     }
     
     func updatePlayer(_ player: Player, completion: @escaping (Result<Bool, Error>) -> Void) {
-        let endpoint = Endpoint(path: "\(urlRequest.endpoint.path)/\(player.serverId)")
+        let endpoint = StandardEndpoint(path: "\(urlRequest.endpoint.path)/\(player.serverId)")
         urlRequest.endpoint = endpoint
   
         let playerCreateModel = PlayerCreateData(name: player.name,

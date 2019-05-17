@@ -1,0 +1,56 @@
+//
+//  EndpointMock.swift
+//  FootballGatherTests
+//
+//  Created by Dan, Radu-Ionut (RO - Bucharest) on 16/05/2019.
+//  Copyright © 2019 Radu Dan. All rights reserved.
+//
+
+import Foundation
+@testable import FootballGather
+
+struct EndpointMock: Endpoint {
+    var path: String
+    var queryItems: [URLQueryItem]? = nil
+    var scheme: String? = "http"
+    var host: String? = "localhost"
+    var port: Int? = 9999
+    
+    init(path: String) {
+        self.path = path
+    }
+}
+
+enum URLSessionMockFactory {
+    static func makeSession() -> URLSession {
+        let urlSession = URLSession(configuration: .ephemeral)
+        return urlSession
+    }
+}
+
+enum EndpointMockFactory {
+    static func makeSuccessfulEndpoint(path: String) -> EndpointMock {
+        let routePath = "\(path)/success"
+        return EndpointMock(path: routePath)
+    }
+    
+    static func makeErrorEndpoint(path: String) -> EndpointMock {
+        let routePath = "\(path)/server-error"
+        return EndpointMock(path: routePath)
+    }
+    
+    static func makeUnexpectedStatusCodeCreateEndpoint(path: String) -> EndpointMock {
+        let routePath = "\(path)/create/invalid-status-code"
+        return EndpointMock(path: routePath)
+    }
+    
+    static func makeLocationHeaderNotFoundEndpoint(path: String) -> EndpointMock {
+        let routePath = "\(path)/create/location-not-found"
+        return EndpointMock(path: routePath)
+    }
+    
+    static func makeInvalidResourceIDCreateEndpoint(path: String) -> EndpointMock {
+        let routePath = "\(path)/create/invalid-uuid"
+        return EndpointMock(path: routePath)
+    }
+}

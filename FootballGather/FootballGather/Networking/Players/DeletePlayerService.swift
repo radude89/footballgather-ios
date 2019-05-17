@@ -14,13 +14,13 @@ final class DeletePlayerService {
     private var urlRequest: URLRequestFactory
     
     init(session: NetworkSession = URLSession.shared,
-         urlRequest: URLRequestFactory = AuthURLRequestFactory(endpoint: Endpoint(path: "api/players"))) {
+         urlRequest: URLRequestFactory = AuthURLRequestFactory(endpoint: StandardEndpoint(path: "api/players"))) {
         self.session = session
         self.urlRequest = urlRequest
     }
     
     func deletePlayer(havingServerId serverId: Int, completion: @escaping (Result<Bool, Error>) -> Void) {
-        let endpoint = Endpoint(path: "\(urlRequest.endpoint.path)/\(serverId)")
+        let endpoint = StandardEndpoint(path: "\(urlRequest.endpoint.path)/\(serverId)")
         urlRequest.endpoint = endpoint
         
         var request = urlRequest.makeURLRequest()

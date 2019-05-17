@@ -28,6 +28,10 @@
 		F72749D8228D0BCF00698D0D /* DeleteGatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72749D7228D0BCF00698D0D /* DeleteGatherService.swift */; };
 		F72749DB228D0C5100698D0D /* GetPlayersForGatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72749DA228D0C5100698D0D /* GetPlayersForGatherService.swift */; };
 		F72749DD228D0FC800698D0D /* AddPlayerToGatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72749DC228D0FC800698D0D /* AddPlayerToGatherService.swift */; };
+		F75CE92D228DF1B800871C47 /* EndpointMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75CE92C228DF1B800871C47 /* EndpointMock.swift */; };
+		F75CE92F228E6B6100871C47 /* CreateUserServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75CE92E228E6B6100871C47 /* CreateUserServiceTests.swift */; };
+		F75CE931228E6BDA00871C47 /* ApplicationKeychainMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75CE930228E6BDA00871C47 /* ApplicationKeychainMock.swift */; };
+		F75CE933228E717800871C47 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75CE932228E717800871C47 /* Models.swift */; };
 		F762CA9122619C5C00947AED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F762CA9022619C5C00947AED /* AppDelegate.swift */; };
 		F762CA9322619C5C00947AED /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F762CA9222619C5C00947AED /* ViewController.swift */; };
 		F762CA9622619C5C00947AED /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F762CA9422619C5C00947AED /* Main.storyboard */; };
@@ -82,6 +86,10 @@
 		F72749D7228D0BCF00698D0D /* DeleteGatherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteGatherService.swift; sourceTree = "<group>"; };
 		F72749DA228D0C5100698D0D /* GetPlayersForGatherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPlayersForGatherService.swift; sourceTree = "<group>"; };
 		F72749DC228D0FC800698D0D /* AddPlayerToGatherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlayerToGatherService.swift; sourceTree = "<group>"; };
+		F75CE92C228DF1B800871C47 /* EndpointMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointMock.swift; sourceTree = "<group>"; };
+		F75CE92E228E6B6100871C47 /* CreateUserServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateUserServiceTests.swift; sourceTree = "<group>"; };
+		F75CE930228E6BDA00871C47 /* ApplicationKeychainMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationKeychainMock.swift; sourceTree = "<group>"; };
+		F75CE932228E717800871C47 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		F762CA8D22619C5C00947AED /* FootballGather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FootballGather.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F762CA9022619C5C00947AED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F762CA9222619C5C00947AED /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -178,6 +186,14 @@
 			path = GathersPlayers;
 			sourceTree = "<group>";
 		};
+		F75CE92B228DF14000871C47 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				F75CE92E228E6B6100871C47 /* CreateUserServiceTests.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
 		F762CA8422619C5C00947AED = {
 			isa = PBXGroup;
 			children = (
@@ -214,6 +230,7 @@
 			isa = PBXGroup;
 			children = (
 				F782C8942261E10F0045EB2C /* Mocks */,
+				F75CE92B228DF14000871C47 /* Networking */,
 				F782C8912261D7AD0045EB2C /* CoreData */,
 				F7034C48228918700003F506 /* Storage */,
 				F762CAAA22619C5E00947AED /* Info.plist */,
@@ -285,6 +302,9 @@
 			children = (
 				F782C8952261E11C0045EB2C /* CoreDataStoreMock.swift */,
 				F782C8972261EC3E0045EB2C /* TestConfigurator.swift */,
+				F75CE92C228DF1B800871C47 /* EndpointMock.swift */,
+				F75CE930228E6BDA00871C47 /* ApplicationKeychainMock.swift */,
+				F75CE932228E717800871C47 /* Models.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -442,6 +462,7 @@
 			files = (
 				F782C8932261D7F90045EB2C /* CoreDataStoreTests.swift in Sources */,
 				F782C8992261F4640045EB2C /* FootballGather.xcdatamodeld in Sources */,
+				F75CE92F228E6B6100871C47 /* CreateUserServiceTests.swift in Sources */,
 				F7034C4A2289192E0003F506 /* KeychainQueryFactoryTests.swift in Sources */,
 				F7034C7A228A79060003F506 /* FootbalGatherKeychainTests.swift in Sources */,
 				F7034C82228AF44C0003F506 /* CryptoTests.swift in Sources */,
@@ -449,7 +470,10 @@
 				F782C8982261EC3E0045EB2C /* TestConfigurator.swift in Sources */,
 				F7034C7E228A9CC70003F506 /* FootballGatherUserDefaultsTests.swift in Sources */,
 				F782C8962261E11C0045EB2C /* CoreDataStoreMock.swift in Sources */,
+				F75CE931228E6BDA00871C47 /* ApplicationKeychainMock.swift in Sources */,
+				F75CE92D228DF1B800871C47 /* EndpointMock.swift in Sources */,
 				F7034C76228920AD0003F506 /* KeychainWrapperTests.swift in Sources */,
+				F75CE933228E717800871C47 /* Models.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

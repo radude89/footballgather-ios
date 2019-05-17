@@ -33,19 +33,37 @@ extension URLSession: NetworkSession {
 }
 
 // MARK: - Endpoint
-/// https://www.swiftbysundell.com/posts/constructing-urls-in-swift
-struct Endpoint {
-    let path: String
-    let queryItems: [URLQueryItem]? = nil
+protocol Endpoint {
+    var path: String { get set }
+    var queryItems: [URLQueryItem]? { get set }
     
+    var scheme: String? { get }
+    var host: String? { get }
+    var port: Int? { get }
+    var url: URL? { get }
+}
+
+extension Endpoint {
     var url: URL? {
         var components = URLComponents()
-        components.scheme = "http"
-        components.host = "localhost.com:8080"
+        components.scheme = scheme
+        components.host = host
         components.path = path
         components.queryItems = queryItems
+        components.port = port
         
         return components.url
     }
 }
 
+struct StandardEndpoint: Endpoint {
+    var path: String
+    var queryItems: [URLQueryItem]? = nil
+    var scheme: String? = "http"
+    var host: String? = "localhost.com"
+    var port: Int? = 8080
+    
+    init(path: String) {
+        self.path = path
+    }
+}

@@ -15,7 +15,7 @@ final class LoginService {
     private var appKeychain: ApplicationKeychain
     
     init(session: NetworkSession = URLSession.shared,
-         urlRequest: URLRequestFactory = StandardURLRequestFactory(endpoint: Endpoint(path: "api/users/login")),
+         urlRequest: URLRequestFactory = StandardURLRequestFactory(endpoint: StandardEndpoint(path: "api/users/login")),
          appKeychain: ApplicationKeychain = FootbalGatherKeychain.shared) {
         self.session = session
         self.urlRequest = urlRequest

@@ -39,7 +39,7 @@ enum EndpointMockFactory {
         return EndpointMock(path: routePath)
     }
     
-    static func makeEmptyReÔsponseEndpoint() -> EndpointMock {
+    static func makeEmptyResponseEndpoint() -> EndpointMock {
         let routePath = "/api/empty"
         return EndpointMock(path: routePath)
     }

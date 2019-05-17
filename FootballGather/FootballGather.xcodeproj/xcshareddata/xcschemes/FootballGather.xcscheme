@@ -52,7 +52,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "# You can save logs to a file&#10;curl -X POST http://localhost:9999/__admin/shutdown&#10;#sleep 1s&#10;#osascript -e &apos;tell application &quot;Terminal&quot; to close window 1&apos; &#10;">
+               scriptText = "# You can save logs to a file&#10;curl -X POST http://localhost:9999/__admin/shutdown&#10;sleep 1s&#10;osascript -e &apos;tell application &quot;Terminal&quot; to close window 1&apos; &#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"

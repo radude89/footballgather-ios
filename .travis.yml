@@ -1,3 +1,5 @@
+git:
+  depth: 3
 osx_image: xcode10.2
 language: swift
 os: osx

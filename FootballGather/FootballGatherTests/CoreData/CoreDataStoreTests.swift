@@ -82,7 +82,7 @@ final class CoreDataStoreTests: XCTestCase {
     }
     
     func test_retrieveManagedObjectsInBackground_hasZeroElements() {
-        let exp = expectation(description: "Fetch objects in background expectation")
+        let exp = expectation(description: "Fetch objects in background expectation.")
         
         sut.createBackgroundQueue { [weak self] in
             self?.retrieveAndCheckObjectsCountIsZero(inBackground: true)

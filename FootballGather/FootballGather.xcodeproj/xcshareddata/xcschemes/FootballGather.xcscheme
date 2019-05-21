@@ -34,7 +34,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "java -jar &quot;${SRCROOT}/_stubs/wiremock-standalone-2.22.0.jar&quot; --port 9999 --root-dir &quot;${SRCROOT}/_stubs&quot; --verbose &amp;&gt; &quot;${SRCROOT}/_stubs/outputwiremock.txt&quot; 2&gt;&amp;1 &amp;&#10;">
+               scriptText = "java -jar &quot;${SRCROOT}/_stubs/wiremock-standalone-2.22.0.jar&quot; --port 9999 --root-dir &quot;${SRCROOT}/_stubs&quot; 2&gt;&amp;1 &amp;&#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"

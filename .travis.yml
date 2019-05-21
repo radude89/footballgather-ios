@@ -3,10 +3,6 @@ git:
 
 osx_image: xcode10.2
 language: swift
-os: osx
-xcode_project: FootballGather/FootballGather.xcodeproj
-xcode_scheme: FootballGather-ci
-xcode_destination: platform=iOS Simulator,OS=12.2,name=iPhone XR
 before_script: ./start-wiremock.sh
-script: echo "rdan-tests-script"
+script: ./run-tests.sh
 after_script: ./stop-wiremock.sh

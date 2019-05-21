@@ -18,7 +18,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "# Type a script or drag a script file from your workspace to insert its path.&#10;java -jar &quot;${SRCROOT}/_stubs/wiremock-standalone-2.22.0.jar&quot; --port 9999 --root-dir &quot;${SRCROOT}/_stubs&quot; 2&gt;&amp;1 &amp;&#10;">
+               scriptText = "# Type a script or drag a script file from your workspace to insert its path.&#10;java -jar &quot;${SRCROOT}/_stubs/wiremock-standalone-2.22.0.jar&quot; --port 9999 --root-dir &quot;${SRCROOT}/_stubs&quot;&#10;">
             </ActionContent>
          </ExecutionAction>
       </PreActions>

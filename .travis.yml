@@ -3,6 +3,6 @@ git:
 
 osx_image: xcode10.2
 language: swift
-before_script: ./start-wiremock.sh
-script: ./run-tests.sh
-after_script: ./stop-wiremock.sh
+before_script: ./scripts/start-wiremock.sh
+script: ./scripts/run-tests.sh
+after_script: ./scripts/stop-wiremock.sh

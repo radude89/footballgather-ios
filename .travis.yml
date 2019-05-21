@@ -7,5 +7,6 @@ os: osx
 xcode_project: FootballGather/FootballGather.xcodeproj
 xcode_scheme: FootballGather-ci
 xcode_destination: platform=iOS Simulator,OS=12.2,name=iPhone XR
-before_deploy: ./start-wiremock.sh
-after_deploy: ./stop-wiremock.sh
+before_script: ./start-wiremock.sh
+script: echo "rdan-tests-script"
+after_script: ./stop-wiremock.sh

@@ -21,6 +21,44 @@
                BlueprintName = "FootballGatherTests"
                ReferencedContainer = "container:FootballGather.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "AddPlayerToGatherServiceTests">
+               </Test>
+               <Test
+                  Identifier = "CreateGatherServiceTests">
+               </Test>
+               <Test
+                  Identifier = "CreatePlayersServiceTests">
+               </Test>
+               <Test
+                  Identifier = "CreateUserServiceTests">
+               </Test>
+               <Test
+                  Identifier = "DeleteGatherServiceTests">
+               </Test>
+               <Test
+                  Identifier = "DeletePlayerServiceTests">
+               </Test>
+               <Test
+                  Identifier = "GetGathersServiceTests">
+               </Test>
+               <Test
+                  Identifier = "GetPlayersForGatherServiceTests">
+               </Test>
+               <Test
+                  Identifier = "GetPlayersServiceTests">
+               </Test>
+               <Test
+                  Identifier = "LoginServiceTests">
+               </Test>
+               <Test
+                  Identifier = "UpdateGatherServiceTests">
+               </Test>
+               <Test
+                  Identifier = "UpdatePlayerServiceTests">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <AdditionalOptions>

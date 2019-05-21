@@ -13,6 +13,24 @@
       codeCoverageEnabled = "YES"
       onlyGenerateCoverageForSpecifiedTargets = "YES"
       shouldUseLaunchSchemeArgsEnv = "YES">
+      <PreActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Run Script"
+               scriptText = "# Type a script or drag a script file from your workspace to insert its path.&#10;java -jar &quot;${SRCROOT}/_stubs/wiremock-standalone-2.22.0.jar&quot; --port 9999 --root-dir &quot;${SRCROOT}/_stubs&quot; --verbose &amp;&gt; &quot;${SRCROOT}/_stubs/outputwiremock.txt&quot; 2&gt;&amp;1 &amp;&#10;">
+            </ActionContent>
+         </ExecutionAction>
+      </PreActions>
+      <PostActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Run Script"
+               scriptText = "# Type a script or drag a script file from your workspace to insert its path.&#10;curl -X POST http://localhost:9999/__admin/shutdown&#10;">
+            </ActionContent>
+         </ExecutionAction>
+      </PostActions>
       <CodeCoverageTargets>
          <BuildableReference
             BuildableIdentifier = "primary"
@@ -32,44 +50,6 @@
                BlueprintName = "FootballGatherTests"
                ReferencedContainer = "container:FootballGather.xcodeproj">
             </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "AddPlayerToGatherServiceTests">
-               </Test>
-               <Test
-                  Identifier = "CreateGatherServiceTests">
-               </Test>
-               <Test
-                  Identifier = "CreatePlayersServiceTests">
-               </Test>
-               <Test
-                  Identifier = "CreateUserServiceTests">
-               </Test>
-               <Test
-                  Identifier = "DeleteGatherServiceTests">
-               </Test>
-               <Test
-                  Identifier = "DeletePlayerServiceTests">
-               </Test>
-               <Test
-                  Identifier = "GetGathersServiceTests">
-               </Test>
-               <Test
-                  Identifier = "GetPlayersForGatherServiceTests">
-               </Test>
-               <Test
-                  Identifier = "GetPlayersServiceTests">
-               </Test>
-               <Test
-                  Identifier = "LoginServiceTests">
-               </Test>
-               <Test
-                  Identifier = "UpdateGatherServiceTests">
-               </Test>
-               <Test
-                  Identifier = "UpdatePlayerServiceTests">
-               </Test>
-            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>

@@ -10,7 +10,18 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      codeCoverageEnabled = "YES"
+      onlyGenerateCoverageForSpecifiedTargets = "YES"
       shouldUseLaunchSchemeArgsEnv = "YES">
+      <CodeCoverageTargets>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "F762CA8C22619C5C00947AED"
+            BuildableName = "FootballGather.app"
+            BlueprintName = "FootballGather"
+            ReferencedContainer = "container:FootballGather.xcodeproj">
+         </BuildableReference>
+      </CodeCoverageTargets>
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -21,46 +32,17 @@
                BlueprintName = "FootballGatherTests"
                ReferencedContainer = "container:FootballGather.xcodeproj">
             </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "AddPlayerToGatherServiceTests">
-               </Test>
-               <Test
-                  Identifier = "CreateGatherServiceTests">
-               </Test>
-               <Test
-                  Identifier = "CreatePlayersServiceTests">
-               </Test>
-               <Test
-                  Identifier = "CreateUserServiceTests">
-               </Test>
-               <Test
-                  Identifier = "DeleteGatherServiceTests">
-               </Test>
-               <Test
-                  Identifier = "DeletePlayerServiceTests">
-               </Test>
-               <Test
-                  Identifier = "GetGathersServiceTests">
-               </Test>
-               <Test
-                  Identifier = "GetPlayersForGatherServiceTests">
-               </Test>
-               <Test
-                  Identifier = "GetPlayersServiceTests">
-               </Test>
-               <Test
-                  Identifier = "LoginServiceTests">
-               </Test>
-               <Test
-                  Identifier = "UpdateGatherServiceTests">
-               </Test>
-               <Test
-                  Identifier = "UpdatePlayerServiceTests">
-               </Test>
-            </SkippedTests>
          </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "F762CA8C22619C5C00947AED"
+            BuildableName = "FootballGather.app"
+            BlueprintName = "FootballGather"
+            ReferencedContainer = "container:FootballGather.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -74,6 +56,16 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "F762CA8C22619C5C00947AED"
+            BuildableName = "FootballGather.app"
+            BlueprintName = "FootballGather"
+            ReferencedContainer = "container:FootballGather.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

@@ -9,5 +9,5 @@
 import XCTest
 
 enum TestConfigurator {
-    static let defaultTimeout: TimeInterval = 0.3
+    static let defaultTimeout: TimeInterval = 1.0
 }

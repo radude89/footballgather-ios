@@ -43,7 +43,7 @@ final class AddPlayerToGatherServiceTests: XCTestCase {
 
         }
         
-        wait(for: [exp], timeout: TestConfigurator.defaultTimeout)
+        wait(for: [exp], timeout: TestConfigurator.defaultTimeout + 5.0)
     }
     
     func test_request_completesWithError() {

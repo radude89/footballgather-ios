@@ -34,7 +34,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "cd &quot;/${SRCROOT}/_stubs&quot;&#10;osascript run-wiremocks.applescript &quot;/${SRCROOT}/_stubs&quot;&#10;">
+               scriptText = "java -jar &quot;${SRCROOT}/../stubs/wiremock-standalone-2.22.0.jar&quot; --port 9999 --root-dir &quot;${SRCROOT}/../stubs&quot; 2&gt;&amp;1 &amp;&#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"
@@ -52,7 +52,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "# You can save logs to a file&#10;curl -X POST http://localhost:9999/__admin/shutdown&#10;sleep 1s&#10;osascript -e &apos;tell application &quot;Terminal&quot; to close window 1&apos; &#10;">
+               scriptText = "curl -X POST http://localhost:9999/__admin/shutdown&#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"

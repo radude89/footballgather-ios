@@ -1,5 +1,5 @@
 //
-//  GatherNetworkService.swift
+//  GatherServiceModels.swift
 //  FootballGather
 //
 //  Created by Dan, Radu-Ionut (RO - Bucharest) on 02/06/2019.
@@ -7,18 +7,6 @@
 //
 
 import Foundation
-
-// MARK: - Service
-struct GatherNetworkService: NetworkService {
-    var session: NetworkSession
-    var urlRequest: URLRequestFactory
-    
-    init(session: NetworkSession = URLSession.shared,
-         urlRequest: URLRequestFactory = AuthURLRequestFactory(endpoint: StandardEndpoint(path: "/api/gathers"))) {
-        self.session = session
-        self.urlRequest = urlRequest
-    }
-}
 
 // MARK: - RequestModel
 struct GatherCreateModel: Encodable {

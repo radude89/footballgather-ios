@@ -27,8 +27,7 @@ final class GetPlayersServiceTests: XCTestCase {
     
     func test_request_completesSuccessfully() {
         let endpoint = EndpointMockFactory.makeSuccessfulEndpoint(path: resourcePath)
-        let service = PlayerNetworkService(session: session,
-                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let service = StandardNetworkService(session: session, urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let exp = expectation(description: "Waiting response expectation")
         
         service.get() { (result: Result<[PlayerResponseModel], Error>) in
@@ -46,8 +45,7 @@ final class GetPlayersServiceTests: XCTestCase {
     
     func test_request_completesWithError() {
         let endpoint = EndpointMockFactory.makeErrorEndpoint()
-        let service = PlayerNetworkService(session: session,
-                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let service = StandardNetworkService(session: session, urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let exp = expectation(description: "Waiting response expectation")
         
         service.get() { (result: Result<[PlayerResponseModel], Error>) in
@@ -65,8 +63,7 @@ final class GetPlayersServiceTests: XCTestCase {
     
     func test_request_completesWithUnexpectedResponseStatusCode() {
         let endpoint = EndpointMockFactory.makeUnexpectedStatusCodeCreateEndpoint()
-        let service = PlayerNetworkService(session: session,
-                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let service = StandardNetworkService(session: session, urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let exp = expectation(description: "Waiting response expectation")
         
         service.get() { (result: Result<[PlayerResponseModel], Error>) in
@@ -84,8 +81,7 @@ final class GetPlayersServiceTests: XCTestCase {
     
     func test_request_completesWithTransformModelError() {
         let endpoint = EndpointMockFactory.makeInvalidModelTansformEndpoint()
-        let service = PlayerNetworkService(session: session,
-                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let service = StandardNetworkService(session: session, urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let exp = expectation(description: "Waiting response expectation")
         
         service.get() { (result: Result<[PlayerResponseModel], Error>) in

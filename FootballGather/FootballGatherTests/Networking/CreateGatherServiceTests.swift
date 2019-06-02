@@ -27,8 +27,7 @@ final class CreateGatherServiceTests: XCTestCase {
     
     func test_request_completesSuccessfully_withoutGatherDetails() {
         let endpoint = EndpointMockFactory.makeSuccessfulEndpoint(path: resourcePath)
-        let service = GatherNetworkService(session: session,
-                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let service = StandardNetworkService(session: session, urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let gather = ModelsMockFactory.makeGather()
         let exp = expectation(description: "Waiting response expectation")
         
@@ -46,8 +45,7 @@ final class CreateGatherServiceTests: XCTestCase {
     
     func test_request_completesSuccessfully_withGatherDetails() {
         let endpoint = EndpointMockFactory.makeSuccessfulEndpoint(path: resourcePath)
-        let service = GatherNetworkService(session: session,
-                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let service = StandardNetworkService(session: session, urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let gather = ModelsMockFactory.makeGather()
         let exp = expectation(description: "Waiting response expectation")
         
@@ -65,8 +63,7 @@ final class CreateGatherServiceTests: XCTestCase {
     
     func test_request_completesWithError() {
         let endpoint = EndpointMockFactory.makeErrorEndpoint()
-        let service = GatherNetworkService(session: session,
-                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let service = StandardNetworkService(session: session, urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let gather = ModelsMockFactory.makeGather()
         let exp = expectation(description: "Waiting response expectation")
         
@@ -84,8 +81,7 @@ final class CreateGatherServiceTests: XCTestCase {
     
     func test_request_completesWithUnexpectedResponseStatusCode() {
         let endpoint = EndpointMockFactory.makeUnexpectedStatusCodeCreateEndpoint()
-        let service = GatherNetworkService(session: session,
-                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let service = StandardNetworkService(session: session, urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let gather = ModelsMockFactory.makeGather()
         let exp = expectation(description: "Waiting response expectation")
         
@@ -103,8 +99,7 @@ final class CreateGatherServiceTests: XCTestCase {
     
     func test_request_completesWithoutLocationHeader() {
         let endpoint = EndpointMockFactory.makeLocationHeaderNotFoundEndpoint()
-        let service = GatherNetworkService(session: session,
-                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let service = StandardNetworkService(session: session, urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let gather = ModelsMockFactory.makeGather()
         let exp = expectation(description: "Waiting response expectation")
         
@@ -122,8 +117,7 @@ final class CreateGatherServiceTests: XCTestCase {
     
     func test_request_completesWithInvalidResourceId() {
         let endpoint = EndpointMockFactory.makeInvalidResourceIDCreateEndpoint()
-        let service = GatherNetworkService(session: session,
-                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let service = StandardNetworkService(session: session, urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let gather = ModelsMockFactory.makeGather()
         let exp = expectation(description: "Waiting response expectation")
         

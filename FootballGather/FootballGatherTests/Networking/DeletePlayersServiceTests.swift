@@ -27,8 +27,7 @@ final class DeletePlayerServiceTests: XCTestCase {
     
     func test_request_completesSuccessfully() {
         let endpoint = EndpointMockFactory.makeSuccessfulEndpoint(path: resourcePath)
-        var service = PlayerNetworkService(session: session,
-                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        var service = StandardNetworkService(session: session, urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let exp = expectation(description: "Waiting response expectation")
         
         service.delete(withID: ResourceID.integer(ModelsMock.playerId)) { result in
@@ -47,8 +46,7 @@ final class DeletePlayerServiceTests: XCTestCase {
     
     func test_request_completesWithError() {
         let endpoint = EndpointMockFactory.makeErrorEndpoint()
-        var service = PlayerNetworkService(session: session,
-                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        var service = StandardNetworkService(session: session, urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let exp = expectation(description: "Waiting response expectation")
         
         service.delete(withID: ResourceID.integer(ModelsMock.playerId)) { result in
@@ -66,8 +64,7 @@ final class DeletePlayerServiceTests: XCTestCase {
     
     func test_request_completesWithUnexpectedResponseStatusCode() {
         let endpoint = EndpointMockFactory.makeUnexpectedStatusCodeCreateEndpoint()
-        var service = PlayerNetworkService(session: session,
-                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        var service = StandardNetworkService(session: session, urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let exp = expectation(description: "Waiting response expectation")
         
         service.delete(withID: ResourceID.integer(ModelsMock.playerId)) { result in

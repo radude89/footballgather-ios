@@ -27,8 +27,7 @@ final class UpdateGatherServiceTests: XCTestCase {
     
     func test_request_completesSuccessfully() {
         let endpoint = EndpointMockFactory.makeSuccessfulEndpoint(path: resourcePath)
-        var service = GatherNetworkService(session: session,
-                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        var service = StandardNetworkService(session: session, urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let gather = ModelsMockFactory.makeGather()
         let exp = expectation(description: "Waiting response expectation")
         
@@ -48,8 +47,7 @@ final class UpdateGatherServiceTests: XCTestCase {
     
     func test_request_completesWithError() {
         let endpoint = EndpointMockFactory.makeErrorEndpoint()
-        var service = GatherNetworkService(session: session,
-                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        var service = StandardNetworkService(session: session, urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let gather = ModelsMockFactory.makeGather()
         let exp = expectation(description: "Waiting response expectation")
         
@@ -68,8 +66,7 @@ final class UpdateGatherServiceTests: XCTestCase {
     
     func test_request_completesWithUnexpectedResponseStatusCode() {
         let endpoint = EndpointMockFactory.makeUnexpectedStatusCodeCreateEndpoint()
-        var service = GatherNetworkService(session: session,
-                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        var service = StandardNetworkService(session: session, urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let gather = ModelsMockFactory.makeGather()
         let exp = expectation(description: "Waiting response expectation")
         

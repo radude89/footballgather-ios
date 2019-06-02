@@ -1,5 +1,5 @@
 //
-//  PlayerNetworkService.swift
+//  PlayerServiceModels.swift
 //  FootballGather
 //
 //  Created by Dan, Radu-Ionut (RO - Bucharest) on 02/06/2019.
@@ -7,19 +7,6 @@
 //
 
 import Foundation
-
-// MARK: - Service
-struct PlayerNetworkService: NetworkService {
-    var session: NetworkSession
-    var urlRequest: URLRequestFactory
-    
-    init(session: NetworkSession = URLSession.shared,
-         urlRequest: URLRequestFactory = AuthURLRequestFactory(endpoint: StandardEndpoint(path: "/api/players"))) {
-        self.session = session
-        self.urlRequest = urlRequest
-    }
-    
-}
 
 // MARK - Create RequestModel
 struct PlayerCreateModel: Encodable {

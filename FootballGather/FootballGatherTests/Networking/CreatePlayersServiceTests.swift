@@ -27,8 +27,7 @@ final class CreatePlayersServiceTests: XCTestCase {
     
     func test_request_completesSuccessfully() {
         let endpoint = EndpointMockFactory.makeSuccessfulEndpoint(path: resourcePath)
-        let service = PlayerNetworkService(session: session,
-                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let service = StandardNetworkService(session: session, urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let player = ModelsMockFactory.makePlayer()
         let exp = expectation(description: "Waiting response expectation")
         
@@ -46,8 +45,7 @@ final class CreatePlayersServiceTests: XCTestCase {
     
     func test_request_completesWithError() {
         let endpoint = EndpointMockFactory.makeErrorEndpoint()
-        let service = PlayerNetworkService(session: session,
-                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let service = StandardNetworkService(session: session, urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let player = ModelsMockFactory.makePlayer()
         let exp = expectation(description: "Waiting response expectation")
         
@@ -65,8 +63,7 @@ final class CreatePlayersServiceTests: XCTestCase {
     
     func test_request_completesWithUnexpectedResponseStatusCode() {
         let endpoint = EndpointMockFactory.makeUnexpectedStatusCodeCreateEndpoint()
-        let service = PlayerNetworkService(session: session,
-                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let service = StandardNetworkService(session: session, urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let player = ModelsMockFactory.makePlayer()
         let exp = expectation(description: "Waiting response expectation")
         
@@ -84,8 +81,7 @@ final class CreatePlayersServiceTests: XCTestCase {
     
     func test_request_completesWithoutLocationHeader() {
         let endpoint = EndpointMockFactory.makeLocationHeaderNotFoundEndpoint()
-        let service = PlayerNetworkService(session: session,
-                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let service = StandardNetworkService(session: session, urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let player = ModelsMockFactory.makePlayer()
         let exp = expectation(description: "Waiting response expectation")
         
@@ -103,8 +99,7 @@ final class CreatePlayersServiceTests: XCTestCase {
     
     func test_request_completesWithInvalidResourceId() {
         let endpoint = EndpointMockFactory.makeInvalidResourceIDCreateEndpoint()
-        let service = PlayerNetworkService(session: session,
-                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let service = StandardNetworkService(session: session, urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let player = ModelsMockFactory.makePlayer()
         let exp = expectation(description: "Waiting response expectation")
         

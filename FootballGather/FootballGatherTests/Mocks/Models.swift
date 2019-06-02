@@ -20,32 +20,12 @@ enum ModelsMockFactory {
         return GatherCreateModel(score: score, winnerTeam: winnerTeam)
     }
     
-    static func makeUpdateGatherModel(serverUUID: UUID = ModelsMock.gatherUUID,
-                                      score: String? = ModelsMock.DefaultGather.score,
-                                      winnerTeam: String? = ModelsMock.DefaultGather.winnerTeam) -> GatherUpdateModel {
-        return GatherUpdateModel(serverUUID: serverUUID, score: score, winnerTeam: winnerTeam)
-    }
-    
     static func makePlayer(name: String = ModelsMock.DefaultPlayer.name,
                            age: Int? = ModelsMock.DefaultPlayer.age,
                            favouriteTeam: String? = ModelsMock.DefaultPlayer.favouriteTeam,
                            skill: Player.Skill = ModelsMock.DefaultPlayer.skill,
                            preferredPosition: Player.Position = ModelsMock.DefaultPlayer.preferredPosition) -> PlayerCreateModel {
         return PlayerCreateModel(name: name, age: age, skill: skill, preferredPosition: preferredPosition, favouriteTeam: favouriteTeam)
-    }
-    
-    static func makeUpdatePlayerModel(serverId: Int = ModelsMock.DefaultPlayer.serverId,
-                                      name: String = ModelsMock.DefaultPlayer.name,
-                                      age: Int? = ModelsMock.DefaultPlayer.age,
-                                      favouriteTeam: String? = ModelsMock.DefaultPlayer.favouriteTeam,
-                                      skill: Player.Skill = ModelsMock.DefaultPlayer.skill,
-                                      preferredPosition: Player.Position = ModelsMock.DefaultPlayer.preferredPosition) -> PlayerUpdateModel {
-        return PlayerUpdateModel(serverId: serverId,
-                                 name: name,
-                                 age: age,
-                                 skill: skill,
-                                 preferredPosition: preferredPosition,
-                                 favouriteTeam: favouriteTeam)
     }
 }
 

@@ -27,11 +27,11 @@ final class DeletePlayerServiceTests: XCTestCase {
     
     func test_request_completesSuccessfully() {
         let endpoint = EndpointMockFactory.makeSuccessfulEndpoint(path: resourcePath)
-        let service = DeletePlayerService(session: session,
-                                          urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        var service = PlayerNetworkService(session: session,
+                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let exp = expectation(description: "Waiting response expectation")
         
-        service.deletePlayer(havingServerId: ModelsMock.playerId) { result in
+        service.delete(withID: ResourceID.integer(ModelsMock.playerId)) { result in
             switch result {
             case .success(let resultValue):
                 XCTAssertTrue(resultValue)
@@ -47,11 +47,11 @@ final class DeletePlayerServiceTests: XCTestCase {
     
     func test_request_completesWithError() {
         let endpoint = EndpointMockFactory.makeErrorEndpoint()
-        let service = DeletePlayerService(session: session,
-                                          urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        var service = PlayerNetworkService(session: session,
+                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let exp = expectation(description: "Waiting response expectation")
         
-        service.deletePlayer(havingServerId: ModelsMock.playerId) { result in
+        service.delete(withID: ResourceID.integer(ModelsMock.playerId)) { result in
             switch result {
             case .success(_):
                 XCTFail("Request should have failed")
@@ -66,11 +66,11 @@ final class DeletePlayerServiceTests: XCTestCase {
     
     func test_request_completesWithUnexpectedResponseStatusCode() {
         let endpoint = EndpointMockFactory.makeUnexpectedStatusCodeCreateEndpoint()
-        let service = DeletePlayerService(session: session,
-                                          urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        var service = PlayerNetworkService(session: session,
+                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let exp = expectation(description: "Waiting response expectation")
         
-        service.deletePlayer(havingServerId: ModelsMock.playerId) { result in
+        service.delete(withID: ResourceID.integer(ModelsMock.playerId)) { result in
             switch result {
             case .failure(let error as ServiceError):
                 XCTAssertEqual(error, .unexpectedResponse)

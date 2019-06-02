@@ -47,6 +47,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self?.coreDataStore.saveContext(background: true)
             self?.coreDataStore.saveContext()
         }
+        
+        FootbalGatherKeychain.shared.token = nil
     }
 
 }

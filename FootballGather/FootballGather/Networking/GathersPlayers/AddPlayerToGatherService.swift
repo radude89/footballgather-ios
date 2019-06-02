@@ -9,9 +9,9 @@
 import Foundation
 
 // MARK: - Service
-final class AddPlayerToGatherService {
-    private let session: NetworkSession
-    private var urlRequest: URLRequestFactory
+struct AddPlayerToGatherService: NetworkService {
+    var session: NetworkSession
+    var urlRequest: URLRequestFactory
     
     init(session: NetworkSession = URLSession.shared,
          urlRequest: URLRequestFactory = AuthURLRequestFactory(endpoint: StandardEndpoint(path: "/api/gathers"))) {
@@ -19,10 +19,10 @@ final class AddPlayerToGatherService {
         self.urlRequest = urlRequest
     }
     
-    func addPlayer(havingServerId playerServerId: Int,
-                   toGatherWithId gatherUUID: UUID,
-                   team: PlayerGatherTeam,
-                   completion: @escaping (Result<Bool, Error>) -> Void) {
+    mutating func addPlayer(havingServerId playerServerId: Int,
+                            toGatherWithId gatherUUID: UUID,
+                            team: PlayerGatherTeam,
+                            completion: @escaping (Result<Bool, Error>) -> Void) {
         var playersEndpoint = urlRequest.endpoint
         playersEndpoint.path = "\(urlRequest.endpoint.path)/\(gatherUUID.uuidString)/players/\(playerServerId)"
         urlRequest.endpoint = playersEndpoint
@@ -45,7 +45,7 @@ final class AddPlayerToGatherService {
             completion(.success(true))
         }
     }
-        
+    
 }
 
 // MARK: - Model

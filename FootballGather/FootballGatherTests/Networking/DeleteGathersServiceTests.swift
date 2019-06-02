@@ -27,11 +27,11 @@ final class DeleteGatherServiceTests: XCTestCase {
     
     func test_request_completesSuccessfully() {
         let endpoint = EndpointMockFactory.makeSuccessfulEndpoint(path: resourcePath)
-        let service = DeleteGatherService(session: session,
-                                          urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        var service = GatherNetworkService(session: session,
+                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let exp = expectation(description: "Waiting response expectation")
         
-        service.deleteGather(havingServerId: ModelsMock.gatherUUID) { result in
+        service.delete(withID: ResourceID.uuid(ModelsMock.gatherUUID)) { result in
             switch result {
             case .success(let resultValue):
                 XCTAssertTrue(resultValue)
@@ -39,7 +39,6 @@ final class DeleteGatherServiceTests: XCTestCase {
             case .failure(_):
                 XCTFail("Unexpected failure")
             }
-            
         }
         
         wait(for: [exp], timeout: TestConfigurator.defaultTimeout)
@@ -47,11 +46,11 @@ final class DeleteGatherServiceTests: XCTestCase {
     
     func test_request_completesWithError() {
         let endpoint = EndpointMockFactory.makeErrorEndpoint()
-        let service = DeleteGatherService(session: session,
-                                          urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        var service = GatherNetworkService(session: session,
+                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let exp = expectation(description: "Waiting response expectation")
         
-        service.deleteGather(havingServerId: ModelsMock.gatherUUID) { result in
+        service.delete(withID: ResourceID.uuid(ModelsMock.gatherUUID)) { result in
             switch result {
             case .success(_):
                 XCTFail("Request should have failed")
@@ -66,11 +65,11 @@ final class DeleteGatherServiceTests: XCTestCase {
     
     func test_request_completesWithUnexpectedResponseStatusCode() {
         let endpoint = EndpointMockFactory.makeUnexpectedStatusCodeCreateEndpoint()
-        let service = DeleteGatherService(session: session,
-                                          urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        var service = GatherNetworkService(session: session,
+                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let exp = expectation(description: "Waiting response expectation")
         
-        service.deleteGather(havingServerId: ModelsMock.gatherUUID) { result in
+        service.delete(withID: ResourceID.uuid(ModelsMock.gatherUUID)) { result in
             switch result {
             case .failure(let error as ServiceError):
                 XCTAssertEqual(error, .unexpectedResponse)

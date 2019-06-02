@@ -12,7 +12,8 @@ import Foundation
 enum ServiceError: Error {
     case unexpectedResponse
     case locationHeaderNotFound
-    case resourceIdNotFound
+    case resourceIDNotFound
+    case unexpectedResourceIDType
     case expectedDataInResponse
     case invalidRequestData
 }

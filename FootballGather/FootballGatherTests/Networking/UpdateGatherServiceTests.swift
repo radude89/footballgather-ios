@@ -27,12 +27,12 @@ final class UpdateGatherServiceTests: XCTestCase {
     
     func test_request_completesSuccessfully() {
         let endpoint = EndpointMockFactory.makeSuccessfulEndpoint(path: resourcePath)
-        let service = UpdateGatherService(session: session,
-                                          urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
-        let gather = ModelsMockFactory.makeUpdateGatherModel()
+        var service = GatherNetworkService(session: session,
+                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let gather = ModelsMockFactory.makeGather()
         let exp = expectation(description: "Waiting response expectation")
         
-        service.updateGather(gather) { result in
+        service.update(gather, resourceID: ResourceID.uuid(ModelsMock.gatherUUID)) { result in
             switch result {
             case .success(let resultValue):
                 XCTAssertTrue(resultValue)
@@ -40,7 +40,7 @@ final class UpdateGatherServiceTests: XCTestCase {
             case .failure(_):
                 XCTFail("Unexpected failure")
             }
-
+            
         }
         
         wait(for: [exp], timeout: TestConfigurator.defaultTimeout)
@@ -48,12 +48,12 @@ final class UpdateGatherServiceTests: XCTestCase {
     
     func test_request_completesWithError() {
         let endpoint = EndpointMockFactory.makeErrorEndpoint()
-        let service = UpdateGatherService(session: session,
-                                          urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
-        let gather = ModelsMockFactory.makeUpdateGatherModel()
+        var service = GatherNetworkService(session: session,
+                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let gather = ModelsMockFactory.makeGather()
         let exp = expectation(description: "Waiting response expectation")
         
-        service.updateGather(gather) { result in
+        service.update(gather, resourceID: ResourceID.uuid(ModelsMock.gatherUUID)) { result in
             switch result {
             case .success(_):
                 XCTFail("Request should have failed")
@@ -68,12 +68,12 @@ final class UpdateGatherServiceTests: XCTestCase {
     
     func test_request_completesWithUnexpectedResponseStatusCode() {
         let endpoint = EndpointMockFactory.makeUnexpectedStatusCodeCreateEndpoint()
-        let service = UpdateGatherService(session: session,
-                                          urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
-        let gather = ModelsMockFactory.makeUpdateGatherModel()
+        var service = GatherNetworkService(session: session,
+                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let gather = ModelsMockFactory.makeGather()
         let exp = expectation(description: "Waiting response expectation")
         
-        service.updateGather(gather) { result in
+        service.update(gather, resourceID: ResourceID.uuid(ModelsMock.gatherUUID)) { result in
             switch result {
             case .failure(let error as ServiceError):
                 XCTAssertEqual(error, .unexpectedResponse)

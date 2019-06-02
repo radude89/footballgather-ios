@@ -27,7 +27,7 @@ final class GetPlayersForGatherServiceTests: XCTestCase {
     
     func test_request_completesSuccessfully() {
         let endpoint = EndpointMockFactory.makeSuccessfulEndpoint(path: resourcePath)
-        let service = GetPlayersForGatherService(session: session,
+        var service = GetPlayersForGatherService(session: session,
                                                  urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let exp = expectation(description: "Waiting response expectation")
         
@@ -46,7 +46,7 @@ final class GetPlayersForGatherServiceTests: XCTestCase {
     
     func test_request_completesWithError() {
         let endpoint = EndpointMockFactory.makeErrorEndpoint()
-        let service = GetPlayersForGatherService(session: session,
+        var service = GetPlayersForGatherService(session: session,
                                                  urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let exp = expectation(description: "Waiting response expectation")
         
@@ -65,7 +65,7 @@ final class GetPlayersForGatherServiceTests: XCTestCase {
     
     func test_request_completesWithUnexpectedResponseStatusCode() {
         let endpoint = EndpointMockFactory.makeUnexpectedStatusCodeCreateEndpoint()
-        let service = GetPlayersForGatherService(session: session,
+        var service = GetPlayersForGatherService(session: session,
                                                  urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let exp = expectation(description: "Waiting response expectation")
         
@@ -84,7 +84,7 @@ final class GetPlayersForGatherServiceTests: XCTestCase {
     
     func test_request_completesWithTransformModelError() {
         let endpoint = EndpointMockFactory.makeInvalidModelTansformEndpoint()
-        let service = GetPlayersForGatherService(session: session,
+        var service = GetPlayersForGatherService(session: session,
                                                  urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let exp = expectation(description: "Waiting response expectation")
         

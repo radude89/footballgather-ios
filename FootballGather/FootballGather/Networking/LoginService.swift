@@ -9,13 +9,13 @@
 import Foundation
 
 // MARK: - Service
-final class LoginService {
-    private let session: NetworkSession
-    private let urlRequest: URLRequestFactory
+final class LoginService: NetworkService {
+    var session: NetworkSession
+    var urlRequest: URLRequestFactory
     private var appKeychain: ApplicationKeychain
     
     init(session: NetworkSession = URLSession.shared,
-         urlRequest: URLRequestFactory = StandardURLRequestFactory(endpoint: StandardEndpoint(path: "/api/users/login")),
+         urlRequest: URLRequestFactory = StandardURLRequestFactory("/api/users/login"),
          appKeychain: ApplicationKeychain = FootbalGatherKeychain.shared) {
         self.session = session
         self.urlRequest = urlRequest

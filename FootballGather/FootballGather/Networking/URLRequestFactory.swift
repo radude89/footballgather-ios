@@ -37,6 +37,12 @@ struct StandardURLRequestFactory: URLRequestFactory {
     }
 }
 
+extension StandardURLRequestFactory: ExpressibleByStringLiteral {
+    init(stringLiteral value: StringLiteralType) {
+        endpoint = StandardEndpoint(path: value)
+    }
+}
+
 // MARK: - AuthURLRequestFactory
 struct AuthURLRequestFactory: URLRequestFactory {
     var endpoint: Endpoint

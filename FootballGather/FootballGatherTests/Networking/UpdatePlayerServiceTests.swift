@@ -27,12 +27,12 @@ final class UpdatePlayerServiceTests: XCTestCase {
     
     func test_request_completesSuccessfully() {
         let endpoint = EndpointMockFactory.makeSuccessfulEndpoint(path: resourcePath)
-        let service = UpdatePlayerService(session: session,
-                                          urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
-        let player = ModelsMockFactory.makeUpdatePlayerModel()
+        var service = PlayerNetworkService(session: session,
+                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let player = ModelsMockFactory.makePlayer()
         let exp = expectation(description: "Waiting response expectation")
         
-        service.updatePlayer(player) { result in
+        service.update(player, resourceID: ResourceID.integer(ModelsMock.playerId)) { result in
             switch result {
             case .success(let resultValue):
                 XCTAssertTrue(resultValue)
@@ -48,12 +48,12 @@ final class UpdatePlayerServiceTests: XCTestCase {
     
     func test_request_completesWithError() {
         let endpoint = EndpointMockFactory.makeErrorEndpoint()
-        let service = UpdatePlayerService(session: session,
-                                          urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
-        let player = ModelsMockFactory.makeUpdatePlayerModel()
+        var service = PlayerNetworkService(session: session,
+                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let player = ModelsMockFactory.makePlayer()
         let exp = expectation(description: "Waiting response expectation")
         
-        service.updatePlayer(player) { result in
+        service.update(player, resourceID: ResourceID.integer(ModelsMock.playerId)) { result in
             switch result {
             case .success(_):
                 XCTFail("Request should have failed")
@@ -68,12 +68,12 @@ final class UpdatePlayerServiceTests: XCTestCase {
     
     func test_request_completesWithUnexpectedResponseStatusCode() {
         let endpoint = EndpointMockFactory.makeUnexpectedStatusCodeCreateEndpoint()
-        let service = UpdatePlayerService(session: session,
-                                          urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
-        let player = ModelsMockFactory.makeUpdatePlayerModel()
+        var service = PlayerNetworkService(session: session,
+                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let player = ModelsMockFactory.makePlayer()
         let exp = expectation(description: "Waiting response expectation")
         
-        service.updatePlayer(player) { result in
+        service.update(player, resourceID: ResourceID.integer(ModelsMock.playerId)) { result in
             switch result {
             case .failure(let error as ServiceError):
                 XCTAssertEqual(error, .unexpectedResponse)

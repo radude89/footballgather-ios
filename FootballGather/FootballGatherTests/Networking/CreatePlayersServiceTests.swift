@@ -27,17 +27,16 @@ final class CreatePlayersServiceTests: XCTestCase {
     
     func test_request_completesSuccessfully() {
         let endpoint = EndpointMockFactory.makeSuccessfulEndpoint(path: resourcePath)
-        let service = CreatePlayerService(session: session,
-                                          urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let service = PlayerNetworkService(session: session,
+                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let player = ModelsMockFactory.makePlayer()
         let exp = expectation(description: "Waiting response expectation")
         
-        service.createPlayer(player) { result in
-            switch result {
-            case .success(let playerId):
+        service.create(player) { result in
+            if case let .success(ResourceID.integer(playerId)) = result {
                 XCTAssertEqual(playerId, ModelsMock.playerId)
                 exp.fulfill()
-            case .failure(_):
+            } else {
                 XCTFail("Unexpected failure")
             }
         }
@@ -47,18 +46,17 @@ final class CreatePlayersServiceTests: XCTestCase {
     
     func test_request_completesWithError() {
         let endpoint = EndpointMockFactory.makeErrorEndpoint()
-        let service = CreatePlayerService(session: session,
-                                          urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let service = PlayerNetworkService(session: session,
+                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let player = ModelsMockFactory.makePlayer()
         let exp = expectation(description: "Waiting response expectation")
         
-        service.createPlayer(player) { result in
-            switch result {
-            case .success(_):
-                XCTFail("Request should have failed")
-            case .failure(_):
+        service.create(player) { result in
+            if case .failure(_) = result {
                 XCTAssertTrue(true)
                 exp.fulfill()
+            } else {
+                XCTFail("Request should have failed")
             }
         }
         
@@ -67,17 +65,16 @@ final class CreatePlayersServiceTests: XCTestCase {
     
     func test_request_completesWithUnexpectedResponseStatusCode() {
         let endpoint = EndpointMockFactory.makeUnexpectedStatusCodeCreateEndpoint()
-        let service = CreatePlayerService(session: session,
-                                          urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let service = PlayerNetworkService(session: session,
+                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let player = ModelsMockFactory.makePlayer()
         let exp = expectation(description: "Waiting response expectation")
         
-        service.createPlayer(player) { result in
-            switch result {
-            case .failure(let error as ServiceError):
+        service.create(player) { result in
+            if case .failure(let error as ServiceError) = result {
                 XCTAssertEqual(error, .unexpectedResponse)
                 exp.fulfill()
-            default:
+            } else {
                 XCTFail("Request should have failed with a service error")
             }
         }
@@ -87,17 +84,16 @@ final class CreatePlayersServiceTests: XCTestCase {
     
     func test_request_completesWithoutLocationHeader() {
         let endpoint = EndpointMockFactory.makeLocationHeaderNotFoundEndpoint()
-        let service = CreatePlayerService(session: session,
-                                          urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let service = PlayerNetworkService(session: session,
+                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let player = ModelsMockFactory.makePlayer()
         let exp = expectation(description: "Waiting response expectation")
         
-        service.createPlayer(player) { result in
-            switch result {
-            case .failure(let error as ServiceError):
+        service.create(player) { result in
+            if case .failure(let error as ServiceError) = result {
                 XCTAssertEqual(error, .locationHeaderNotFound)
                 exp.fulfill()
-            default:
+            } else {
                 XCTFail("Request should have failed with a service error")
             }
         }
@@ -107,17 +103,16 @@ final class CreatePlayersServiceTests: XCTestCase {
     
     func test_request_completesWithInvalidResourceId() {
         let endpoint = EndpointMockFactory.makeInvalidResourceIDCreateEndpoint()
-        let service = CreatePlayerService(session: session,
-                                          urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
+        let service = PlayerNetworkService(session: session,
+                                           urlRequest: AuthURLRequestFactory(endpoint: endpoint, keychain: appKeychain))
         let player = ModelsMockFactory.makePlayer()
         let exp = expectation(description: "Waiting response expectation")
         
-        service.createPlayer(player) { result in
-            switch result {
-            case .failure(let error as ServiceError):
-                XCTAssertEqual(error, .resourceIdNotFound)
+        service.create(player) { result in
+            if case .failure(let error as ServiceError) = result {
+                XCTAssertEqual(error, .unexpectedResourceIDType)
                 exp.fulfill()
-            default:
+            } else {
                 XCTFail("Request should have failed with a service error")
             }
         }

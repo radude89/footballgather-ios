@@ -16,16 +16,17 @@ final class CreateUserServiceTests: XCTestCase {
     
     func test_request_completesSuccessfully() {
         let endpoint = EndpointMockFactory.makeSuccessfulEndpoint(path: resourcePath)
-        let service = CreateUserService(session: session, urlRequest: StandardURLRequestFactory(endpoint: endpoint))
-        let user = ModelsMockFactory.makeUser()
+        let service = UserNetworkService(session: session, urlRequest: StandardURLRequestFactory(endpoint: endpoint))
         let exp = expectation(description: "Waiting response expectation")
         
-        service.createUser(user) { result in
-            switch result {
-            case .success(let uuid):
+        var user = ModelsMockFactory.makeUser()
+        user.hashPassword()
+        
+        service.create(user) { result in
+            if case let .success(ResourceID.uuid(uuid)) = result {
                 XCTAssertEqual(uuid, ModelsMock.userUUID)
                 exp.fulfill()
-            case .failure(_):
+            } else {
                 XCTFail("Unexpected failure")
             }
         }
@@ -35,17 +36,18 @@ final class CreateUserServiceTests: XCTestCase {
     
     func test_request_completesWithError() {
         let endpoint = EndpointMockFactory.makeErrorEndpoint()
-        let service = CreateUserService(session: session, urlRequest: StandardURLRequestFactory(endpoint: endpoint))
-        let user = ModelsMockFactory.makeUser()
+        let service = UserNetworkService(session: session, urlRequest: StandardURLRequestFactory(endpoint: endpoint))
         let exp = expectation(description: "Waiting response expectation")
         
-        service.createUser(user) { result in
-            switch result {
-            case .success(_):
-                XCTFail("Request should have failed")
-            case .failure(_):
+        var user = ModelsMockFactory.makeUser()
+        user.hashPassword()
+        
+        service.create(user) { result in
+            if case .failure(_) = result {
                 XCTAssertTrue(true)
                 exp.fulfill()
+            } else {
+                XCTFail("Request should have failed")
             }
         }
         
@@ -54,16 +56,17 @@ final class CreateUserServiceTests: XCTestCase {
     
     func test_request_completesWithUnexpectedResponseStatusCode() {
         let endpoint = EndpointMockFactory.makeUnexpectedStatusCodeCreateEndpoint()
-        let service = CreateUserService(session: session, urlRequest: StandardURLRequestFactory(endpoint: endpoint))
-        let user = ModelsMockFactory.makeUser()
+        let service = UserNetworkService(session: session, urlRequest: StandardURLRequestFactory(endpoint: endpoint))
         let exp = expectation(description: "Waiting response expectation")
         
-        service.createUser(user) { result in
-            switch result {
-            case .failure(let error as ServiceError):
+        var user = ModelsMockFactory.makeUser()
+        user.hashPassword()
+        
+        service.create(user) { result in
+            if case .failure(let error as ServiceError) = result {
                 XCTAssertEqual(error, .unexpectedResponse)
                 exp.fulfill()
-            default:
+            } else {
                 XCTFail("Request should have failed with a service error")
             }
         }
@@ -73,16 +76,17 @@ final class CreateUserServiceTests: XCTestCase {
     
     func test_request_completesWithoutLocationHeader() {
         let endpoint = EndpointMockFactory.makeLocationHeaderNotFoundEndpoint()
-        let service = CreateUserService(session: session, urlRequest: StandardURLRequestFactory(endpoint: endpoint))
-        let user = ModelsMockFactory.makeUser()
+        let service = UserNetworkService(session: session, urlRequest: StandardURLRequestFactory(endpoint: endpoint))
         let exp = expectation(description: "Waiting response expectation")
         
-        service.createUser(user) { result in
-            switch result {
-            case .failure(let error as ServiceError):
+        var user = ModelsMockFactory.makeUser()
+        user.hashPassword()
+        
+        service.create(user) { result in
+            if case .failure(let error as ServiceError) = result {
                 XCTAssertEqual(error, .locationHeaderNotFound)
                 exp.fulfill()
-            default:
+            } else {
                 XCTFail("Request should have failed with a service error")
             }
         }
@@ -92,16 +96,17 @@ final class CreateUserServiceTests: XCTestCase {
     
     func test_request_completesWithInvalidResourceId() {
         let endpoint = EndpointMockFactory.makeInvalidResourceIDCreateEndpoint()
-        let service = CreateUserService(session: session, urlRequest: StandardURLRequestFactory(endpoint: endpoint))
-        let user = ModelsMockFactory.makeUser()
+        let service = UserNetworkService(session: session, urlRequest: StandardURLRequestFactory(endpoint: endpoint))
         let exp = expectation(description: "Waiting response expectation")
         
-        service.createUser(user) { result in
-            switch result {
-            case .failure(let error as ServiceError):
-                XCTAssertEqual(error, .resourceIdNotFound)
+        var user = ModelsMockFactory.makeUser()
+        user.hashPassword()
+        
+        service.create(user) { result in
+            if case .failure(let error as ServiceError) = result {
+                XCTAssertEqual(error, .unexpectedResourceIDType)
                 exp.fulfill()
-            default:
+            } else {
                 XCTFail("Request should have failed with a service error")
             }
         }

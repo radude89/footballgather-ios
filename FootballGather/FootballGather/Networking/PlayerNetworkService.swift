@@ -1,17 +1,17 @@
 //
-//  GetPlayersService.swift
+//  PlayerNetworkService.swift
 //  FootballGather
 //
-//  Created by Dan, Radu-Ionut (RO - Bucharest) on 14/04/2019.
+//  Created by Dan, Radu-Ionut (RO - Bucharest) on 02/06/2019.
 //  Copyright © 2019 Radu Dan. All rights reserved.
 //
 
 import Foundation
 
 // MARK: - Service
-final class GetPlayersService {
-    private let session: NetworkSession
-    private let urlRequest: URLRequestFactory
+struct PlayerNetworkService: NetworkService {
+    var session: NetworkSession
+    var urlRequest: URLRequestFactory
     
     init(session: NetworkSession = URLSession.shared,
          urlRequest: URLRequestFactory = AuthURLRequestFactory(endpoint: StandardEndpoint(path: "/api/players"))) {
@@ -19,33 +19,18 @@ final class GetPlayersService {
         self.urlRequest = urlRequest
     }
     
-    func getPlayers(completion: @escaping (Result<[PlayerResponseModel], Error>) -> Void) {
-        var request = urlRequest.makeURLRequest()
-        request.httpMethod = "GET"
-        
-        session.loadData(from: request) { (data, response, error) in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-            
-            guard let data = data, data.isEmpty == false else {
-                completion(.failure(ServiceError.unexpectedResponse))
-                return
-            }
-            
-            do {
-                let players = try JSONDecoder().decode([PlayerResponseModel].self, from: data)
-                completion(.success(players))
-            } catch {
-                completion(.failure(error))
-            }
-        }
-    }
-    
 }
 
-// MARK: - Model
+// MARK - Create RequestModel
+struct PlayerCreateModel: Encodable {
+    let name: String
+    let age: Int?
+    let skill: Player.Skill?
+    let preferredPosition: Player.Position?
+    let favouriteTeam: String?
+}
+
+// MARK: - ResponseModel
 struct PlayerResponseModel {
     let id: Int
     let name: String

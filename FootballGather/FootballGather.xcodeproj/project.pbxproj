@@ -66,6 +66,10 @@
 		F7BF3B4D227ED0C600F33913 /* KeyValueStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BF3B4C227ED0C600F33913 /* KeyValueStorage.swift */; };
 		F7BF3B4F2280575E00F33913 /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BF3B4E2280575E00F33913 /* KeychainWrapper.swift */; };
 		F7BF3B5122805BA300F33913 /* KeychainQueryFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BF3B5022805BA300F33913 /* KeychainQueryFactory.swift */; };
+		F7C32A5B22AA3CC000D80C37 /* LoadingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C32A5A22AA3CC000D80C37 /* LoadingView.xib */; };
+		F7C32A5D22AA3D9500D80C37 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C32A5C22AA3D9500D80C37 /* LoadingView.swift */; };
+		F7C32A6022AA4CF000D80C37 /* AlertHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C32A5F22AA4CF000D80C37 /* AlertHelper.swift */; };
+		F7C32A6222AA9F6400D80C37 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C32A6122AA9F6400D80C37 /* View+Extensions.swift */; };
 		F7E0D91F22644534002F4CE1 /* URLRequestFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E0D91E22644534002F4CE1 /* URLRequestFactory.swift */; };
 /* End PBXBuildFile section */
 
@@ -142,6 +146,10 @@
 		F7BF3B4C227ED0C600F33913 /* KeyValueStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValueStorage.swift; sourceTree = "<group>"; };
 		F7BF3B4E2280575E00F33913 /* KeychainWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWrapper.swift; sourceTree = "<group>"; };
 		F7BF3B5022805BA300F33913 /* KeychainQueryFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainQueryFactory.swift; sourceTree = "<group>"; };
+		F7C32A5A22AA3CC000D80C37 /* LoadingView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingView.xib; sourceTree = "<group>"; };
+		F7C32A5C22AA3D9500D80C37 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		F7C32A5F22AA4CF000D80C37 /* AlertHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertHelper.swift; sourceTree = "<group>"; };
+		F7C32A6122AA9F6400D80C37 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		F7E0D91E22644534002F4CE1 /* URLRequestFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequestFactory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -227,8 +235,10 @@
 			isa = PBXGroup;
 			children = (
 				F762CA9022619C5C00947AED /* AppDelegate.swift */,
+				F7C32A5E22AA4BCD00D80C37 /* Utils */,
 				F7ABD0B122648C9F00AAEA87 /* Storage */,
 				F772265322620DD000445F67 /* Networking */,
+				F7C32A5922AA3C5500D80C37 /* Storyboards */,
 				F762CAB522619C8D00947AED /* Models */,
 				F762CAB422619C8900947AED /* Views */,
 				F762CAB322619C7F00947AED /* ViewControllers */,
@@ -263,8 +273,8 @@
 		F762CAB422619C8900947AED /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				F762CA9422619C5C00947AED /* Main.storyboard */,
-				F762CA9C22619C5E00947AED /* LaunchScreen.storyboard */,
+				F7C32A5A22AA3CC000D80C37 /* LoadingView.xib */,
+				F7C32A5C22AA3D9500D80C37 /* LoadingView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -349,7 +359,6 @@
 		F7ABD0B122648C9F00AAEA87 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
-				F7034C7F228ADC3C0003F506 /* Crypto.swift */,
 				F7034C4422890DF40003F506 /* FootballGatherUserDefaults.swift */,
 				F7034C4622890E340003F506 /* UserDefaultsWrapper.swift */,
 				F7ABD0B222648CCE00AAEA87 /* FootballGatherKeychain.swift */,
@@ -358,6 +367,25 @@
 				F7BF3B4C227ED0C600F33913 /* KeyValueStorage.swift */,
 			);
 			path = Storage;
+			sourceTree = "<group>";
+		};
+		F7C32A5922AA3C5500D80C37 /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				F762CA9422619C5C00947AED /* Main.storyboard */,
+				F762CA9C22619C5E00947AED /* LaunchScreen.storyboard */,
+			);
+			path = Storyboards;
+			sourceTree = "<group>";
+		};
+		F7C32A5E22AA4BCD00D80C37 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				F7034C7F228ADC3C0003F506 /* Crypto.swift */,
+				F7C32A5F22AA4CF000D80C37 /* AlertHelper.swift */,
+				F7C32A6122AA9F6400D80C37 /* View+Extensions.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -443,6 +471,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F762CA9E22619C5E00947AED /* LaunchScreen.storyboard in Resources */,
+				F7C32A5B22AA3CC000D80C37 /* LoadingView.xib in Resources */,
 				F762CA9B22619C5E00947AED /* Assets.xcassets in Resources */,
 				F762CA9622619C5C00947AED /* Main.storyboard in Resources */,
 			);
@@ -465,6 +494,7 @@
 				F77226592262248800445F67 /* NetworkSession.swift in Sources */,
 				F72749DB228D0C5100698D0D /* GetPlayersForGatherService.swift in Sources */,
 				F7E0D91F22644534002F4CE1 /* URLRequestFactory.swift in Sources */,
+				F7C32A6222AA9F6400D80C37 /* View+Extensions.swift in Sources */,
 				F78C8CFB22A431040035D5A2 /* CreateNetworkService.swift in Sources */,
 				F78C8CFD22A431350035D5A2 /* UpdateNetworkService.swift in Sources */,
 				F762CA9922619C5C00947AED /* FootballGather.xcdatamodeld in Sources */,
@@ -474,8 +504,10 @@
 				F78C8D0122A4317F0035D5A2 /* GetNetworkService.swift in Sources */,
 				F72749DD228D0FC800698D0D /* AddPlayerToGatherService.swift in Sources */,
 				F78C8CF922A421810035D5A2 /* PlayerServiceModels.swift in Sources */,
+				F7C32A6022AA4CF000D80C37 /* AlertHelper.swift in Sources */,
 				F7034C4522890DF40003F506 /* FootballGatherUserDefaults.swift in Sources */,
 				F772265522620F8600445F67 /* UserServiceModels.swift in Sources */,
+				F7C32A5D22AA3D9500D80C37 /* LoadingView.swift in Sources */,
 				F78C8D0322A431A00035D5A2 /* Endpoint.swift in Sources */,
 				F78C8CF522A420310035D5A2 /* GatherServiceModels.swift in Sources */,
 				F7034C4722890E340003F506 /* UserDefaultsWrapper.swift in Sources */,

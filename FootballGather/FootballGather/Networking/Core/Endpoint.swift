@@ -37,7 +37,7 @@ struct StandardEndpoint: Endpoint {
     var path: String
     var queryItems: [URLQueryItem]? = nil
     var scheme: String? = "http"
-    var host: String? = "localhost.com"
+    var host: String? = "localhost"
     var port: Int? = 8080
     
     init(path: String) {

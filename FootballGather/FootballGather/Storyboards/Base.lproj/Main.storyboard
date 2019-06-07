@@ -56,8 +56,7 @@
                                                 <rect key="frame" x="0.0" y="76" width="335" height="30"/>
                                                 <state key="normal" title="Login"/>
                                                 <connections>
-                                                    <action selector="onLoginAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="w6w-m4-d9L"/>
-                                                    <segue destination="wzm-VA-DL5" kind="show" id="cCt-OI-83u"/>
+                                                    <action selector="onLoginAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Tg5-qD-ENZ"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -105,7 +104,6 @@
                                         <state key="normal" title="Use the offline version"/>
                                         <connections>
                                             <action selector="onUseOfflineAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="8Qz-Js-Ze6"/>
-                                            <segue destination="wzm-VA-DL5" kind="show" id="4rA-Fx-EsH"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -129,6 +127,7 @@
                         <outlet property="passwordTextField" destination="fer-q6-FM5" id="whX-R4-Rkj"/>
                         <outlet property="rememberMeSwitch" destination="wAb-xZ-fbb" id="2AT-hT-ywA"/>
                         <outlet property="usernameTextField" destination="W60-nE-cdb" id="Yyl-uc-hs8"/>
+                        <segue destination="wzm-VA-DL5" kind="show" identifier="showMainSegueIdentifier" id="2tY-GV-EYR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -184,7 +183,4 @@
             <point key="canvasLocation" x="974" y="138"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="cCt-OI-83u"/>
-    </inferredMetricsTieBreakers>
 </document>

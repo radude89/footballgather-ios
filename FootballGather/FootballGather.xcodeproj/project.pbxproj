@@ -23,7 +23,6 @@
 		F72749DD228D0FC800698D0D /* AddPlayerToGatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72749DC228D0FC800698D0D /* AddPlayerToGatherService.swift */; };
 		F738782122A956FD001B9097 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F738782022A956FD001B9097 /* LoginViewController.swift */; };
 		F738782322A95AD2001B9097 /* PlayerListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F738782222A95AD2001B9097 /* PlayerListViewController.swift */; };
-		F738782522A95B2C001B9097 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F738782422A95B2C001B9097 /* RegisterViewController.swift */; };
 		F738782722A95C54001B9097 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F738782622A95C54001B9097 /* MainViewController.swift */; };
 		F75CE92D228DF1B800871C47 /* EndpointMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75CE92C228DF1B800871C47 /* EndpointMock.swift */; };
 		F75CE92F228E6B6100871C47 /* CreateUserServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75CE92E228E6B6100871C47 /* CreateUserServiceTests.swift */; };
@@ -70,6 +69,7 @@
 		F7C32A5D22AA3D9500D80C37 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C32A5C22AA3D9500D80C37 /* LoadingView.swift */; };
 		F7C32A6022AA4CF000D80C37 /* AlertHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C32A5F22AA4CF000D80C37 /* AlertHelper.swift */; };
 		F7C32A6222AA9F6400D80C37 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C32A6122AA9F6400D80C37 /* View+Extensions.swift */; };
+		F7C32A6422AB972A00D80C37 /* Loadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C32A6322AB972A00D80C37 /* Loadable.swift */; };
 		F7E0D91F22644534002F4CE1 /* URLRequestFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E0D91E22644534002F4CE1 /* URLRequestFactory.swift */; };
 /* End PBXBuildFile section */
 
@@ -100,7 +100,6 @@
 		F72749DC228D0FC800698D0D /* AddPlayerToGatherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlayerToGatherService.swift; sourceTree = "<group>"; };
 		F738782022A956FD001B9097 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		F738782222A95AD2001B9097 /* PlayerListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerListViewController.swift; sourceTree = "<group>"; };
-		F738782422A95B2C001B9097 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		F738782622A95C54001B9097 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		F75CE92C228DF1B800871C47 /* EndpointMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointMock.swift; sourceTree = "<group>"; };
 		F75CE92E228E6B6100871C47 /* CreateUserServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateUserServiceTests.swift; sourceTree = "<group>"; };
@@ -150,6 +149,7 @@
 		F7C32A5C22AA3D9500D80C37 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		F7C32A5F22AA4CF000D80C37 /* AlertHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertHelper.swift; sourceTree = "<group>"; };
 		F7C32A6122AA9F6400D80C37 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
+		F7C32A6322AB972A00D80C37 /* Loadable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loadable.swift; sourceTree = "<group>"; };
 		F7E0D91E22644534002F4CE1 /* URLRequestFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequestFactory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -264,7 +264,6 @@
 			children = (
 				F738782022A956FD001B9097 /* LoginViewController.swift */,
 				F738782222A95AD2001B9097 /* PlayerListViewController.swift */,
-				F738782422A95B2C001B9097 /* RegisterViewController.swift */,
 				F738782622A95C54001B9097 /* MainViewController.swift */,
 			);
 			path = ViewControllers;
@@ -384,6 +383,7 @@
 				F7034C7F228ADC3C0003F506 /* Crypto.swift */,
 				F7C32A5F22AA4CF000D80C37 /* AlertHelper.swift */,
 				F7C32A6122AA9F6400D80C37 /* View+Extensions.swift */,
+				F7C32A6322AB972A00D80C37 /* Loadable.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -495,6 +495,7 @@
 				F72749DB228D0C5100698D0D /* GetPlayersForGatherService.swift in Sources */,
 				F7E0D91F22644534002F4CE1 /* URLRequestFactory.swift in Sources */,
 				F7C32A6222AA9F6400D80C37 /* View+Extensions.swift in Sources */,
+				F7C32A6422AB972A00D80C37 /* Loadable.swift in Sources */,
 				F78C8CFB22A431040035D5A2 /* CreateNetworkService.swift in Sources */,
 				F78C8CFD22A431350035D5A2 /* UpdateNetworkService.swift in Sources */,
 				F762CA9922619C5C00947AED /* FootballGather.xcdatamodeld in Sources */,
@@ -515,7 +516,6 @@
 				F738782122A956FD001B9097 /* LoginViewController.swift in Sources */,
 				F7034C5C22891C1B0003F506 /* Player.swift in Sources */,
 				F7BF3B5122805BA300F33913 /* KeychainQueryFactory.swift in Sources */,
-				F738782522A95B2C001B9097 /* RegisterViewController.swift in Sources */,
 				F762CAC82261A23300947AED /* CoreDataStore.swift in Sources */,
 				F738782722A95C54001B9097 /* MainViewController.swift in Sources */,
 				F78C8CFF22A4315D0035D5A2 /* DeleteNetworkService.swift in Sources */,

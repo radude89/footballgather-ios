@@ -24,6 +24,10 @@
 		F738782122A956FD001B9097 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F738782022A956FD001B9097 /* LoginViewController.swift */; };
 		F738782322A95AD2001B9097 /* PlayerListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F738782222A95AD2001B9097 /* PlayerListViewController.swift */; };
 		F738782722A95C54001B9097 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F738782622A95C54001B9097 /* MainViewController.swift */; };
+		F755AC6922C08F2C00A9EFB7 /* PlayerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F755AC6822C08F2C00A9EFB7 /* PlayerTableViewCell.swift */; };
+		F755AC6B22C09C0500A9EFB7 /* EmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F755AC6A22C09C0500A9EFB7 /* EmptyView.swift */; };
+		F755AC6D22C09C1700A9EFB7 /* EmptyView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F755AC6C22C09C1700A9EFB7 /* EmptyView.xib */; };
+		F755AC6F22C09D3F00A9EFB7 /* Emptyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F755AC6E22C09D3F00A9EFB7 /* Emptyable.swift */; };
 		F75CE92D228DF1B800871C47 /* EndpointMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75CE92C228DF1B800871C47 /* EndpointMock.swift */; };
 		F75CE92F228E6B6100871C47 /* CreateUserServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75CE92E228E6B6100871C47 /* CreateUserServiceTests.swift */; };
 		F75CE931228E6BDA00871C47 /* ApplicationKeychainMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75CE930228E6BDA00871C47 /* ApplicationKeychainMock.swift */; };
@@ -101,6 +105,10 @@
 		F738782022A956FD001B9097 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		F738782222A95AD2001B9097 /* PlayerListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerListViewController.swift; sourceTree = "<group>"; };
 		F738782622A95C54001B9097 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		F755AC6822C08F2C00A9EFB7 /* PlayerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerTableViewCell.swift; sourceTree = "<group>"; };
+		F755AC6A22C09C0500A9EFB7 /* EmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyView.swift; sourceTree = "<group>"; };
+		F755AC6C22C09C1700A9EFB7 /* EmptyView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EmptyView.xib; sourceTree = "<group>"; };
+		F755AC6E22C09D3F00A9EFB7 /* Emptyable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Emptyable.swift; sourceTree = "<group>"; };
 		F75CE92C228DF1B800871C47 /* EndpointMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointMock.swift; sourceTree = "<group>"; };
 		F75CE92E228E6B6100871C47 /* CreateUserServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateUserServiceTests.swift; sourceTree = "<group>"; };
 		F75CE930228E6BDA00871C47 /* ApplicationKeychainMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationKeychainMock.swift; sourceTree = "<group>"; };
@@ -238,8 +246,8 @@
 				F7C32A5E22AA4BCD00D80C37 /* Utils */,
 				F7ABD0B122648C9F00AAEA87 /* Storage */,
 				F772265322620DD000445F67 /* Networking */,
-				F7C32A5922AA3C5500D80C37 /* Storyboards */,
 				F762CAB522619C8D00947AED /* Models */,
+				F7C32A5922AA3C5500D80C37 /* Storyboards */,
 				F762CAB422619C8900947AED /* Views */,
 				F762CAB322619C7F00947AED /* ViewControllers */,
 				F762CAB622619C9200947AED /* Supporting files */,
@@ -274,6 +282,9 @@
 			children = (
 				F7C32A5A22AA3CC000D80C37 /* LoadingView.xib */,
 				F7C32A5C22AA3D9500D80C37 /* LoadingView.swift */,
+				F755AC6C22C09C1700A9EFB7 /* EmptyView.xib */,
+				F755AC6A22C09C0500A9EFB7 /* EmptyView.swift */,
+				F755AC6822C08F2C00A9EFB7 /* PlayerTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -384,6 +395,7 @@
 				F7C32A5F22AA4CF000D80C37 /* AlertHelper.swift */,
 				F7C32A6122AA9F6400D80C37 /* View+Extensions.swift */,
 				F7C32A6322AB972A00D80C37 /* Loadable.swift */,
+				F755AC6E22C09D3F00A9EFB7 /* Emptyable.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -474,6 +486,7 @@
 				F7C32A5B22AA3CC000D80C37 /* LoadingView.xib in Resources */,
 				F762CA9B22619C5E00947AED /* Assets.xcassets in Resources */,
 				F762CA9622619C5C00947AED /* Main.storyboard in Resources */,
+				F755AC6D22C09C1700A9EFB7 /* EmptyView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -506,6 +519,7 @@
 				F72749DD228D0FC800698D0D /* AddPlayerToGatherService.swift in Sources */,
 				F78C8CF922A421810035D5A2 /* PlayerServiceModels.swift in Sources */,
 				F7C32A6022AA4CF000D80C37 /* AlertHelper.swift in Sources */,
+				F755AC6F22C09D3F00A9EFB7 /* Emptyable.swift in Sources */,
 				F7034C4522890DF40003F506 /* FootballGatherUserDefaults.swift in Sources */,
 				F772265522620F8600445F67 /* UserServiceModels.swift in Sources */,
 				F7C32A5D22AA3D9500D80C37 /* LoadingView.swift in Sources */,
@@ -515,7 +529,9 @@
 				F7BF3B4F2280575E00F33913 /* KeychainWrapper.swift in Sources */,
 				F738782122A956FD001B9097 /* LoginViewController.swift in Sources */,
 				F7034C5C22891C1B0003F506 /* Player.swift in Sources */,
+				F755AC6922C08F2C00A9EFB7 /* PlayerTableViewCell.swift in Sources */,
 				F7BF3B5122805BA300F33913 /* KeychainQueryFactory.swift in Sources */,
+				F755AC6B22C09C0500A9EFB7 /* EmptyView.swift in Sources */,
 				F762CAC82261A23300947AED /* CoreDataStore.swift in Sources */,
 				F738782722A95C54001B9097 /* MainViewController.swift in Sources */,
 				F78C8CFF22A4315D0035D5A2 /* DeleteNetworkService.swift in Sources */,

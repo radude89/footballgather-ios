@@ -25,11 +25,12 @@ class LoadingView: UIView {
         isHidden = true
     }
     
-    static func initToView(_ view: UIView) -> LoadingView {
+    static func initToView(_ view: UIView, loadingText: String = "Loading...") -> LoadingView {
         guard let loadingView: LoadingView = UIView.instanceFromNib() else {
             fatalError("Unable to allocate Loading View")
         }
         
+        loadingView.loadingLabel.text = loadingText
         loadingView.isHidden = true
         loadingView.center = view.center
         view.addSubview(loadingView)

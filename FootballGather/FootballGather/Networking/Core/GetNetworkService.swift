@@ -25,8 +25,8 @@ extension NetworkService {
             }
             
             do {
-                let gathers = try JSONDecoder().decode([Resource].self, from: data)
-                completion(.success(gathers))
+                let resources = try JSONDecoder().decode([Resource].self, from: data)
+                completion(.success(resources))
             } catch {
                 completion(.failure(error))
             }

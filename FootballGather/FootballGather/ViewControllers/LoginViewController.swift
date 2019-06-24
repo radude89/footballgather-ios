@@ -39,7 +39,7 @@ class LoginViewController: UIViewController {
         hideLoadingView()
         userDefaults.rememberUsername = rememberMeSwitch.isOn
         
-        if self.rememberMeSwitch.isOn {
+        if rememberMeSwitch.isOn {
             FootbalGatherKeychain.shared.username = usernameTextField.text
         } else {
             FootbalGatherKeychain.shared.username = nil

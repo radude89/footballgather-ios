@@ -220,34 +220,21 @@
                                         </constraints>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tj5-Yq-gmB">
-                                        <rect key="frame" x="145" y="10" width="85" height="60"/>
+                                        <rect key="frame" x="145" y="25" width="85" height="30"/>
                                         <state key="normal" title="Start Gather"/>
                                         <connections>
                                             <action selector="startGatherAction:" destination="wzm-VA-DL5" eventType="touchUpInside" id="MhI-HB-H44"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wbd-Ic-3xj">
-                                        <rect key="frame" x="310" y="10" width="45" height="60"/>
-                                        <state key="normal" title="Delete"/>
-                                        <connections>
-                                            <action selector="deletePlayerAction:" destination="wzm-VA-DL5" eventType="touchUpInside" id="gHA-wN-Cxg"/>
                                         </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="daJ-Xg-iVk" firstAttribute="leading" secondItem="lpY-ht-MEh" secondAttribute="leading" id="416-mp-b3n"/>
-                                    <constraint firstItem="Tj5-Yq-gmB" firstAttribute="centerX" secondItem="lpY-ht-MEh" secondAttribute="centerX" id="4Im-8L-ENK"/>
                                     <constraint firstAttribute="trailing" secondItem="daJ-Xg-iVk" secondAttribute="trailing" id="5g8-ve-ln1"/>
-                                    <constraint firstAttribute="bottom" secondItem="Wbd-Ic-3xj" secondAttribute="bottom" constant="10" id="6hF-ax-GeK"/>
+                                    <constraint firstItem="Tj5-Yq-gmB" firstAttribute="centerY" secondItem="lpY-ht-MEh" secondAttribute="centerY" id="9ge-0h-aP1"/>
                                     <constraint firstItem="daJ-Xg-iVk" firstAttribute="top" secondItem="lpY-ht-MEh" secondAttribute="top" id="E1s-vd-LWp"/>
-                                    <constraint firstItem="Wbd-Ic-3xj" firstAttribute="centerY" secondItem="lpY-ht-MEh" secondAttribute="centerY" id="LT8-DX-Y01"/>
-                                    <constraint firstAttribute="trailing" secondItem="Wbd-Ic-3xj" secondAttribute="trailing" constant="20" id="M6g-Qn-LHA"/>
-                                    <constraint firstAttribute="bottom" secondItem="Tj5-Yq-gmB" secondAttribute="bottom" constant="10" id="PtO-bv-I9t"/>
-                                    <constraint firstItem="Wbd-Ic-3xj" firstAttribute="top" secondItem="lpY-ht-MEh" secondAttribute="top" constant="10" id="cAP-Nb-Jz6"/>
+                                    <constraint firstItem="Tj5-Yq-gmB" firstAttribute="centerX" secondItem="lpY-ht-MEh" secondAttribute="centerX" id="NKo-kT-k3c"/>
                                     <constraint firstAttribute="height" constant="80" id="dUo-hH-wBd"/>
-                                    <constraint firstItem="Tj5-Yq-gmB" firstAttribute="top" secondItem="lpY-ht-MEh" secondAttribute="top" constant="10" id="ix0-6q-ML8"/>
-                                    <constraint firstItem="Wbd-Ic-3xj" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Tj5-Yq-gmB" secondAttribute="trailing" constant="8" symbolic="YES" id="n3H-H8-aKq"/>
                                 </constraints>
                             </view>
                         </subviews>

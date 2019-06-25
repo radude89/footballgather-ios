@@ -10,8 +10,11 @@ import UIKit
 
 class PlayerListViewController: UIViewController {
     
-    // MARK: - Properties
+    // MARK: - Outlets
+    
     @IBOutlet weak var playerTableView: UITableView!
+    @IBOutlet weak var bottomActionView: UIView!
+    @IBOutlet weak var bottomActionViewHeightConstraint: NSLayoutConstraint!
     
     lazy var loadingView = LoadingView.initToView(self.view)
     lazy var emptyView: EmptyView = {
@@ -20,18 +23,66 @@ class PlayerListViewController: UIViewController {
         return emptyView
     }()
     
+    private lazy var barButtonItem: UIBarButtonItem = UIBarButtonItem(title: "Select", style: .plain, target: self, action: #selector(selectPlayers))
+    
+    // MARK: - Variables
+    
     private let playersService = StandardNetworkService(resourcePath: "/api/players", authenticated: true)
     private var players: [PlayerResponseModel] = []
+    
+    private enum ViewState {
+        case list
+        case selection
+    }
+    private var viewState: ViewState = .list
+    
+    private var selectedPlayersDictionary: [Int: PlayerResponseModel] = [:]
+    
+    private enum ViewConstants {
+        static let bottomViewHeight: CGFloat = 80.0
+    }
+    
+    // MARK: - View life cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        bottomActionViewHeightConstraint.constant = 0
+        bottomActionView.isHidden = true
+        
+        title = "Players"
+        navigationItem.rightBarButtonItem = barButtonItem
         playerTableView.tableFooterView = UIView()
+        
         loadPlayers()
     }
     
+    // MARK: - Selectors
+    
+    @objc func selectPlayers(sender: UIBarButtonItem) {
+        // toggle
+        title = "Players"
+        viewState = viewState == .list ? .selection : .list
+        
+        if viewState == .list {
+            sender.title = "Select"
+            bottomActionViewHeightConstraint.constant = 0
+            bottomActionView.isHidden = true
+        } else {
+            sender.title = "Cancel"
+            bottomActionViewHeightConstraint.constant = ViewConstants.bottomViewHeight
+            bottomActionView.isHidden = false
+        }
+        
+        playerTableView.reloadData()
+    }
+    
+    @IBAction func startGatherAction(_ sender: Any) {
+        
+    }
+    
     private func loadPlayers() {
-        showLoadingView()
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         
         playersService.get { [weak self] (result: Result<[PlayerResponseModel], Error>) in
             guard let self = self else { return }
@@ -44,7 +95,7 @@ class PlayerListViewController: UIViewController {
                 }
             case .success(let players):
                 DispatchQueue.main.async {
-                    self.hideLoadingView()
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
                     
                     if players.isEmpty {
                         self.showEmptyView()
@@ -54,6 +105,27 @@ class PlayerListViewController: UIViewController {
 
                     self.players = players
                     self.playerTableView.reloadData()
+                }
+            }
+        }
+    }
+    
+    private func deletePlayer(_ player: PlayerResponseModel, completion: @escaping (Bool) -> Void) {
+        var service = playersService
+        service.delete(withID: ResourceID.integer(player.id)) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.hideLoadingView()
+                    AlertHelper.present(in: self, title: "Error", message: String(describing: error))
+                    completion(false)
+                }
+            case .success(_):
+                DispatchQueue.main.async {
+                    self.hideLoadingView()
+                    completion(true)
                 }
             }
         }
@@ -76,6 +148,13 @@ extension PlayerListViewController: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         
+        if viewState == .list {
+            selectedPlayersDictionary[indexPath.row] = nil
+            cell.setupDefaultView()
+        } else {
+            cell.setupSelectionView()
+        }
+        
         let player = players[indexPath.row]
         cell.nameLabel.text = player.name
         
@@ -91,7 +170,68 @@ extension PlayerListViewController: UITableViewDelegate, UITableViewDataSource {
             cell.skillLabel.text = "Skill: -"
         }
         
+        cell.playerIsSelected = selectedPlayersDictionary[indexPath.row] != nil
+        
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if viewState == .list {
+            // TODO: go to next screen
+        } else {
+            guard let cell: PlayerTableViewCell = tableView.cellForRow(at: indexPath) as? PlayerTableViewCell else {
+                return
+            }
+            
+            cell.playerIsSelected = !cell.playerIsSelected
+            
+            if cell.playerIsSelected {
+                selectedPlayersDictionary[indexPath.row] = players[indexPath.row]
+            } else {
+                selectedPlayersDictionary[indexPath.row] = nil
+            }
+            
+            let selectedPlayers = selectedPlayersDictionary.values.count
+            title = selectedPlayers > 0 ? "\(selectedPlayers) selected" : "Players"
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        if viewState == .selection {
+            return false
+        }
+        
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        guard editingStyle == .delete else { return }
+        
+        let alertController = UIAlertController(title: "Delete player", message: "Are you sure you want to delete the selected player?", preferredStyle: .alert)
+        let confirmAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+            guard let self = self else { return }
+            
+            let player = self.players[indexPath.row]
+            self.deletePlayer(player, completion: { [weak self] result in
+                guard result, let self = self else { return }
+                
+                tableView.beginUpdates()
+                self.selectedPlayersDictionary[indexPath.row] = nil
+                self.players.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+                tableView.endUpdates()
+                
+                if self.players.isEmpty {
+                    self.showEmptyView()
+                }
+            })
+        }
+        alertController.addAction(confirmAction)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        
+        present(alertController, animated: true, completion: nil)
     }
 }
 

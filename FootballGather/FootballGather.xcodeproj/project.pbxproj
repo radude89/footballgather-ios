@@ -23,7 +23,6 @@
 		F72749DD228D0FC800698D0D /* AddPlayerToGatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72749DC228D0FC800698D0D /* AddPlayerToGatherService.swift */; };
 		F738782122A956FD001B9097 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F738782022A956FD001B9097 /* LoginViewController.swift */; };
 		F738782322A95AD2001B9097 /* PlayerListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F738782222A95AD2001B9097 /* PlayerListViewController.swift */; };
-		F738782722A95C54001B9097 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F738782622A95C54001B9097 /* MainViewController.swift */; };
 		F755AC6922C08F2C00A9EFB7 /* PlayerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F755AC6822C08F2C00A9EFB7 /* PlayerTableViewCell.swift */; };
 		F755AC6B22C09C0500A9EFB7 /* EmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F755AC6A22C09C0500A9EFB7 /* EmptyView.swift */; };
 		F755AC6D22C09C1700A9EFB7 /* EmptyView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F755AC6C22C09C1700A9EFB7 /* EmptyView.xib */; };
@@ -104,7 +103,6 @@
 		F72749DC228D0FC800698D0D /* AddPlayerToGatherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlayerToGatherService.swift; sourceTree = "<group>"; };
 		F738782022A956FD001B9097 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		F738782222A95AD2001B9097 /* PlayerListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerListViewController.swift; sourceTree = "<group>"; };
-		F738782622A95C54001B9097 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		F755AC6822C08F2C00A9EFB7 /* PlayerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerTableViewCell.swift; sourceTree = "<group>"; };
 		F755AC6A22C09C0500A9EFB7 /* EmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyView.swift; sourceTree = "<group>"; };
 		F755AC6C22C09C1700A9EFB7 /* EmptyView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EmptyView.xib; sourceTree = "<group>"; };
@@ -272,7 +270,6 @@
 			children = (
 				F738782022A956FD001B9097 /* LoginViewController.swift */,
 				F738782222A95AD2001B9097 /* PlayerListViewController.swift */,
-				F738782622A95C54001B9097 /* MainViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -533,7 +530,6 @@
 				F7BF3B5122805BA300F33913 /* KeychainQueryFactory.swift in Sources */,
 				F755AC6B22C09C0500A9EFB7 /* EmptyView.swift in Sources */,
 				F762CAC82261A23300947AED /* CoreDataStore.swift in Sources */,
-				F738782722A95C54001B9097 /* MainViewController.swift in Sources */,
 				F78C8CFF22A4315D0035D5A2 /* DeleteNetworkService.swift in Sources */,
 				F7034C5B22891C1B0003F506 /* User.swift in Sources */,
 				F7034C5A22891C1B0003F506 /* Gather.swift in Sources */,

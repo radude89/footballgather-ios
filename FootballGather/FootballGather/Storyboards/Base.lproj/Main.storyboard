@@ -254,11 +254,36 @@
                         <outlet property="bottomActionView" destination="lpY-ht-MEh" id="LJp-cc-ZDt"/>
                         <outlet property="bottomActionViewHeightConstraint" destination="dUo-hH-wBd" id="9Ns-Ws-ZAX"/>
                         <outlet property="playerTableView" destination="CiU-2R-yXK" id="c3k-V0-dIC"/>
+                        <segue destination="7zc-k2-1Q8" kind="show" identifier="StartGatherSegueIdentifier" id="KO4-1b-qtZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sGj-qk-t1v" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="973.60000000000002" y="137.4384236453202"/>
+        </scene>
+        <!--Start Gather View Controller-->
+        <scene sceneID="lvj-3W-q6x">
+            <objects>
+                <viewController id="7zc-k2-1Q8" customClass="StartGatherViewController" customModule="FootballGather" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ZVa-y0-fKQ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Gather started" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vx8-bR-oNG">
+                                <rect key="frame" x="16" y="108" width="112" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="m4k-1l-8YX"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="loM-UE-DCc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1909.5999999999999" y="136.69950738916256"/>
         </scene>
     </scenes>
     <resources>

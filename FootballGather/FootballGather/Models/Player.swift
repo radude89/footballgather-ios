@@ -49,6 +49,15 @@ extension Player {
     
     enum Position: String, Codable {
         case goalkeeper, defender, midfielder, winger, striker
+        
+        var acronym: String {
+            switch self {
+            case .goalkeeper: return "GK"
+            case .winger: return "W"
+            case .striker: return "ST"
+            default: return rawValue.prefix(3).uppercased()   
+            }
+        }
     }
     
     var skillOption: Skill? {

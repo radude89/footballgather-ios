@@ -28,6 +28,8 @@
 		F755AC6D22C09C1700A9EFB7 /* EmptyView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F755AC6C22C09C1700A9EFB7 /* EmptyView.xib */; };
 		F755AC6F22C09D3F00A9EFB7 /* Emptyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F755AC6E22C09D3F00A9EFB7 /* Emptyable.swift */; };
 		F75BFF9F22C3DB4100F1E55D /* StartGatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75BFF9E22C3DB4100F1E55D /* StartGatherViewController.swift */; };
+		F75BFFA122C3E8BD00F1E55D /* PlayerDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75BFFA022C3E8BD00F1E55D /* PlayerDetailViewController.swift */; };
+		F75BFFA322C3EAC500F1E55D /* PlayerDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75BFFA222C3EAC500F1E55D /* PlayerDetailTableViewCell.swift */; };
 		F75CE92D228DF1B800871C47 /* EndpointMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75CE92C228DF1B800871C47 /* EndpointMock.swift */; };
 		F75CE92F228E6B6100871C47 /* CreateUserServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75CE92E228E6B6100871C47 /* CreateUserServiceTests.swift */; };
 		F75CE931228E6BDA00871C47 /* ApplicationKeychainMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75CE930228E6BDA00871C47 /* ApplicationKeychainMock.swift */; };
@@ -109,6 +111,8 @@
 		F755AC6C22C09C1700A9EFB7 /* EmptyView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EmptyView.xib; sourceTree = "<group>"; };
 		F755AC6E22C09D3F00A9EFB7 /* Emptyable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Emptyable.swift; sourceTree = "<group>"; };
 		F75BFF9E22C3DB4100F1E55D /* StartGatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartGatherViewController.swift; sourceTree = "<group>"; };
+		F75BFFA022C3E8BD00F1E55D /* PlayerDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDetailViewController.swift; sourceTree = "<group>"; };
+		F75BFFA222C3EAC500F1E55D /* PlayerDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDetailTableViewCell.swift; sourceTree = "<group>"; };
 		F75CE92C228DF1B800871C47 /* EndpointMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointMock.swift; sourceTree = "<group>"; };
 		F75CE92E228E6B6100871C47 /* CreateUserServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateUserServiceTests.swift; sourceTree = "<group>"; };
 		F75CE930228E6BDA00871C47 /* ApplicationKeychainMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationKeychainMock.swift; sourceTree = "<group>"; };
@@ -272,6 +276,7 @@
 			children = (
 				F738782022A956FD001B9097 /* LoginViewController.swift */,
 				F738782222A95AD2001B9097 /* PlayerListViewController.swift */,
+				F75BFFA022C3E8BD00F1E55D /* PlayerDetailViewController.swift */,
 				F75BFF9E22C3DB4100F1E55D /* StartGatherViewController.swift */,
 			);
 			path = ViewControllers;
@@ -285,6 +290,7 @@
 				F755AC6C22C09C1700A9EFB7 /* EmptyView.xib */,
 				F755AC6A22C09C0500A9EFB7 /* EmptyView.swift */,
 				F755AC6822C08F2C00A9EFB7 /* PlayerTableViewCell.swift */,
+				F75BFFA222C3EAC500F1E55D /* PlayerDetailTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -527,11 +533,13 @@
 				F78C8CF522A420310035D5A2 /* GatherServiceModels.swift in Sources */,
 				F7034C4722890E340003F506 /* UserDefaultsWrapper.swift in Sources */,
 				F7BF3B4F2280575E00F33913 /* KeychainWrapper.swift in Sources */,
+				F75BFFA122C3E8BD00F1E55D /* PlayerDetailViewController.swift in Sources */,
 				F738782122A956FD001B9097 /* LoginViewController.swift in Sources */,
 				F7034C5C22891C1B0003F506 /* Player.swift in Sources */,
 				F755AC6922C08F2C00A9EFB7 /* PlayerTableViewCell.swift in Sources */,
 				F7BF3B5122805BA300F33913 /* KeychainQueryFactory.swift in Sources */,
 				F755AC6B22C09C0500A9EFB7 /* EmptyView.swift in Sources */,
+				F75BFFA322C3EAC500F1E55D /* PlayerDetailTableViewCell.swift in Sources */,
 				F762CAC82261A23300947AED /* CoreDataStore.swift in Sources */,
 				F78C8CFF22A4315D0035D5A2 /* DeleteNetworkService.swift in Sources */,
 				F75BFF9F22C3DB4100F1E55D /* StartGatherViewController.swift in Sources */,

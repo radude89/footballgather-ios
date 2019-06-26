@@ -42,6 +42,11 @@ class PlayerListViewController: UIViewController {
         static let bottomViewHeight: CGFloat = 80.0
     }
     
+    private enum SegueIdentifiers: String {
+        case startGather = "StartGatherSegueIdentifier"
+        case playerDetails = "PlayerDetailSegueIdentifier"
+    }
+    
     // MARK: - View life cycle
     
     override func viewDidLoad() {
@@ -87,7 +92,7 @@ class PlayerListViewController: UIViewController {
             if case let .success(ResourceID.uuid(gatherUUID)) = result {
                 DispatchQueue.main.async {
                     self.hideLoadingView()
-                    self.performSegue(withIdentifier: "StartGatherSegueIdentifier", sender: gatherUUID)
+                    self.performSegue(withIdentifier: SegueIdentifiers.startGather.rawValue, sender: gatherUUID)
                 }
             } else {
                 DispatchQueue.main.async {
@@ -149,11 +154,17 @@ class PlayerListViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard segue.identifier == "StartGatherSegueIdentifier" else { return }
-        guard let startGatherViewController = segue.destination as? StartGatherViewController,
-            let gatherUUID = sender as? UUID else { return }
-        
-        startGatherViewController.gatherUUID = gatherUUID
+        if segue.identifier == SegueIdentifiers.startGather.rawValue {
+            guard let startGatherViewController = segue.destination as? StartGatherViewController,
+                let gatherUUID = sender as? UUID else { return }
+            
+            startGatherViewController.gatherUUID = gatherUUID
+        } else if segue.identifier == SegueIdentifiers.playerDetails.rawValue {
+            guard let playerDetailsViewController = segue.destination as? PlayerDetailViewController,
+                let player = sender as? PlayerResponseModel else { return }
+            
+            playerDetailsViewController.player = player
+        }
     }
     
 }
@@ -202,7 +213,8 @@ extension PlayerListViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if viewState == .list {
-            // TODO: go to next screen
+            let player = players[indexPath.row]
+            performSegue(withIdentifier: SegueIdentifiers.playerDetails.rawValue, sender: player)
         } else {
             guard let cell: PlayerTableViewCell = tableView.cellForRow(at: indexPath) as? PlayerTableViewCell else {
                 return

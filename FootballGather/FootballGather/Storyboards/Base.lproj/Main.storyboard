@@ -255,11 +255,85 @@
                         <outlet property="bottomActionViewHeightConstraint" destination="dUo-hH-wBd" id="9Ns-Ws-ZAX"/>
                         <outlet property="playerTableView" destination="CiU-2R-yXK" id="c3k-V0-dIC"/>
                         <segue destination="7zc-k2-1Q8" kind="show" identifier="StartGatherSegueIdentifier" id="KO4-1b-qtZ"/>
+                        <segue destination="gwz-hl-jIY" kind="show" identifier="PlayerDetailSegueIdentifier" id="fUT-fs-NbI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sGj-qk-t1v" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="973.60000000000002" y="137.4384236453202"/>
+        </scene>
+        <!--Player Detail View Controller-->
+        <scene sceneID="fCc-Iq-Qlk">
+            <objects>
+                <viewController id="gwz-hl-jIY" customClass="PlayerDetailViewController" customModule="FootballGather" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="3xa-x6-lgY">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="40" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="gE3-ts-FU9">
+                                <rect key="frame" x="0.0" y="88" width="375" height="724"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="PlayerDetailTableViewCell" rowHeight="40" id="cPG-Ot-M2b" customClass="PlayerDetailTableViewCell" customModule="FootballGather" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="55.333333333333343" width="375" height="40"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="cPG-Ot-M2b" id="2yb-j6-BqX">
+                                            <rect key="frame" x="0.0" y="0.0" width="342" height="39.666666666666664"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="bBx-9f-toK">
+                                                    <rect key="frame" x="20" y="0.0" width="322" height="39.666666666666664"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="10D-aE-zuz">
+                                                            <rect key="frame" x="0.0" y="0.0" width="161" height="39.666666666666664"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gE6-jl-iJH">
+                                                            <rect key="frame" x="161" y="0.0" width="161" height="39.666666666666664"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                </stackView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="bBx-9f-toK" firstAttribute="top" secondItem="2yb-j6-BqX" secondAttribute="top" id="4uZ-9D-hlL"/>
+                                                <constraint firstItem="bBx-9f-toK" firstAttribute="leading" secondItem="2yb-j6-BqX" secondAttribute="leading" constant="20" id="PMS-3G-CaT"/>
+                                                <constraint firstAttribute="trailing" secondItem="bBx-9f-toK" secondAttribute="trailing" id="Pk6-xB-Yjh"/>
+                                                <constraint firstAttribute="bottom" secondItem="bBx-9f-toK" secondAttribute="bottom" id="owA-fE-GZl"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="leftLabel" destination="10D-aE-zuz" id="wo4-VX-Gbg"/>
+                                            <outlet property="rightLabel" destination="gE6-jl-iJH" id="3TO-Be-9dW"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="gwz-hl-jIY" id="gcm-xI-vLI"/>
+                                    <outlet property="delegate" destination="gwz-hl-jIY" id="aKg-qc-2EO"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="gE3-ts-FU9" firstAttribute="top" secondItem="Esa-zQ-05e" secondAttribute="top" id="1lP-QI-50t"/>
+                            <constraint firstItem="gE3-ts-FU9" firstAttribute="leading" secondItem="Esa-zQ-05e" secondAttribute="leading" id="W0H-6u-gIh"/>
+                            <constraint firstAttribute="bottom" secondItem="gE3-ts-FU9" secondAttribute="bottom" id="aag-BE-0TY"/>
+                            <constraint firstItem="gE3-ts-FU9" firstAttribute="trailing" secondItem="Esa-zQ-05e" secondAttribute="trailing" id="ezS-x3-Daz"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Esa-zQ-05e"/>
+                    </view>
+                    <connections>
+                        <outlet property="playerDetailTableView" destination="gE3-ts-FU9" id="C3Z-pg-dgM"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="AFU-Ah-pgM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="973.60000000000002" y="844.58128078817742"/>
         </scene>
         <!--Start Gather View Controller-->
         <scene sceneID="lvj-3W-q6x">

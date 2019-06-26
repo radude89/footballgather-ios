@@ -78,7 +78,24 @@ class PlayerListViewController: UIViewController {
     }
     
     @IBAction func startGatherAction(_ sender: Any) {
+        showLoadingView()
         
+        let gatherService = StandardNetworkService(resourcePath: "/api/gathers", authenticated: true)
+        gatherService.create(GatherCreateModel()) { [weak self] result in
+            guard let self = self else { return }
+            
+            if case let .success(ResourceID.uuid(gatherUUID)) = result {
+                DispatchQueue.main.async {
+                    self.hideLoadingView()
+                    self.performSegue(withIdentifier: "StartGatherSegueIdentifier", sender: gatherUUID)
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.hideLoadingView()
+                    AlertHelper.present(in: self, title: "Error", message: "Unable to create gather.")
+                }
+            }
+        }
     }
     
     private func loadPlayers() {
@@ -90,7 +107,7 @@ class PlayerListViewController: UIViewController {
             switch result {
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self.hideLoadingView()
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
                     AlertHelper.present(in: self, title: "Error", message: String(describing: error))
                 }
             case .success(let players):
@@ -129,6 +146,14 @@ class PlayerListViewController: UIViewController {
                 }
             }
         }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard segue.identifier == "StartGatherSegueIdentifier" else { return }
+        guard let startGatherViewController = segue.destination as? StartGatherViewController,
+            let gatherUUID = sender as? UUID else { return }
+        
+        startGatherViewController.gatherUUID = gatherUUID
     }
     
 }

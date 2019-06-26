@@ -27,6 +27,7 @@
 		F755AC6B22C09C0500A9EFB7 /* EmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F755AC6A22C09C0500A9EFB7 /* EmptyView.swift */; };
 		F755AC6D22C09C1700A9EFB7 /* EmptyView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F755AC6C22C09C1700A9EFB7 /* EmptyView.xib */; };
 		F755AC6F22C09D3F00A9EFB7 /* Emptyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F755AC6E22C09D3F00A9EFB7 /* Emptyable.swift */; };
+		F75BFF9F22C3DB4100F1E55D /* StartGatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75BFF9E22C3DB4100F1E55D /* StartGatherViewController.swift */; };
 		F75CE92D228DF1B800871C47 /* EndpointMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75CE92C228DF1B800871C47 /* EndpointMock.swift */; };
 		F75CE92F228E6B6100871C47 /* CreateUserServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75CE92E228E6B6100871C47 /* CreateUserServiceTests.swift */; };
 		F75CE931228E6BDA00871C47 /* ApplicationKeychainMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75CE930228E6BDA00871C47 /* ApplicationKeychainMock.swift */; };
@@ -107,6 +108,7 @@
 		F755AC6A22C09C0500A9EFB7 /* EmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyView.swift; sourceTree = "<group>"; };
 		F755AC6C22C09C1700A9EFB7 /* EmptyView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EmptyView.xib; sourceTree = "<group>"; };
 		F755AC6E22C09D3F00A9EFB7 /* Emptyable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Emptyable.swift; sourceTree = "<group>"; };
+		F75BFF9E22C3DB4100F1E55D /* StartGatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartGatherViewController.swift; sourceTree = "<group>"; };
 		F75CE92C228DF1B800871C47 /* EndpointMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointMock.swift; sourceTree = "<group>"; };
 		F75CE92E228E6B6100871C47 /* CreateUserServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateUserServiceTests.swift; sourceTree = "<group>"; };
 		F75CE930228E6BDA00871C47 /* ApplicationKeychainMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationKeychainMock.swift; sourceTree = "<group>"; };
@@ -270,6 +272,7 @@
 			children = (
 				F738782022A956FD001B9097 /* LoginViewController.swift */,
 				F738782222A95AD2001B9097 /* PlayerListViewController.swift */,
+				F75BFF9E22C3DB4100F1E55D /* StartGatherViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -531,6 +534,7 @@
 				F755AC6B22C09C0500A9EFB7 /* EmptyView.swift in Sources */,
 				F762CAC82261A23300947AED /* CoreDataStore.swift in Sources */,
 				F78C8CFF22A4315D0035D5A2 /* DeleteNetworkService.swift in Sources */,
+				F75BFF9F22C3DB4100F1E55D /* StartGatherViewController.swift in Sources */,
 				F7034C5B22891C1B0003F506 /* User.swift in Sources */,
 				F7034C5A22891C1B0003F506 /* Gather.swift in Sources */,
 				F7ABD0B322648CCE00AAEA87 /* FootballGatherKeychain.swift in Sources */,

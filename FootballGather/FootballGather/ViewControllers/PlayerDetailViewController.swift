@@ -8,43 +8,97 @@
 
 import UIKit
 
+// MARK: - PlayerDetailViewControllerDelegate
+protocol PlayerDetailViewControllerDelegate: AnyObject {
+    func didEdit(player: PlayerResponseModel)
+}
+
 // MARK: - PlayerDetailViewController
 class PlayerDetailViewController: UIViewController {
     @IBOutlet weak var playerDetailTableView: UITableView!
     
+    weak var delegate: PlayerDetailViewControllerDelegate?
     var player: PlayerResponseModel?
     
-    private lazy var sections = [
-        PlayerSection(
-            title: "Personal".uppercased(),
-            rows: [
-                PlayerRow(title: "Name",
-                          value: self.player?.name ?? "-")
-            ]
-        ),
-        PlayerSection(
-            title: "Play".uppercased(),
-            rows: [
-                PlayerRow(title: "Preferred position",
-                          value: self.player?.preferredPosition?.acronym ?? "-"),
-                PlayerRow(title: "Skill",
-                          value: self.player?.skill?.rawValue.capitalized ?? "-")
-            ]
-        ),
-        PlayerSection(
-            title: "Likes".uppercased(),
-            rows: [
-                PlayerRow(title: "Favourite team",
-                          value: self.player?.favouriteTeam ?? "-")
-            ]
-        )
-    ]
+    private enum SegueIdentifiers: String {
+        case editPlayer = "EditPlayerSegueIdentifier"
+    }
+    
+    private lazy var sections = makeSections()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         title = player?.name
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        playerDetailTableView.reloadData()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == SegueIdentifiers.editPlayer.rawValue{
+            guard let destinationViewController = segue.destination as? PlayerEditViewController,
+                let selectedPlayerRow = sender as? PlayerRow else {
+                    return
+            }
+            
+            destinationViewController.delegate = self
+            destinationViewController.playerRow = selectedPlayerRow
+            destinationViewController.player = player
+            
+            if selectedPlayerRow.editableField == .position || selectedPlayerRow.editableField == .skill {
+                let items = selectedPlayerRow.editableField == .position ?
+                    Player.Position.allCases.map { $0.rawValue } :
+                    Player.Skill.allCases.map { $0.rawValue }
+                let selectedIndex = items.firstIndex(of: selectedPlayerRow.value.lowercased())!
+                
+                destinationViewController.selectedItemIndex = selectedIndex
+                destinationViewController.items = items
+                destinationViewController.viewType = .selection
+            } else {
+                destinationViewController.viewType = .text
+            }
+        }
+    }
+    
+    private func makeSections() -> [PlayerSection] {
+        return [
+            PlayerSection(
+                title: "Personal",
+                rows: [
+                    PlayerRow(title: "Name",
+                              value: self.player?.name ?? "",
+                              editableField: .name),
+                    PlayerRow(title: "Age",
+                              value: self.player?.age != nil ? "\(self.player!.age!)" : "",
+                              editableField: .age)
+                ]
+            ),
+            PlayerSection(
+                title: "Play",
+                rows: [
+                    PlayerRow(title: "Preferred position",
+                              value: self.player?.preferredPosition?.rawValue.capitalized ?? "",
+                              editableField: .position),
+                    PlayerRow(title: "Skill",
+                              value: self.player?.skill?.rawValue.capitalized ?? "",
+                              editableField: .skill)
+                ]
+            ),
+            PlayerSection(
+                title: "Likes",
+                rows: [
+                    PlayerRow(title: "Favourite team",
+                              value: self.player?.favouriteTeam ?? "",
+                              editableField: .favouriteTeam)
+                ]
+            )
+        ]
+    }
+    
 }
 
 // MARK: - UITableViewDelegate | UITableViewDataSource
@@ -71,11 +125,24 @@ extension PlayerDetailViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sections[section].title
+        return sections[section].title.uppercased()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let row = sections[indexPath.section].rows[indexPath.row]
+        performSegue(withIdentifier: SegueIdentifiers.editPlayer.rawValue, sender: row)
+    }
+}
+
+// MARK: - PlayerEditViewControllerDelegate
+extension PlayerDetailViewController: PlayerEditViewControllerDelegate {
+    func didFinishEditing(player: PlayerResponseModel) {
+        self.player = player
+        title = player.name
+        sections = makeSections()
+        playerDetailTableView.reloadData()
         
+        delegate?.didEdit(player: player)
     }
 }
 
@@ -88,4 +155,30 @@ struct PlayerSection {
 struct PlayerRow {
     let title: String
     let value: String
+    let editableField: PlayerEditableFieldOption
+}
+
+enum PlayerEditableFieldOption {
+    case name, age, skill, position, favouriteTeam
+}
+
+extension PlayerResponseModel {
+    mutating func update(usingField field: PlayerEditableFieldOption, value: String) {
+        switch field {
+        case .name:
+            name = value
+        case .age:
+            age = Int(value)
+        case .position:
+            if let position = Player.Position(rawValue: value) {
+                preferredPosition = position
+            }
+        case .skill:
+            if let skill = Player.Skill(rawValue: value) {
+                self.skill = skill
+            }
+        case .favouriteTeam:
+            favouriteTeam = value
+        }
+    }
 }

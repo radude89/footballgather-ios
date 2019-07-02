@@ -43,11 +43,11 @@ extension Player {
 
 // MARK: - Skill & Position enum wrappers
 extension Player {
-    enum Skill: String, Codable {
+    enum Skill: String, Codable, CaseIterable {
         case beginner, amateur, professional
     }
     
-    enum Position: String, Codable {
+    enum Position: String, Codable, CaseIterable {
         case goalkeeper, defender, midfielder, winger, striker
         
         var acronym: String {

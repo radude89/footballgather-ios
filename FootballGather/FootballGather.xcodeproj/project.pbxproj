@@ -19,6 +19,7 @@
 		F7034C7E228A9CC70003F506 /* FootballGatherUserDefaultsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7034C7D228A9CC70003F506 /* FootballGatherUserDefaultsTests.swift */; };
 		F7034C80228ADC3C0003F506 /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7034C7F228ADC3C0003F506 /* Crypto.swift */; };
 		F7034C82228AF44C0003F506 /* CryptoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7034C81228AF44C0003F506 /* CryptoTests.swift */; };
+		F7072B7222CAFFB6008376F1 /* PlayerEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7072B7122CAFFB6008376F1 /* PlayerEditViewController.swift */; };
 		F72749DB228D0C5100698D0D /* GetPlayersForGatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72749DA228D0C5100698D0D /* GetPlayersForGatherService.swift */; };
 		F72749DD228D0FC800698D0D /* AddPlayerToGatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72749DC228D0FC800698D0D /* AddPlayerToGatherService.swift */; };
 		F738782122A956FD001B9097 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F738782022A956FD001B9097 /* LoginViewController.swift */; };
@@ -102,6 +103,7 @@
 		F7034C7D228A9CC70003F506 /* FootballGatherUserDefaultsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootballGatherUserDefaultsTests.swift; sourceTree = "<group>"; };
 		F7034C7F228ADC3C0003F506 /* Crypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Crypto.swift; sourceTree = "<group>"; };
 		F7034C81228AF44C0003F506 /* CryptoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoTests.swift; sourceTree = "<group>"; };
+		F7072B7122CAFFB6008376F1 /* PlayerEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerEditViewController.swift; sourceTree = "<group>"; };
 		F72749DA228D0C5100698D0D /* GetPlayersForGatherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPlayersForGatherService.swift; sourceTree = "<group>"; };
 		F72749DC228D0FC800698D0D /* AddPlayerToGatherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlayerToGatherService.swift; sourceTree = "<group>"; };
 		F738782022A956FD001B9097 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -277,6 +279,7 @@
 				F738782022A956FD001B9097 /* LoginViewController.swift */,
 				F738782222A95AD2001B9097 /* PlayerListViewController.swift */,
 				F75BFFA022C3E8BD00F1E55D /* PlayerDetailViewController.swift */,
+				F7072B7122CAFFB6008376F1 /* PlayerEditViewController.swift */,
 				F75BFF9E22C3DB4100F1E55D /* StartGatherViewController.swift */,
 			);
 			path = ViewControllers;
@@ -538,6 +541,7 @@
 				F7034C5C22891C1B0003F506 /* Player.swift in Sources */,
 				F755AC6922C08F2C00A9EFB7 /* PlayerTableViewCell.swift in Sources */,
 				F7BF3B5122805BA300F33913 /* KeychainQueryFactory.swift in Sources */,
+				F7072B7222CAFFB6008376F1 /* PlayerEditViewController.swift in Sources */,
 				F755AC6B22C09C0500A9EFB7 /* EmptyView.swift in Sources */,
 				F75BFFA322C3EAC500F1E55D /* PlayerDetailTableViewCell.swift in Sources */,
 				F762CAC82261A23300947AED /* CoreDataStore.swift in Sources */,

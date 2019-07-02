@@ -23,7 +23,7 @@ class PlayerListViewController: UIViewController {
         return emptyView
     }()
     
-    private lazy var barButtonItem: UIBarButtonItem = UIBarButtonItem(title: "Select", style: .plain, target: self, action: #selector(selectPlayers))
+    private lazy var barButtonItem = UIBarButtonItem(title: "Select", style: .plain, target: self, action: #selector(selectPlayers))
     
     // MARK: - Variables
     
@@ -64,7 +64,8 @@ class PlayerListViewController: UIViewController {
     
     // MARK: - Selectors
     
-    @objc func selectPlayers(sender: UIBarButtonItem) {
+    @objc
+    func selectPlayers(sender: UIBarButtonItem) {
         // toggle
         title = "Players"
         viewState = viewState == .list ? .selection : .list
@@ -162,11 +163,22 @@ class PlayerListViewController: UIViewController {
         } else if segue.identifier == SegueIdentifiers.playerDetails.rawValue {
             guard let playerDetailsViewController = segue.destination as? PlayerDetailViewController,
                 let player = sender as? PlayerResponseModel else { return }
-            
+            playerDetailsViewController.delegate = self
             playerDetailsViewController.player = player
         }
     }
     
+}
+
+extension PlayerListViewController: PlayerDetailViewControllerDelegate {
+    func didEdit(player: PlayerResponseModel) {
+        guard let index = players.firstIndex(of: player) else { return }
+        
+        players[index] = player
+        
+        let indexPath = IndexPath(row: index, section: 0)
+        playerTableView.reloadRows(at: [indexPath], with: .none)
+    }
 }
 
 // MARK: - UITableViewDelegate | UITableViewDataSource

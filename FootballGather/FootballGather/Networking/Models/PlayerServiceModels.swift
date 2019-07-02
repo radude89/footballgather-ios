@@ -17,14 +17,30 @@ struct PlayerCreateModel: Encodable {
     let favouriteTeam: String?
 }
 
+extension PlayerCreateModel {
+    init(_ responseModel: PlayerResponseModel) {
+        name = responseModel.name
+        age = responseModel.age
+        skill = responseModel.skill
+        preferredPosition = responseModel.preferredPosition
+        favouriteTeam = responseModel.favouriteTeam
+    }
+}
+
 // MARK: - ResponseModel
 struct PlayerResponseModel {
     let id: Int
-    let name: String
-    let age: Int?
-    let skill: Player.Skill?
-    let preferredPosition: Player.Position?
-    let favouriteTeam: String?
+    var name: String
+    var age: Int?
+    var skill: Player.Skill?
+    var preferredPosition: Player.Position?
+    var favouriteTeam: String?
+}
+
+extension PlayerResponseModel: Equatable {
+    static func ==(lhs: PlayerResponseModel, rhs: PlayerResponseModel) -> Bool {
+        return lhs.id == rhs.id
+    }
 }
 
 extension PlayerResponseModel: Decodable {

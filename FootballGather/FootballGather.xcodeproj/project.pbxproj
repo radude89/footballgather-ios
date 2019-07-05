@@ -22,13 +22,14 @@
 		F7072B7222CAFFB6008376F1 /* PlayerEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7072B7122CAFFB6008376F1 /* PlayerEditViewController.swift */; };
 		F72749DB228D0C5100698D0D /* GetPlayersForGatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72749DA228D0C5100698D0D /* GetPlayersForGatherService.swift */; };
 		F72749DD228D0FC800698D0D /* AddPlayerToGatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72749DC228D0FC800698D0D /* AddPlayerToGatherService.swift */; };
+		F729D28E22CF3124009D7195 /* GatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F729D28D22CF3124009D7195 /* GatherViewController.swift */; };
 		F738782122A956FD001B9097 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F738782022A956FD001B9097 /* LoginViewController.swift */; };
 		F738782322A95AD2001B9097 /* PlayerListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F738782222A95AD2001B9097 /* PlayerListViewController.swift */; };
 		F755AC6922C08F2C00A9EFB7 /* PlayerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F755AC6822C08F2C00A9EFB7 /* PlayerTableViewCell.swift */; };
 		F755AC6B22C09C0500A9EFB7 /* EmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F755AC6A22C09C0500A9EFB7 /* EmptyView.swift */; };
 		F755AC6D22C09C1700A9EFB7 /* EmptyView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F755AC6C22C09C1700A9EFB7 /* EmptyView.xib */; };
 		F755AC6F22C09D3F00A9EFB7 /* Emptyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F755AC6E22C09D3F00A9EFB7 /* Emptyable.swift */; };
-		F75BFF9F22C3DB4100F1E55D /* StartGatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75BFF9E22C3DB4100F1E55D /* StartGatherViewController.swift */; };
+		F75BFF9F22C3DB4100F1E55D /* ConfirmPlayersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75BFF9E22C3DB4100F1E55D /* ConfirmPlayersViewController.swift */; };
 		F75BFFA122C3E8BD00F1E55D /* PlayerDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75BFFA022C3E8BD00F1E55D /* PlayerDetailViewController.swift */; };
 		F75BFFA322C3EAC500F1E55D /* PlayerDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75BFFA222C3EAC500F1E55D /* PlayerDetailTableViewCell.swift */; };
 		F75CE92D228DF1B800871C47 /* EndpointMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75CE92C228DF1B800871C47 /* EndpointMock.swift */; };
@@ -106,13 +107,14 @@
 		F7072B7122CAFFB6008376F1 /* PlayerEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerEditViewController.swift; sourceTree = "<group>"; };
 		F72749DA228D0C5100698D0D /* GetPlayersForGatherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPlayersForGatherService.swift; sourceTree = "<group>"; };
 		F72749DC228D0FC800698D0D /* AddPlayerToGatherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlayerToGatherService.swift; sourceTree = "<group>"; };
+		F729D28D22CF3124009D7195 /* GatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatherViewController.swift; sourceTree = "<group>"; };
 		F738782022A956FD001B9097 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		F738782222A95AD2001B9097 /* PlayerListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerListViewController.swift; sourceTree = "<group>"; };
 		F755AC6822C08F2C00A9EFB7 /* PlayerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerTableViewCell.swift; sourceTree = "<group>"; };
 		F755AC6A22C09C0500A9EFB7 /* EmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyView.swift; sourceTree = "<group>"; };
 		F755AC6C22C09C1700A9EFB7 /* EmptyView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EmptyView.xib; sourceTree = "<group>"; };
 		F755AC6E22C09D3F00A9EFB7 /* Emptyable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Emptyable.swift; sourceTree = "<group>"; };
-		F75BFF9E22C3DB4100F1E55D /* StartGatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartGatherViewController.swift; sourceTree = "<group>"; };
+		F75BFF9E22C3DB4100F1E55D /* ConfirmPlayersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmPlayersViewController.swift; sourceTree = "<group>"; };
 		F75BFFA022C3E8BD00F1E55D /* PlayerDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDetailViewController.swift; sourceTree = "<group>"; };
 		F75BFFA222C3EAC500F1E55D /* PlayerDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDetailTableViewCell.swift; sourceTree = "<group>"; };
 		F75CE92C228DF1B800871C47 /* EndpointMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointMock.swift; sourceTree = "<group>"; };
@@ -280,7 +282,8 @@
 				F738782222A95AD2001B9097 /* PlayerListViewController.swift */,
 				F75BFFA022C3E8BD00F1E55D /* PlayerDetailViewController.swift */,
 				F7072B7122CAFFB6008376F1 /* PlayerEditViewController.swift */,
-				F75BFF9E22C3DB4100F1E55D /* StartGatherViewController.swift */,
+				F75BFF9E22C3DB4100F1E55D /* ConfirmPlayersViewController.swift */,
+				F729D28D22CF3124009D7195 /* GatherViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -534,6 +537,7 @@
 				F7C32A5D22AA3D9500D80C37 /* LoadingView.swift in Sources */,
 				F78C8D0322A431A00035D5A2 /* Endpoint.swift in Sources */,
 				F78C8CF522A420310035D5A2 /* GatherServiceModels.swift in Sources */,
+				F729D28E22CF3124009D7195 /* GatherViewController.swift in Sources */,
 				F7034C4722890E340003F506 /* UserDefaultsWrapper.swift in Sources */,
 				F7BF3B4F2280575E00F33913 /* KeychainWrapper.swift in Sources */,
 				F75BFFA122C3E8BD00F1E55D /* PlayerDetailViewController.swift in Sources */,
@@ -546,7 +550,7 @@
 				F75BFFA322C3EAC500F1E55D /* PlayerDetailTableViewCell.swift in Sources */,
 				F762CAC82261A23300947AED /* CoreDataStore.swift in Sources */,
 				F78C8CFF22A4315D0035D5A2 /* DeleteNetworkService.swift in Sources */,
-				F75BFF9F22C3DB4100F1E55D /* StartGatherViewController.swift in Sources */,
+				F75BFF9F22C3DB4100F1E55D /* ConfirmPlayersViewController.swift in Sources */,
 				F7034C5B22891C1B0003F506 /* User.swift in Sources */,
 				F7034C5A22891C1B0003F506 /* Gather.swift in Sources */,
 				F7ABD0B322648CCE00AAEA87 /* FootballGatherKeychain.swift in Sources */,

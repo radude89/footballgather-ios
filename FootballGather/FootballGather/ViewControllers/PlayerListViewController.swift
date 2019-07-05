@@ -15,6 +15,7 @@ class PlayerListViewController: UIViewController {
     @IBOutlet weak var playerTableView: UITableView!
     @IBOutlet weak var bottomActionView: UIView!
     @IBOutlet weak var bottomActionViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var confirmPlayersButton: UIButton!
     
     lazy var loadingView = LoadingView.initToView(self.view)
     lazy var emptyView: EmptyView = {
@@ -43,7 +44,7 @@ class PlayerListViewController: UIViewController {
     }
     
     private enum SegueIdentifiers: String {
-        case startGather = "StartGatherSegueIdentifier"
+        case confirmPlayers = "ConfirmPlayersSegueIdentifier"
         case playerDetails = "PlayerDetailSegueIdentifier"
     }
     
@@ -54,6 +55,7 @@ class PlayerListViewController: UIViewController {
         
         bottomActionViewHeightConstraint.constant = 0
         bottomActionView.isHidden = true
+        confirmPlayersButton.isEnabled = false
         
         title = "Players"
         navigationItem.rightBarButtonItem = barButtonItem
@@ -83,25 +85,8 @@ class PlayerListViewController: UIViewController {
         playerTableView.reloadData()
     }
     
-    @IBAction func startGatherAction(_ sender: Any) {
-        showLoadingView()
-        
-        let gatherService = StandardNetworkService(resourcePath: "/api/gathers", authenticated: true)
-        gatherService.create(GatherCreateModel()) { [weak self] result in
-            guard let self = self else { return }
-            
-            if case let .success(ResourceID.uuid(gatherUUID)) = result {
-                DispatchQueue.main.async {
-                    self.hideLoadingView()
-                    self.performSegue(withIdentifier: SegueIdentifiers.startGather.rawValue, sender: gatherUUID)
-                }
-            } else {
-                DispatchQueue.main.async {
-                    self.hideLoadingView()
-                    AlertHelper.present(in: self, title: "Error", message: "Unable to create gather.")
-                }
-            }
-        }
+    @IBAction func confirmPlayersAction(_ sender: Any) {
+        performSegue(withIdentifier: SegueIdentifiers.confirmPlayers.rawValue, sender: nil)
     }
     
     private func loadPlayers() {
@@ -155,11 +140,11 @@ class PlayerListViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == SegueIdentifiers.startGather.rawValue {
-            guard let startGatherViewController = segue.destination as? StartGatherViewController,
-                let gatherUUID = sender as? UUID else { return }
+        if segue.identifier == SegueIdentifiers.confirmPlayers.rawValue {
+            guard let confirmPlayersViewController = segue.destination as? ConfirmPlayersViewController else { return }
             
-            startGatherViewController.gatherUUID = gatherUUID
+            let selectedPlayers = Array(selectedPlayersDictionary.values)
+            confirmPlayersViewController.playersDictionary[.bench] = selectedPlayers
         } else if segue.identifier == SegueIdentifiers.playerDetails.rawValue {
             guard let playerDetailsViewController = segue.destination as? PlayerDetailViewController,
                 let player = sender as? PlayerResponseModel else { return }
@@ -242,6 +227,7 @@ extension PlayerListViewController: UITableViewDelegate, UITableViewDataSource {
             
             let selectedPlayers = selectedPlayersDictionary.values.count
             title = selectedPlayers > 0 ? "\(selectedPlayers) selected" : "Players"
+            confirmPlayersButton.isEnabled = selectedPlayers >= 2
         }
     }
     

@@ -9,6 +9,7 @@
 import UIKit
 
 // MARK: - ConfirmPlayersViewController
+typealias Team = ConfirmPlayersViewController.TeamSection
 
 class ConfirmPlayersViewController: UIViewController {
     
@@ -48,22 +49,109 @@ class ConfirmPlayersViewController: UIViewController {
     @IBAction func startGatherAction(_ sender: Any) {
         showLoadingView()
         
-        let gatherService = StandardNetworkService(resourcePath: "/api/gathers", authenticated: true)
-        gatherService.create(GatherCreateModel()) { [weak self] result in
+        createGather { [weak self] uuid in
             guard let self = self else { return }
+            guard let gatherUUID = uuid else {
+                self.handleServiceFailure()
+                return
+            }
             
+            self.addPlayersToGather(havingUUID: gatherUUID)
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == SegueIdentifiers.gather.rawValue {
+            guard let gatherViewController = segue.destination as? GatherViewController,
+                let gatherModel = sender as? GatherModel else {
+                    return
+            }
+            
+            gatherViewController.gatherModel = gatherModel
+        }
+    }
+    
+    private func createGather(completion: @escaping (UUID?) -> Void) {
+        let gatherService = StandardNetworkService(resourcePath: "/api/gathers", authenticated: true)
+        gatherService.create(GatherCreateModel()) { result in
             if case let .success(ResourceID.uuid(gatherUUID)) = result {
-                DispatchQueue.main.async {
-                    self.hideLoadingView()
-                    self.performSegue(withIdentifier: SegueIdentifiers.gather.rawValue, sender: gatherUUID)
-                }
+                completion(gatherUUID)
             } else {
-                DispatchQueue.main.async {
-                    self.hideLoadingView()
-                    AlertHelper.present(in: self, title: "Error", message: "Unable to create gather.")
-                }
+                completion(nil)
             }
         }
+    }
+    
+    private func addPlayersToGather(havingUUID gatherUUID: UUID) {
+        let players = self.playerTeamArray
+        let dispatchGroup = DispatchGroup()
+        var serviceFailed = false
+        
+        players.forEach { playerTeamModel in
+            dispatchGroup.enter()
+            
+            self.addPlayer(
+                playerTeamModel.player,
+                toGatherHavingUUID: gatherUUID,
+                team: playerTeamModel.team,
+                completion: { playerWasAdded in
+                    if !playerWasAdded {
+                        serviceFailed = true
+                    }
+                    
+                    dispatchGroup.leave()
+            })
+        }
+        
+        dispatchGroup.notify(queue: DispatchQueue.main) {
+            self.hideLoadingView()
+            
+            if serviceFailed {
+                self.handleServiceFailure()
+            } else {
+                self.performSegue(withIdentifier: SegueIdentifiers.gather.rawValue,
+                                  sender: GatherModel(players: players, gatherUUID: gatherUUID))
+            }
+        }
+    }
+    
+    private func addPlayer(_ player: PlayerResponseModel,
+                           toGatherHavingUUID gatherUUID: UUID,
+                           team: TeamSection,
+                           completion: @escaping (Bool) -> Void) {
+        var service = AddPlayerToGatherService()
+        service.addPlayer(
+            havingServerId: player.id,
+            toGatherWithId: gatherUUID,
+            team: PlayerGatherTeam(team: team.headerTitle)) { result in
+                if case let .success(resultValue) = result {
+                    completion(resultValue)
+                } else {
+                    completion(false)
+                }
+        }
+    }
+    
+    private func handleServiceFailure() {
+        DispatchQueue.main.async {
+            self.hideLoadingView()
+            AlertHelper.present(in: self, title: "Error", message: "Unable to create gather.")
+        }
+    }
+    
+    private var playerTeamArray: [PlayerTeamModel] {
+        var players: [PlayerTeamModel] = []
+        players += self.playersDictionary
+            .filter { $0.key == .teamA }
+            .flatMap { $0.value }
+            .map { PlayerTeamModel(team: .teamA, player: $0) }
+        
+        players += self.playersDictionary
+            .filter { $0.key == .teamB }
+            .flatMap { $0.value }
+            .map { PlayerTeamModel(team: .teamB, player: $0) }
+        
+        return players
     }
     
 }
@@ -72,7 +160,6 @@ class ConfirmPlayersViewController: UIViewController {
 extension ConfirmPlayersViewController: Loadable {}
 
 // MARK: - UITableViewDelegate | UITableViewDataSource
-
 extension ConfirmPlayersViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return TeamSection.allCases.count
@@ -117,7 +204,7 @@ extension ConfirmPlayersViewController: UITableViewDelegate, UITableViewDataSour
             let destinationTeam = TeamSection(rawValue: destinationIndexPath.section) else {
                 fatalError("Unable to move players")
         }
-
+        
         playersDictionary[sourceTeam]?.remove(at: sourceIndexPath.row)
         
         if playersDictionary[destinationTeam]?.isEmpty == false {
@@ -132,5 +219,33 @@ extension ConfirmPlayersViewController: UITableViewDelegate, UITableViewDataSour
         } else {
             startGatherButton.isEnabled = false
         }
+    }
+}
+
+// MARK: - PlayerTeamModel
+struct PlayerTeamModel {
+    let team: Team
+    let player: PlayerResponseModel
+}
+
+extension PlayerTeamModel: Equatable {
+    static func ==(lhs: PlayerTeamModel, rhs: PlayerTeamModel) -> Bool {
+        return lhs.team == rhs.team && lhs.player == rhs.player
+    }
+}
+
+extension PlayerTeamModel: Hashable {}
+
+// MARK: - GatherModel
+struct GatherModel {
+    let players: [PlayerTeamModel]
+    let gatherUUID: UUID
+}
+
+extension GatherModel: Hashable {}
+
+extension GatherModel: Equatable {
+    static func ==(lhs: GatherModel, rhs: GatherModel) -> Bool {
+        return lhs.gatherUUID == rhs.gatherUUID && lhs.players == rhs.players
     }
 }

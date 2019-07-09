@@ -43,6 +43,8 @@ extension PlayerResponseModel: Equatable {
     }
 }
 
+extension PlayerResponseModel: Hashable {}
+
 extension PlayerResponseModel: Decodable {
     enum CodingKeys: String, CodingKey {
         case id, name, age, skill, preferredPosition, favouriteTeam

@@ -162,15 +162,15 @@ extension ConfirmPlayersViewController: Loadable {}
 // MARK: - UITableViewDelegate | UITableViewDataSource
 extension ConfirmPlayersViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return TeamSection.allCases.count
+        return Team.allCases.count
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return TeamSection(rawValue: section)?.headerTitle
+        return Team(rawValue: section)?.headerTitle
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let team = TeamSection(rawValue: section), let players = playersDictionary[team] else { return 0 }
+        guard let team = Team(rawValue: section), let players = playersDictionary[team] else { return 0 }
         
         return players.count
     }
@@ -188,7 +188,7 @@ extension ConfirmPlayersViewController: UITableViewDelegate, UITableViewDataSour
             return UITableViewCell()
         }
         
-        if let team = TeamSection(rawValue: indexPath.section), let players = playersDictionary[team] {
+        if let team = Team(rawValue: indexPath.section), let players = playersDictionary[team] {
             let player = players[indexPath.row]
             
             cell.textLabel?.text = player.name

@@ -11,7 +11,7 @@ import UIKit
 // MARK: - GatherViewController
 class GatherViewController: UIViewController {
     
-    // MARK: - Outlets
+    // MARK: - Outlets, views
     @IBOutlet weak var playerTableView: UITableView!
     @IBOutlet weak var scoreLabelView: ScoreLabelView!
     @IBOutlet weak var scoreStepper: ScoreStepper!
@@ -80,12 +80,109 @@ class GatherViewController: UIViewController {
         selectedTime = Constants.defaultTime
         timerView.isHidden = true
         setupTimePickerView()
+        timePickerView.reloadAllComponents()
         
         scoreStepper.delegate = self
         playerTableView.reloadData()
     }
     
     @IBAction func endGather(_ sender: Any) {
+        let alertController = UIAlertController(title: "End Gather", message: "Are you sure you want to end the gather?", preferredStyle: .alert)
+        let confirmAction = UIAlertAction(title: "Yes", style: .default) { _ in
+            self.endGather()
+        }
+        alertController.addAction(confirmAction)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    // MARK: - Timer
+    @IBAction func setTimer(_ sender: Any) {
+        setupTimePickerView()
+        timerView.isHidden = false
+    }
+    
+    @IBAction func cancelTimer(_ sender: Any) {
+        timerState = .stopped
+        timer.invalidate()
+        selectedTime = Constants.defaultTime
+        timerView.isHidden = true
+    }
+    
+    @IBAction func actionTimer(_ sender: Any) {
+        guard selectedTime.minutes > 0 || selectedTime.seconds > 0 else {
+            return
+        }
+        
+        switch timerState {
+        case .stopped, .paused:
+            timerState = .running
+        case .running:
+            timerState = .paused
+        }
+        
+        if timerState == .paused {
+            timer.invalidate()
+        } else {
+            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
+        }
+    }
+    
+    @IBAction func timerCancel(_ sender: Any) {
+        timerView.isHidden = true
+    }
+    
+    @IBAction func timerDone(_ sender: Any) {
+        timerState = .stopped
+        timer.invalidate()
+        
+        selectedTime.minutes = timePickerView.selectedRow(inComponent: GatherCountDownTimerComponent.minutes.rawValue)
+        selectedTime.seconds = timePickerView.selectedRow(inComponent: GatherCountDownTimerComponent.seconds.rawValue)
+        
+        timerView.isHidden = true
+    }
+    
+    @objc
+    func updateTimer(_ timer: Timer) {
+        if selectedTime.seconds == 0 {
+            selectedTime.minutes -= 1
+            selectedTime.seconds = 59
+        } else {
+            selectedTime.seconds -= 1
+        }
+        
+        if selectedTime.seconds == 0 && selectedTime.minutes == 0 {
+            timerState = .stopped
+            timer.invalidate()
+        }
+    }
+    
+    // MARK: - Private methods
+    private func updateGather(_ gather: GatherCreateModel, completion: @escaping (Bool) -> Void) {
+        guard let gatherModel = gatherModel else {
+            completion(false)
+            return
+        }
+        
+        var service = StandardNetworkService(resourcePath: "/api/gathers", authenticated: true)
+        service.update(gather, resourceID: ResourceID.uuid(gatherModel.gatherUUID)) { result in
+            if case .success(let updated) = result {
+                completion(updated)
+            } else {
+                completion(false)
+            }
+        }
+    }
+    
+    private func setupTimePickerView() {
+        timePickerView.selectRow(selectedTime.minutes, inComponent: GatherCountDownTimerComponent.minutes.rawValue, animated: false)
+        timePickerView.selectRow(selectedTime.seconds, inComponent: GatherCountDownTimerComponent.seconds.rawValue, animated: false)
+    }
+    
+    private func endGather() {
         guard let scoreTeamAString = scoreLabelView.teamAScoreLabel.text,
             let scoreTeamBString = scoreLabelView.teamBScoreLabel.text,
             let scoreTeamA = Int(scoreTeamAString),
@@ -116,79 +213,14 @@ class GatherViewController: UIViewController {
                 DispatchQueue.main.async {
                     AlertHelper.present(in: self, title: "Error update", message: "Unable to update gather. Please try again.")
                 }
-            }
-        }
-    }
-    
-    // MARK: - Timer
-    @IBAction func setTimer(_ sender: Any) {
-        setupTimePickerView()
-        timerView.isHidden = false
-    }
-    
-    @IBAction func cancelTimer(_ sender: Any) {
-        timerState = .stopped
-        timer.invalidate()
-        selectedTime = Constants.defaultTime
-        timerView.isHidden = true
-    }
-    
-    @IBAction func actionTimer(_ sender: Any) {
-        switch timerState {
-        case .stopped, .paused:
-            timerState = .running
-        case .running:
-            timerState = .paused
-        }
-        
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
-    }
-    
-    @IBAction func timerCancel(_ sender: Any) {
-        timerView.isHidden = true
-    }
-    
-    @IBAction func timerDone(_ sender: Any) {
-        selectedTime.minutes = timePickerView.selectedRow(inComponent: GatherCountDownTimerComponent.minutes.rawValue)
-        selectedTime.seconds = timePickerView.selectedRow(inComponent: GatherCountDownTimerComponent.seconds.rawValue)
-        
-        timerView.isHidden = true
-    }
-    
-    @objc
-    func updateTimer(_ timer: Timer) {
-        if selectedTime.seconds == 0 {
-            selectedTime.minutes -= 1
-            selectedTime.seconds = 59
-        } else {
-            selectedTime.seconds -= 1
-        }
-        
-        if selectedTime.seconds == 0 && selectedTime.minutes == 0 {
-            timer.invalidate()
-        }
-    }
-    
-    // MARK: - Private methods
-    private func updateGather(_ gather: GatherCreateModel, completion: @escaping (Bool) -> Void) {
-        guard let gatherModel = gatherModel else {
-            completion(false)
-            return
-        }
-        
-        var service = StandardNetworkService(resourcePath: "/api/gathers", authenticated: true)
-        service.update(gather, resourceID: ResourceID.uuid(gatherModel.gatherUUID)) { result in
-            if case .success(let updated) = result {
-                completion(updated)
             } else {
-                completion(false)
+                DispatchQueue.main.async {
+                    self.navigationController?.popViewController(animated: false)
+                    self.navigationController?.popViewController(animated: false)
+                    self.navigationController?.popViewController(animated: true)
+                }
             }
         }
-    }
-    
-    private func setupTimePickerView() {
-        timePickerView.selectRow(selectedTime.minutes, inComponent: GatherCountDownTimerComponent.minutes.rawValue, animated: false)
-        timePickerView.selectRow(selectedTime.seconds, inComponent: GatherCountDownTimerComponent.seconds.rawValue, animated: false)
     }
     
 }
@@ -199,8 +231,17 @@ extension GatherViewController: UITableViewDelegate, UITableViewDataSource {
         return 2
     }
     
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if section == 0 {
+            return Team.teamA.headerTitle
+        } else {
+            return Team.teamB.headerTitle
+        }
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return gatherModel?.players.filter { $0.team == Team(rawValue: section) }.count ?? 0
+        let team: Team = section == 0 ? .teamA : .teamB
+        return gatherModel?.players.filter { $0.team == team }.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -208,7 +249,8 @@ extension GatherViewController: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         
-        if let playerTeams = gatherModel?.players.filter({ $0.team == Team(rawValue: indexPath.section) }) {
+        let team: Team = indexPath.section == 0 ? .teamA : .teamB
+        if let playerTeams = gatherModel?.players.filter({ $0.team == team }) {
             let player = playerTeams[indexPath.row].player
             
             cell.textLabel?.text = player.name
@@ -236,7 +278,7 @@ extension GatherViewController: ScoreStepperDelegate {
 extension GatherViewController: Loadable {}
 
 // MARK: - UIPickerViewDataSource
-extension GatherViewController: UIPickerViewDataSource {
+extension GatherViewController: UIPickerViewDataSource, UIPickerViewDelegate {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return GatherCountDownTimerComponent.allCases.count
     }

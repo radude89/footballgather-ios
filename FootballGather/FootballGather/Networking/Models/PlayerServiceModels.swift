@@ -18,6 +18,16 @@ struct PlayerCreateModel: Encodable {
 }
 
 extension PlayerCreateModel {
+    init(name: String) {
+        self.name = name
+        age = nil
+        skill = nil
+        preferredPosition = nil
+        favouriteTeam = nil
+    }
+}
+
+extension PlayerCreateModel {
     init(_ responseModel: PlayerResponseModel) {
         name = responseModel.name
         age = responseModel.age
@@ -43,6 +53,8 @@ extension PlayerResponseModel: Equatable {
     }
 }
 
+extension PlayerResponseModel: Hashable {}
+
 extension PlayerResponseModel: Decodable {
     enum CodingKeys: String, CodingKey {
         case id, name, age, skill, preferredPosition, favouriteTeam
@@ -53,7 +65,7 @@ extension PlayerResponseModel: Decodable {
         
         id = try container.decode(Int.self, forKey: .id)
         name = try container.decode(String.self, forKey: .name)
-        age = try container.decode(Int.self, forKey: .age)
+        age = try container.decodeIfPresent(Int.self, forKey: .age)
         favouriteTeam = try container.decodeIfPresent(String.self, forKey: .favouriteTeam) ?? nil
         
         if let skillDesc = try container.decodeIfPresent(String.self, forKey: .skill) {

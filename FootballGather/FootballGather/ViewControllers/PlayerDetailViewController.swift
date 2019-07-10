@@ -53,9 +53,9 @@ class PlayerDetailViewController: UIViewController {
                 let items = selectedPlayerRow.editableField == .position ?
                     Player.Position.allCases.map { $0.rawValue } :
                     Player.Skill.allCases.map { $0.rawValue }
-                let selectedIndex = items.firstIndex(of: selectedPlayerRow.value.lowercased())!
+                let selectedIndex = items.firstIndex(of: selectedPlayerRow.value.lowercased())
                 
-                destinationViewController.selectedItemIndex = selectedIndex
+                destinationViewController.selectedItemIndex = selectedIndex ?? -1
                 destinationViewController.items = items
                 destinationViewController.viewType = .selection
             } else {

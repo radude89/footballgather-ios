@@ -25,6 +25,7 @@
 		F729D28E22CF3124009D7195 /* GatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F729D28D22CF3124009D7195 /* GatherViewController.swift */; };
 		F729D29022D07ACB009D7195 /* ScoreLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F729D28F22D07ACB009D7195 /* ScoreLabelView.swift */; };
 		F729D29222D07B39009D7195 /* ScoreStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F729D29122D07B39009D7195 /* ScoreStepper.swift */; };
+		F729D29422D5E617009D7195 /* PlayerAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F729D29322D5E617009D7195 /* PlayerAddViewController.swift */; };
 		F738782122A956FD001B9097 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F738782022A956FD001B9097 /* LoginViewController.swift */; };
 		F738782322A95AD2001B9097 /* PlayerListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F738782222A95AD2001B9097 /* PlayerListViewController.swift */; };
 		F755AC6922C08F2C00A9EFB7 /* PlayerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F755AC6822C08F2C00A9EFB7 /* PlayerTableViewCell.swift */; };
@@ -112,6 +113,7 @@
 		F729D28D22CF3124009D7195 /* GatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatherViewController.swift; sourceTree = "<group>"; };
 		F729D28F22D07ACB009D7195 /* ScoreLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreLabelView.swift; sourceTree = "<group>"; };
 		F729D29122D07B39009D7195 /* ScoreStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreStepper.swift; sourceTree = "<group>"; };
+		F729D29322D5E617009D7195 /* PlayerAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerAddViewController.swift; sourceTree = "<group>"; };
 		F738782022A956FD001B9097 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		F738782222A95AD2001B9097 /* PlayerListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerListViewController.swift; sourceTree = "<group>"; };
 		F755AC6822C08F2C00A9EFB7 /* PlayerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerTableViewCell.swift; sourceTree = "<group>"; };
@@ -284,6 +286,7 @@
 			children = (
 				F738782022A956FD001B9097 /* LoginViewController.swift */,
 				F738782222A95AD2001B9097 /* PlayerListViewController.swift */,
+				F729D29322D5E617009D7195 /* PlayerAddViewController.swift */,
 				F75BFFA022C3E8BD00F1E55D /* PlayerDetailViewController.swift */,
 				F7072B7122CAFFB6008376F1 /* PlayerEditViewController.swift */,
 				F75BFF9E22C3DB4100F1E55D /* ConfirmPlayersViewController.swift */,
@@ -536,6 +539,7 @@
 				F78C8D0122A4317F0035D5A2 /* GetNetworkService.swift in Sources */,
 				F72749DD228D0FC800698D0D /* AddPlayerToGatherService.swift in Sources */,
 				F78C8CF922A421810035D5A2 /* PlayerServiceModels.swift in Sources */,
+				F729D29422D5E617009D7195 /* PlayerAddViewController.swift in Sources */,
 				F7C32A6022AA4CF000D80C37 /* AlertHelper.swift in Sources */,
 				F755AC6F22C09D3F00A9EFB7 /* Emptyable.swift in Sources */,
 				F7034C4522890DF40003F506 /* FootballGatherUserDefaults.swift in Sources */,

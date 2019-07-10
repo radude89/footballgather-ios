@@ -214,10 +214,13 @@ class GatherViewController: UIViewController {
                     AlertHelper.present(in: self, title: "Error update", message: "Unable to update gather. Please try again.")
                 }
             } else {
+                guard let playerViewController = self.navigationController?.viewControllers.first(where: { $0 is PlayerListViewController }) as? PlayerListViewController else {
+                    return
+                }
+                
                 DispatchQueue.main.async {
-                    self.navigationController?.popViewController(animated: false)
-                    self.navigationController?.popViewController(animated: false)
-                    self.navigationController?.popViewController(animated: true)
+                    playerViewController.toggleViewState()
+                    self.navigationController?.popToViewController(playerViewController, animated: true)
                 }
             }
         }

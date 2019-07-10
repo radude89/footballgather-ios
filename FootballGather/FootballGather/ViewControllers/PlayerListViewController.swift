@@ -14,8 +14,7 @@ class PlayerListViewController: UIViewController {
     
     @IBOutlet weak var playerTableView: UITableView!
     @IBOutlet weak var bottomActionView: UIView!
-    @IBOutlet weak var bottomActionViewHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var confirmPlayersButton: UIButton!
+    @IBOutlet weak var confirmOrAddPlayersButton: UIButton!
     
     lazy var loadingView = LoadingView.initToView(self.view)
     lazy var emptyView: EmptyView = {
@@ -35,16 +34,21 @@ class PlayerListViewController: UIViewController {
         case list
         case selection
     }
-    private var viewState: ViewState = .list
+    private var viewState: ViewState = .list {
+        didSet {
+            if viewState == .list {
+                confirmOrAddPlayersButton.setTitle("Add player", for: .normal)
+            } else {
+                confirmOrAddPlayersButton.setTitle("Confirm players", for: .normal)
+            }
+        }
+    }
     
     private var selectedPlayersDictionary: [Int: PlayerResponseModel] = [:]
     
-    private enum ViewConstants {
-        static let bottomViewHeight: CGFloat = 80.0
-    }
-    
     private enum SegueIdentifiers: String {
         case confirmPlayers = "ConfirmPlayersSegueIdentifier"
+        case addPlayer = "PlayerAddSegueIdentifier"
         case playerDetails = "PlayerDetailSegueIdentifier"
     }
     
@@ -52,10 +56,6 @@ class PlayerListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        bottomActionViewHeightConstraint.constant = 0
-        bottomActionView.isHidden = true
-        confirmPlayersButton.isEnabled = false
         
         title = "Players"
         navigationItem.rightBarButtonItem = barButtonItem
@@ -68,29 +68,35 @@ class PlayerListViewController: UIViewController {
     
     @objc
     func selectPlayers(sender: UIBarButtonItem) {
-        // toggle
+        toggleViewState()
+    }
+    
+    func toggleViewState() {
         title = "Players"
         viewState = viewState == .list ? .selection : .list
         
         if viewState == .list {
-            sender.title = "Select"
-            bottomActionViewHeightConstraint.constant = 0
-            bottomActionView.isHidden = true
+            barButtonItem.title = "Select"
+            confirmOrAddPlayersButton.isEnabled = true
         } else {
-            sender.title = "Cancel"
-            bottomActionViewHeightConstraint.constant = ViewConstants.bottomViewHeight
-            bottomActionView.isHidden = false
+            barButtonItem.title = "Cancel"
+            confirmOrAddPlayersButton.isEnabled = false
         }
         
         playerTableView.reloadData()
     }
     
-    @IBAction func confirmPlayersAction(_ sender: Any) {
-        performSegue(withIdentifier: SegueIdentifiers.confirmPlayers.rawValue, sender: nil)
+    @IBAction func confirmOrAddPlayersAction(_ sender: Any) {
+        if viewState == .list {
+            performSegue(withIdentifier: SegueIdentifiers.addPlayer.rawValue, sender: nil)
+        } else {
+            performSegue(withIdentifier: SegueIdentifiers.confirmPlayers.rawValue, sender: nil)
+        }
     }
     
     private func loadPlayers() {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        view.isUserInteractionEnabled = false
         
         playersService.get { [weak self] (result: Result<[PlayerResponseModel], Error>) in
             guard let self = self else { return }
@@ -98,11 +104,13 @@ class PlayerListViewController: UIViewController {
             switch result {
             case .failure(let error):
                 DispatchQueue.main.async {
+                    self.view.isUserInteractionEnabled = true
                     UIApplication.shared.isNetworkActivityIndicatorVisible = false
                     AlertHelper.present(in: self, title: "Error", message: String(describing: error))
                 }
             case .success(let players):
                 DispatchQueue.main.async {
+                    self.view.isUserInteractionEnabled = true
                     UIApplication.shared.isNetworkActivityIndicatorVisible = false
                     
                     if players.isEmpty {
@@ -148,8 +156,13 @@ class PlayerListViewController: UIViewController {
         } else if segue.identifier == SegueIdentifiers.playerDetails.rawValue {
             guard let playerDetailsViewController = segue.destination as? PlayerDetailViewController,
                 let player = sender as? PlayerResponseModel else { return }
+            
             playerDetailsViewController.delegate = self
             playerDetailsViewController.player = player
+        } else if segue.identifier == SegueIdentifiers.addPlayer.rawValue {
+            guard let addPlayerViewController = segue.destination as? PlayerAddViewController else { return }
+            
+            addPlayerViewController.delegate = self
         }
     }
     
@@ -209,6 +222,8 @@ extension PlayerListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard !players.isEmpty else { return }
+        
         if viewState == .list {
             let player = players[indexPath.row]
             performSegue(withIdentifier: SegueIdentifiers.playerDetails.rawValue, sender: player)
@@ -227,7 +242,7 @@ extension PlayerListViewController: UITableViewDelegate, UITableViewDataSource {
             
             let selectedPlayers = selectedPlayersDictionary.values.count
             title = selectedPlayers > 0 ? "\(selectedPlayers) selected" : "Players"
-            confirmPlayersButton.isEnabled = selectedPlayers >= 2
+            confirmOrAddPlayersButton.isEnabled = selectedPlayers >= 2
         }
     }
     
@@ -287,6 +302,13 @@ extension PlayerListViewController: EmptyViewable {
     
     func retryAction() {
         hideEmptyView()
+        loadPlayers()
+    }
+}
+
+// MARK: - AddPlayerDelegate
+extension PlayerListViewController: AddPlayerDelegate {
+    func playerWasAdded(name: String) {
         loadPlayers()
     }
 }

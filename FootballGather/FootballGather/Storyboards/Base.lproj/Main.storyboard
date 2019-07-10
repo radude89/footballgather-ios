@@ -209,7 +209,7 @@
                                     <outlet property="delegate" destination="wzm-VA-DL5" id="Uog-LW-nRZ"/>
                                 </connections>
                             </tableView>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lpY-ht-MEh">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lpY-ht-MEh">
                                 <rect key="frame" x="0.0" y="732" width="375" height="80"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="daJ-Xg-iVk">
@@ -220,10 +220,10 @@
                                         </constraints>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tj5-Yq-gmB">
-                                        <rect key="frame" x="133" y="25" width="109" height="30"/>
-                                        <state key="normal" title="Confirm Players"/>
+                                        <rect key="frame" x="150.66666666666666" y="25" width="74" height="30"/>
+                                        <state key="normal" title="Add Player"/>
                                         <connections>
-                                            <action selector="confirmPlayersAction:" destination="wzm-VA-DL5" eventType="touchUpInside" id="fbF-Fu-yoX"/>
+                                            <action selector="confirmOrAddPlayersAction:" destination="wzm-VA-DL5" eventType="touchUpInside" id="swP-Vf-oyx"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -252,11 +252,11 @@
                     </view>
                     <connections>
                         <outlet property="bottomActionView" destination="lpY-ht-MEh" id="LJp-cc-ZDt"/>
-                        <outlet property="bottomActionViewHeightConstraint" destination="dUo-hH-wBd" id="9Ns-Ws-ZAX"/>
-                        <outlet property="confirmPlayersButton" destination="Tj5-Yq-gmB" id="W0c-rA-1ci"/>
+                        <outlet property="confirmOrAddPlayersButton" destination="Tj5-Yq-gmB" id="iBV-5r-7Ol"/>
                         <outlet property="playerTableView" destination="CiU-2R-yXK" id="c3k-V0-dIC"/>
                         <segue destination="gwz-hl-jIY" kind="show" identifier="PlayerDetailSegueIdentifier" id="fUT-fs-NbI"/>
                         <segue destination="7zc-k2-1Q8" kind="show" identifier="ConfirmPlayersSegueIdentifier" id="pUX-LC-Wad"/>
+                        <segue destination="Uyo-Ur-tjf" kind="show" identifier="PlayerAddSegueIdentifier" id="YN2-PT-hQW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sGj-qk-t1v" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -737,6 +737,37 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PNS-2i-lI7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2800.8000000000002" y="136.69950738916256"/>
+        </scene>
+        <!--Player Add View Controller-->
+        <scene sceneID="5qF-P6-UDr">
+            <objects>
+                <viewController id="Uyo-Ur-tjf" customClass="PlayerAddViewController" customModule="FootballGather" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="MmW-fk-lui">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eeX-pJ-rrj">
+                                <rect key="frame" x="20" y="133" width="335" height="30"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no" textContentType="name"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="eeX-pJ-rrj" firstAttribute="leading" secondItem="hZn-qt-H4u" secondAttribute="leading" constant="20" id="3Qj-hQ-95o"/>
+                            <constraint firstItem="eeX-pJ-rrj" firstAttribute="top" secondItem="hZn-qt-H4u" secondAttribute="top" constant="45" id="Inb-rb-gib"/>
+                            <constraint firstItem="hZn-qt-H4u" firstAttribute="trailing" secondItem="eeX-pJ-rrj" secondAttribute="trailing" constant="20" id="ovp-ND-IF2"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="hZn-qt-H4u"/>
+                    </view>
+                    <connections>
+                        <outlet property="playerNameTextField" destination="eeX-pJ-rrj" id="7AF-Vh-aZe"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Uqm-vQ-w1I" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="945" y="-548"/>
         </scene>
     </scenes>
     <resources>

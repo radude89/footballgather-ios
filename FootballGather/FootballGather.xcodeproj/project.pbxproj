@@ -76,6 +76,7 @@
 		F7BF3B4D227ED0C600F33913 /* KeyValueStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BF3B4C227ED0C600F33913 /* KeyValueStorage.swift */; };
 		F7BF3B4F2280575E00F33913 /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BF3B4E2280575E00F33913 /* KeychainWrapper.swift */; };
 		F7BF3B5122805BA300F33913 /* KeychainQueryFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BF3B5022805BA300F33913 /* KeychainQueryFactory.swift */; };
+		F7C0E39722F9A849002695BC /* PersistentStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C0E39622F9A849002695BC /* PersistentStore.swift */; };
 		F7C32A5B22AA3CC000D80C37 /* LoadingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C32A5A22AA3CC000D80C37 /* LoadingView.xib */; };
 		F7C32A5D22AA3D9500D80C37 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C32A5C22AA3D9500D80C37 /* LoadingView.swift */; };
 		F7C32A6022AA4CF000D80C37 /* AlertHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C32A5F22AA4CF000D80C37 /* AlertHelper.swift */; };
@@ -167,6 +168,7 @@
 		F7BF3B4C227ED0C600F33913 /* KeyValueStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValueStorage.swift; sourceTree = "<group>"; };
 		F7BF3B4E2280575E00F33913 /* KeychainWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWrapper.swift; sourceTree = "<group>"; };
 		F7BF3B5022805BA300F33913 /* KeychainQueryFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainQueryFactory.swift; sourceTree = "<group>"; };
+		F7C0E39622F9A849002695BC /* PersistentStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentStore.swift; sourceTree = "<group>"; };
 		F7C32A5A22AA3CC000D80C37 /* LoadingView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingView.xib; sourceTree = "<group>"; };
 		F7C32A5C22AA3D9500D80C37 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		F7C32A5F22AA4CF000D80C37 /* AlertHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertHelper.swift; sourceTree = "<group>"; };
@@ -314,7 +316,6 @@
 			isa = PBXGroup;
 			children = (
 				F762CA9722619C5C00947AED /* FootballGather.xcdatamodeld */,
-				F762CAC72261A23300947AED /* CoreDataStore.swift */,
 				F7034C4D22891C120003F506 /* User.swift */,
 				F7034C4B22891C120003F506 /* Player.swift */,
 				F7034C4F22891C120003F506 /* Gather.swift */,
@@ -390,7 +391,9 @@
 		F7ABD0B122648C9F00AAEA87 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
+				F7C0E39622F9A849002695BC /* PersistentStore.swift */,
 				F7034C4422890DF40003F506 /* FootballGatherUserDefaults.swift */,
+				F762CAC72261A23300947AED /* CoreDataStore.swift */,
 				F7034C4622890E340003F506 /* UserDefaultsWrapper.swift */,
 				F7ABD0B222648CCE00AAEA87 /* FootballGatherKeychain.swift */,
 				F7BF3B4E2280575E00F33913 /* KeychainWrapper.swift */,
@@ -567,6 +570,7 @@
 				F7034C5A22891C1B0003F506 /* Gather.swift in Sources */,
 				F7ABD0B322648CCE00AAEA87 /* FootballGatherKeychain.swift in Sources */,
 				F762CA9122619C5C00947AED /* AppDelegate.swift in Sources */,
+				F7C0E39722F9A849002695BC /* PersistentStore.swift in Sources */,
 				F78C8CF322A408730035D5A2 /* NetworkService.swift in Sources */,
 				F7BF3B4D227ED0C600F33913 /* KeyValueStorage.swift in Sources */,
 				F78C8D0722A43AD30035D5A2 /* LoginServiceModels.swift in Sources */,

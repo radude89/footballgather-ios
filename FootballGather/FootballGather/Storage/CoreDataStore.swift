@@ -8,7 +8,9 @@
 
 import CoreData
 
+// MARK: - CoreDataStore
 final class CoreDataStore {
+    typealias PersistentModel = NSManagedObject
     
     // MARK: - Variables
     private let persistentContainer: NSPersistentContainer
@@ -18,16 +20,6 @@ final class CoreDataStore {
     // MARK: - Init
     init(persistentContainer: NSPersistentContainer = NSPersistentContainer(name: "FootballGather")) {
         self.persistentContainer = persistentContainer
-    }
-    
-    func setup(completion: (() -> Void)? = nil) {
-        persistentContainer.loadPersistentStores { (storeDescription, error) in
-            guard error == nil else {
-                fatalError("Unable to load the persistent stores \(storeDescription) error \(error!)")
-            }
-            
-            completion?()
-        }
     }
     
     // MARK: - Context
@@ -50,8 +42,39 @@ final class CoreDataStore {
             return mainContext
         }
     }
+
+    func managedObject<T: NSManagedObject>(withId id: NSManagedObjectID, background: Bool = false) -> T? {
+        let context = loadContext(background: background)
+        return context.object(with: id) as? T
+    }
     
-    func saveContext(background: Bool = false) {
+}
+
+// MARK: - PersistentStore
+extension CoreDataStore: PersistentStore {
+    
+    // MARK: - Methods
+    func setup(completion: (() -> Void)? = nil) {
+        persistentContainer.loadPersistentStores { (storeDescription, error) in
+            guard error == nil else {
+                fatalError("Unable to load the persistent stores \(storeDescription) error \(error!)")
+            }
+            
+            completion?()
+        }
+    }
+    
+    // MARK: - Create
+    func createQueue(_ block: @escaping () -> Void) {
+        backgroundContext.perform(block)
+    }
+    
+    func makePersistentModel<T: NSManagedObject>(inBackground background: Bool = false) -> T {
+        let context = loadContext(background: background)
+        return NSEntityDescription.insertNewObject(forEntityName: String(describing: T.self), into: context) as! T
+    }
+    
+    func commitChanges(inBackground background: Bool = false) {
         let context = loadContext(background: background)
         if context.hasChanges {
             do {
@@ -62,22 +85,8 @@ final class CoreDataStore {
         }
     }
     
-    // MARK: - CRUD
-    func createBackgroundQueue(_ block: @escaping () -> Void) {
-        backgroundContext.perform(block)
-    }
-    
-    func insert<T: NSManagedObject>(background: Bool = false) -> T {
-        let context = loadContext(background: background)
-        return NSEntityDescription.insertNewObject(forEntityName: String(describing: T.self), into: context) as! T
-    }
-    
-    func managedObject<T: NSManagedObject>(withId id: NSManagedObjectID, background: Bool = false) -> T? {
-        let context = loadContext(background: background)
-        return context.object(with: id) as? T
-    }
-    
-    func fetch<T: NSManagedObject>(predicate: NSPredicate? = nil, background: Bool = false) -> [T] {
+    // MARK: - Read
+    func fetch<T: NSManagedObject>(inBackground background: Bool = false, predicate: NSPredicate? = nil) -> [T] {
         let context = loadContext(background: background)
         let fetchRequest = NSFetchRequest<T>(entityName: String(describing: T.self))
         
@@ -94,10 +103,10 @@ final class CoreDataStore {
         return []
     }
     
-    func fetchAll<T: NSManagedObject>(background: Bool = false) -> [T] {
+    func fetchAll<T: NSManagedObject>(inBackground background: Bool = false) -> [T] {
         let context = loadContext(background: background)
         let fetchRequest = NSFetchRequest<T>(entityName: String(describing: T.self))
-
+        
         do {
             return try context.fetch(fetchRequest)
         } catch {
@@ -107,6 +116,7 @@ final class CoreDataStore {
         return []
     }
     
+    // MARK: - Delete
     func clear() {
         deleteAll(User.self)
         deleteAll(Player.self)
@@ -115,19 +125,18 @@ final class CoreDataStore {
     
     func deleteAll<T: NSManagedObject>(_ entity: T.Type, background: Bool = false) {
         let context = loadContext(background: background)
-        let objects: [T] = fetchAll(background: background)
+        let objects: [T] = fetchAll(inBackground: background)
         
         objects.forEach {
             context.delete($0)
-            saveContext(background: background)
+            commitChanges(inBackground: background)
         }
     }
     
-    func delete(managedObject: NSManagedObject, background: Bool = false) {
+    func delete(persistentObject: NSManagedObject, background: Bool = false) {
         let context = loadContext(background: background)
         
-        context.delete(managedObject)
-        saveContext()
+        context.delete(persistentObject)
+        commitChanges(inBackground: background)
     }
-    
 }

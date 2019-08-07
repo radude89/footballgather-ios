@@ -41,26 +41,26 @@ final class CoreDataStoreTests: XCTestCase {
     }
 
     func test_saveObject() {
-        let user: User = sut.insert()
-        sut.saveContext()
+        let user: User = sut.makePersistentModel()
+        sut.commitChanges()
         XCTAssertNotNil(user)
         
-        let expectedUser: User = self.sut.fetch().first!
+        let expectedUser: User = sut.fetch().first!
         XCTAssertEqual(user, expectedUser)
     }
     
     func test_saveObject_inBackground() {
-        let user: User = sut.insert()
+        let user: User = sut.makePersistentModel()
         
         let exp = expectation(description: "Save in background expectation")
         
-        sut.createBackgroundQueue { [weak self] in
+        sut.createQueue { [weak self] in
             guard let self = self else {
                 XCTFail("Deallocation occured too early in \(CoreDataStoreTests.self)")
                 return
             }
             
-            self.sut.saveContext(background: true)
+            self.sut.commitChanges(inBackground: true)
             
             let expectedUser: User = self.sut.fetch().first!
             XCTAssertEqual(user, expectedUser)
@@ -84,7 +84,7 @@ final class CoreDataStoreTests: XCTestCase {
     func test_retrieveManagedObjectsInBackground_hasZeroElements() {
         let exp = expectation(description: "Fetch objects in background expectation.")
         
-        sut.createBackgroundQueue { [weak self] in
+        sut.createQueue { [weak self] in
             self?.retrieveAndCheckObjectsCountIsZero(inBackground: true)
             exp.fulfill()
         }
@@ -97,16 +97,16 @@ final class CoreDataStoreTests: XCTestCase {
     }
     
     func test_managedObject_isNotNil() {
-        let user: User = sut.insert()
+        let user: User = sut.makePersistentModel()
         let managedObject = sut.managedObject(withId: user.objectID)
         
         XCTAssertNotNil(managedObject)
     }
     
     func test_managedObject_isNil() {
-        let user: User = sut.insert()
-        sut.saveContext()
-        sut.delete(managedObject: user)
+        let user: User = sut.makePersistentModel()
+        sut.commitChanges()
+        sut.delete(persistentObject: user)
         
         let users: [User] = sut.fetchAll()
         XCTAssertEqual(users.count, 0)
@@ -115,13 +115,13 @@ final class CoreDataStoreTests: XCTestCase {
     func test_managedObjectInBackground_isNotNil() {
         let exp = expectation(description: "Managed object in background expectation")
         
-        sut.createBackgroundQueue { [weak self] in
+        sut.createQueue { [weak self] in
             guard let self = self else {
                 XCTFail("Deallocation occured too early in \(CoreDataStoreTests.self)")
                 return
             }
             
-            let user: User = self.sut.insert(background: true)
+            let user: User = self.sut.makePersistentModel(inBackground: true)
             let managedObject = self.sut.managedObject(withId: user.objectID, background: true)
             
             XCTAssertNotNil(managedObject)
@@ -135,17 +135,17 @@ final class CoreDataStoreTests: XCTestCase {
     func test_managedObjectInBackground_isNil() {
         let exp = expectation(description: "Managed object in background expectation")
         
-        sut.createBackgroundQueue { [weak self] in
+        sut.createQueue { [weak self] in
             guard let self = self else {
                 XCTFail("Deallocation occured too early in \(CoreDataStoreTests.self)")
                 return
             }
             
-            let user: User = self.sut.insert(background: true)
-            self.sut.saveContext(background: true)
-            self.sut.delete(managedObject: user, background: true)
+            let user: User = self.sut.makePersistentModel(inBackground: true)
+            self.sut.commitChanges(inBackground: true)
+            self.sut.delete(persistentObject: user, background: true)
             
-            let users: [User] = self.sut.fetchAll(background: true)
+            let users: [User] = self.sut.fetchAll(inBackground: true)
             XCTAssertEqual(users.count, 0)
             
             exp.fulfill()
@@ -155,10 +155,10 @@ final class CoreDataStoreTests: XCTestCase {
     }
     
     func test_fetchWithPredicate_returnsObjects() {
-        let user: User = sut.insert()
+        let user: User = sut.makePersistentModel()
         let uuid = UUID()
         user.serverId = uuid
-        sut.saveContext()
+        sut.commitChanges()
         
         let predicate = NSPredicate(format: "serverId == %@", argumentArray: [uuid])
         let users: [User] = sut.fetch(predicate: predicate)
@@ -169,19 +169,19 @@ final class CoreDataStoreTests: XCTestCase {
     func test_fetchWithPredicateInBackground_returnsObjects() {
         let exp = expectation(description: "Managed object in background expectation")
         
-        sut.createBackgroundQueue { [weak self] in
+        sut.createQueue { [weak self] in
             guard let self = self else {
                 XCTFail("Deallocation occured too early in \(CoreDataStoreTests.self)")
                 return
             }
             
-            let user: User = self.sut.insert(background: true)
+            let user: User = self.sut.makePersistentModel(inBackground: true)
             let uuid = UUID()
             user.serverId = uuid
-            self.sut.saveContext(background: true)
+            self.sut.commitChanges(inBackground: true)
             
             let predicate = NSPredicate(format: "serverId == %@", argumentArray: [uuid])
-            let users: [User] = self.sut.fetch(predicate: predicate, background: true)
+            let users: [User] = self.sut.fetch(inBackground: true, predicate: predicate)
             
             XCTAssertGreaterThan(users.count, 0)
             

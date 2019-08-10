@@ -22,6 +22,10 @@ class LoginViewController: UIViewController {
     private let usersService = StandardNetworkService(resourcePath: "/api/users")
     private let userDefaults = FootballGatherUserDefaults.shared
     
+    private enum SegueIdentifiers: String {
+        case playerList = "showMainSegueIdentifier"
+    }
+    
     // MARK: - View life cycle
     
     override func viewDidLoad() {
@@ -45,9 +49,8 @@ class LoginViewController: UIViewController {
             FootbalGatherKeychain.shared.username = nil
         }
         
-        performSegue(withIdentifier: "showMainSegueIdentifier", sender: nil)
+        performSegue(withIdentifier: SegueIdentifiers.playerList.rawValue, sender: nil)
     }
-    
     // MARK: - Actions
     @IBAction func onLoginAction(_ sender: Any) {
         guard let userText = usernameTextField.text, userText.isEmpty == false,
@@ -106,10 +109,6 @@ class LoginViewController: UIViewController {
                 }
             }
         }
-    }
-    
-    @IBAction func onUseOfflineAction(_ sender: Any) {
-        performSegue(withIdentifier: "showMainSegueIdentifier", sender: nil)
     }
     
 }

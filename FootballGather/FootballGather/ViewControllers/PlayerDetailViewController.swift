@@ -51,8 +51,8 @@ class PlayerDetailViewController: UIViewController {
             
             if selectedPlayerRow.editableField == .position || selectedPlayerRow.editableField == .skill {
                 let items = selectedPlayerRow.editableField == .position ?
-                    Player.Position.allCases.map { $0.rawValue } :
-                    Player.Skill.allCases.map { $0.rawValue }
+                    PlayerPosition.allCases.map { $0.rawValue } :
+                    PlayerSkill.allCases.map { $0.rawValue }
                 let selectedIndex = items.firstIndex(of: selectedPlayerRow.value.lowercased())
                 
                 destinationViewController.selectedItemIndex = selectedIndex ?? -1
@@ -170,11 +170,11 @@ extension PlayerResponseModel {
         case .age:
             age = Int(value)
         case .position:
-            if let position = Player.Position(rawValue: value) {
+            if let position = PlayerPosition(rawValue: value) {
                 preferredPosition = position
             }
         case .skill:
-            if let skill = Player.Skill(rawValue: value) {
+            if let skill = PlayerSkill(rawValue: value) {
                 self.skill = skill
             }
         case .favouriteTeam:

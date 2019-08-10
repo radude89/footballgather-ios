@@ -22,8 +22,7 @@ class PlayerListViewController: UIViewController {
         emptyView.delegate = self
         return emptyView
     }()
-    
-    private lazy var barButtonItem = UIBarButtonItem(title: "Select", style: .plain, target: self, action: #selector(selectPlayers))
+    private let barButtonItem = UIBarButtonItem(title: "Select", style: .plain, target: self, action: #selector(selectPlayers))
     
     // MARK: - Variables
     
@@ -181,10 +180,6 @@ extension PlayerListViewController: PlayerDetailViewControllerDelegate {
 
 // MARK: - UITableViewDelegate | UITableViewDataSource
 extension PlayerListViewController: UITableViewDelegate, UITableViewDataSource {
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return players.count
     }

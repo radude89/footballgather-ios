@@ -12,8 +12,8 @@ import Foundation
 struct PlayerCreateModel: Encodable {
     let name: String
     let age: Int?
-    let skill: Player.Skill?
-    let preferredPosition: Player.Position?
+    let skill: PlayerSkill?
+    let preferredPosition: PlayerPosition?
     let favouriteTeam: String?
 }
 
@@ -42,8 +42,8 @@ struct PlayerResponseModel {
     let id: Int
     var name: String
     var age: Int?
-    var skill: Player.Skill?
-    var preferredPosition: Player.Position?
+    var skill: PlayerSkill?
+    var preferredPosition: PlayerPosition?
     var favouriteTeam: String?
 }
 
@@ -69,15 +69,32 @@ extension PlayerResponseModel: Decodable {
         favouriteTeam = try container.decodeIfPresent(String.self, forKey: .favouriteTeam) ?? nil
         
         if let skillDesc = try container.decodeIfPresent(String.self, forKey: .skill) {
-            skill = Player.Skill(rawValue: skillDesc)
+            skill = PlayerSkill(rawValue: skillDesc)
         } else {
             skill = nil
         }
         
         if let posDesc = try container.decodeIfPresent(String.self, forKey: .preferredPosition) {
-            preferredPosition = Player.Position(rawValue: posDesc)
+            preferredPosition = PlayerPosition(rawValue: posDesc)
         } else {
             preferredPosition = nil
+        }
+    }
+}
+
+enum PlayerSkill: String, Codable, CaseIterable {
+    case beginner, amateur, professional
+}
+
+enum PlayerPosition: String, Codable, CaseIterable {
+    case goalkeeper, defender, midfielder, winger, striker
+    
+    var acronym: String {
+        switch self {
+        case .goalkeeper: return "GK"
+        case .winger: return "W"
+        case .striker: return "ST"
+        default: return rawValue.prefix(3).uppercased()
         }
     }
 }

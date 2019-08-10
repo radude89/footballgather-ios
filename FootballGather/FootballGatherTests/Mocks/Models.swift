@@ -23,8 +23,8 @@ enum ModelsMockFactory {
     static func makePlayer(name: String = ModelsMock.DefaultPlayer.name,
                            age: Int? = ModelsMock.DefaultPlayer.age,
                            favouriteTeam: String? = ModelsMock.DefaultPlayer.favouriteTeam,
-                           skill: Player.Skill = ModelsMock.DefaultPlayer.skill,
-                           preferredPosition: Player.Position = ModelsMock.DefaultPlayer.preferredPosition) -> PlayerCreateModel {
+                           skill: PlayerSkill = ModelsMock.DefaultPlayer.skill,
+                           preferredPosition: PlayerPosition = ModelsMock.DefaultPlayer.preferredPosition) -> PlayerCreateModel {
         return PlayerCreateModel(name: name, age: age, skill: skill, preferredPosition: preferredPosition, favouriteTeam: favouriteTeam)
     }
 }
@@ -39,8 +39,8 @@ enum ModelsMock {
         static let serverId = 4
         static let name = "John"
         static let age = 18
-        static let skill: Player.Skill = .beginner
-        static let preferredPosition: Player.Position = .goalkeeper
+        static let skill: PlayerSkill = .beginner
+        static let preferredPosition: PlayerPosition = .goalkeeper
         static let favouriteTeam = "FC Team United"
     }
     

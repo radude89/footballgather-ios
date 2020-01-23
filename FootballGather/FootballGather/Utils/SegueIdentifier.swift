@@ -12,4 +12,6 @@ enum SegueIdentifier: String {
     case confirmPlayers = "ConfirmPlayersViewController"
     case playerDetails = "PlayerDetailViewController"
     case addPlayer = "PlayerAddViewController"
+    case editPlayer = "EditPlayerSegueIdentifier"
+    case gather = "GatherSegueIdentifier"
 }

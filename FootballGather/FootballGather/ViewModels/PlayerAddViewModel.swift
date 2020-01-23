@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class PlayerAddViewModel {
+struct PlayerAddViewModel {
     
     private let service: StandardNetworkService
     

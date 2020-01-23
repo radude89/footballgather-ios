@@ -46,7 +46,7 @@ enum ModelsMockFactory {
         (1...numberOfPlayers).forEach { index in
             let skill = allSkills[Int.random(in: 0..<allSkills.count)]
             let position = allPositions[Int.random(in: 0..<allPositions.count)]
-            let team: Team = index % 2 == 0 ? .teamA : .teamB
+            let team: TeamSection = index % 2 == 0 ? .teamA : .teamB
             
             let playerResponseModel = makePlayerResponseModel(id: index, name: "Player \(index)", age: 20 + index, favouriteTeam: "Fav team \(index)", skill: skill, preferredPosition: position)
             let playerTeamModel = PlayerTeamModel(team: team, player: playerResponseModel)

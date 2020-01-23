@@ -236,9 +236,9 @@
                         <outlet property="bottomActionButton" destination="Tj5-Yq-gmB" id="Mha-iv-L7C"/>
                         <outlet property="bottomActionView" destination="lpY-ht-MEh" id="LJp-cc-ZDt"/>
                         <outlet property="playerTableView" destination="CiU-2R-yXK" id="c3k-V0-dIC"/>
-                        <segue destination="gwz-hl-jIY" kind="show" identifier="PlayerDetailSegueIdentifier" id="fUT-fs-NbI"/>
-                        <segue destination="7zc-k2-1Q8" kind="show" identifier="ConfirmPlayersSegueIdentifier" id="pUX-LC-Wad"/>
-                        <segue destination="Uyo-Ur-tjf" kind="show" identifier="PlayerAddSegueIdentifier" id="YN2-PT-hQW"/>
+                        <segue destination="gwz-hl-jIY" kind="show" identifier="PlayerDetailViewController" id="fUT-fs-NbI"/>
+                        <segue destination="7zc-k2-1Q8" kind="show" identifier="ConfirmPlayersViewController" id="pUX-LC-Wad"/>
+                        <segue destination="Uyo-Ur-tjf" kind="show" identifier="PlayerAddViewController" id="YN2-PT-hQW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sGj-qk-t1v" userLabel="First Responder" sceneMemberID="firstResponder"/>

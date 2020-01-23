@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class LoginViewModel {
+struct LoginViewModel {
     
     private let loginService: LoginService
     private let usersService: StandardNetworkService

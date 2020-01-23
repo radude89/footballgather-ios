@@ -14,7 +14,7 @@ protocol PlayerListTogglable {
 }
 
 // MARK: - PlayerListViewController
-class PlayerListViewController: UIViewController, Loadable {
+final class PlayerListViewController: UIViewController, Loadable {
     
     // MARK: - Properties
     @IBOutlet weak var playerTableView: UITableView!
@@ -22,14 +22,13 @@ class PlayerListViewController: UIViewController, Loadable {
     @IBOutlet weak var bottomActionButton: UIButton!
     
     lazy var loadingView = LoadingView.initToView(self.view)
+    private var barButtonItem: UIBarButtonItem!
     
     lazy var emptyView: EmptyView = {
         let emptyView = EmptyView.initToView(self.view, infoText: "There aren't any players for your user.")
         emptyView.delegate = self
         return emptyView
     }()
-    
-    private var barButtonItem: UIBarButtonItem!
     
     private let viewModel = PlayerListViewModel()
     
@@ -122,13 +121,13 @@ class PlayerListViewController: UIViewController, Loadable {
         switch segue.identifier {
         case SegueIdentifier.confirmPlayers.rawValue:
             if let confirmPlayersViewController = segue.destination as? ConfirmPlayersViewController {
-                confirmPlayersViewController.playersDictionary[.bench] = Array(viewModel.selectedPlayersDictionary.values)
+                confirmPlayersViewController.viewModel = makeConfirmPlayersViewModel()
             }
             
         case SegueIdentifier.playerDetails.rawValue:
-            if let playerDetailsViewController = segue.destination as? PlayerDetailViewController {
+            if let playerDetailsViewController = segue.destination as? PlayerDetailViewController, let player = viewModel.selectedPlayerForDetails {
                 playerDetailsViewController.delegate = self
-                playerDetailsViewController.player = viewModel.selectedPlayer
+                playerDetailsViewController.viewModel = PlayerDetailViewModel(player: player)
             }
             
         case SegueIdentifier.addPlayer.rawValue:
@@ -137,6 +136,13 @@ class PlayerListViewController: UIViewController, Loadable {
         default:
             break
         }
+    }
+    
+    private func makeConfirmPlayersViewModel() -> ConfirmPlayersViewModel {
+        var playersDictionary: [TeamSection: [PlayerResponseModel]] = [:]
+        playersDictionary[.bench] = Array(viewModel.selectedPlayersDictionary.values)
+        
+        return ConfirmPlayersViewModel(playersDictionary: playersDictionary)
     }
     
 }
@@ -181,6 +187,7 @@ extension PlayerListViewController: UITableViewDelegate, UITableViewDataSource {
         guard !viewModel.playersCollectionIsEmpty else { return }
         
         if viewModel.isInListViewMode {
+            viewModel.selectPlayerForDisplayingDetails(at: indexPath)
             navigateToPlayerDetails(forRowAt: indexPath)
         } else {
             toggleCellSelection(at: indexPath)
@@ -282,5 +289,9 @@ extension PlayerListViewController: PlayerListViewModelDelegate {
 extension PlayerListViewController: PlayerListTogglable {
     func toggleViewState() {
         viewModel.toggleViewState()
+        barButtonItem.title = viewModel.barButtonItemTitle
+        bottomActionButton.setTitle(viewModel.actionButtonTitle, for: .normal)
+        bottomActionButton.isEnabled = viewModel.actionButtonIsEnabled
+        playerTableView.reloadData()
     }
 }

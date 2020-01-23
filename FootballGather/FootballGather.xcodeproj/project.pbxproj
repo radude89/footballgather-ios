@@ -7,10 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6406F40523CC1CA100722037 /* GatherViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6406F40423CC1CA100722037 /* GatherViewControllerTests.swift */; };
+		640F6A7D23DFF45C004B7F47 /* GatherViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640F6A7C23DFF45C004B7F47 /* GatherViewModelTests.swift */; };
 		64104A1823D80343008A9823 /* PlayerListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64104A1723D80343008A9823 /* PlayerListViewModel.swift */; };
+		648DA94623DE8F4D001CECD7 /* PlayerEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648DA94523DE8F4D001CECD7 /* PlayerEditViewModel.swift */; };
+		648DA94823DEA0BF001CECD7 /* ConfirmPlayersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648DA94723DEA0BF001CECD7 /* ConfirmPlayersViewModel.swift */; };
+		648DA94A23DEACCC001CECD7 /* GatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648DA94923DEACCC001CECD7 /* GatherViewModel.swift */; };
+		648DA94C23DEC8B1001CECD7 /* GatherTimeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648DA94B23DEC8B1001CECD7 /* GatherTimeHandler.swift */; };
 		6497A72B23D94A790061418A /* SegueIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6497A72A23D94A790061418A /* SegueIdentifier.swift */; };
 		6497A72D23D958CC0061418A /* PlayerAddViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6497A72C23D958CC0061418A /* PlayerAddViewModel.swift */; };
+		6497A72F23D95BD50061418A /* PlayerDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6497A72E23D95BD50061418A /* PlayerDetailViewModel.swift */; };
 		64E6120723D6B5FA00C3F1B7 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64E6120623D6B5FA00C3F1B7 /* LoginViewModel.swift */; };
 		F7034C4522890DF40003F506 /* FootballGatherUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7034C4422890DF40003F506 /* FootballGatherUserDefaults.swift */; };
 		F7034C4722890E340003F506 /* UserDefaultsWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7034C4622890E340003F506 /* UserDefaultsWrapper.swift */; };
@@ -92,10 +97,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		6406F40423CC1CA100722037 /* GatherViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatherViewControllerTests.swift; sourceTree = "<group>"; };
+		640F6A7C23DFF45C004B7F47 /* GatherViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatherViewModelTests.swift; sourceTree = "<group>"; };
 		64104A1723D80343008A9823 /* PlayerListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerListViewModel.swift; sourceTree = "<group>"; };
+		648DA94523DE8F4D001CECD7 /* PlayerEditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerEditViewModel.swift; sourceTree = "<group>"; };
+		648DA94723DEA0BF001CECD7 /* ConfirmPlayersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmPlayersViewModel.swift; sourceTree = "<group>"; };
+		648DA94923DEACCC001CECD7 /* GatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatherViewModel.swift; sourceTree = "<group>"; };
+		648DA94B23DEC8B1001CECD7 /* GatherTimeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatherTimeHandler.swift; sourceTree = "<group>"; };
 		6497A72A23D94A790061418A /* SegueIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegueIdentifier.swift; sourceTree = "<group>"; };
 		6497A72C23D958CC0061418A /* PlayerAddViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerAddViewModel.swift; sourceTree = "<group>"; };
+		6497A72E23D95BD50061418A /* PlayerDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDetailViewModel.swift; sourceTree = "<group>"; };
 		64E6120623D6B5FA00C3F1B7 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		F7034C4422890DF40003F506 /* FootballGatherUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FootballGatherUserDefaults.swift; sourceTree = "<group>"; };
 		F7034C4622890E340003F506 /* UserDefaultsWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsWrapper.swift; sourceTree = "<group>"; };
@@ -188,12 +198,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6406F40323CC1C8800722037 /* ViewControllers */ = {
+		640F6A7B23DFF42B004B7F47 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				6406F40423CC1CA100722037 /* GatherViewControllerTests.swift */,
+				640F6A7C23DFF45C004B7F47 /* GatherViewModelTests.swift */,
 			);
-			path = ViewControllers;
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		64E6120523D6B5D400C3F1B7 /* ViewModels */ = {
@@ -202,6 +212,11 @@
 				64E6120623D6B5FA00C3F1B7 /* LoginViewModel.swift */,
 				64104A1723D80343008A9823 /* PlayerListViewModel.swift */,
 				6497A72C23D958CC0061418A /* PlayerAddViewModel.swift */,
+				6497A72E23D95BD50061418A /* PlayerDetailViewModel.swift */,
+				648DA94523DE8F4D001CECD7 /* PlayerEditViewModel.swift */,
+				648DA94723DEA0BF001CECD7 /* ConfirmPlayersViewModel.swift */,
+				648DA94923DEACCC001CECD7 /* GatherViewModel.swift */,
+				648DA94B23DEC8B1001CECD7 /* GatherTimeHandler.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -288,7 +303,7 @@
 				F782C8942261E10F0045EB2C /* Mocks */,
 				F75CE92B228DF14000871C47 /* Networking */,
 				F7034C48228918700003F506 /* Storage */,
-				6406F40323CC1C8800722037 /* ViewControllers */,
+				640F6A7B23DFF42B004B7F47 /* ViewModels */,
 				F762CAAA22619C5E00947AED /* Info.plist */,
 			);
 			path = FootballGatherTests;
@@ -521,8 +536,11 @@
 				F77226592262248800445F67 /* NetworkSession.swift in Sources */,
 				F72749DB228D0C5100698D0D /* GetPlayersForGatherService.swift in Sources */,
 				6497A72B23D94A790061418A /* SegueIdentifier.swift in Sources */,
+				6497A72F23D95BD50061418A /* PlayerDetailViewModel.swift in Sources */,
 				F7E0D91F22644534002F4CE1 /* URLRequestFactory.swift in Sources */,
+				648DA94823DEA0BF001CECD7 /* ConfirmPlayersViewModel.swift in Sources */,
 				F7C32A6222AA9F6400D80C37 /* View+Extensions.swift in Sources */,
+				648DA94A23DEACCC001CECD7 /* GatherViewModel.swift in Sources */,
 				F7C32A6422AB972A00D80C37 /* Loadable.swift in Sources */,
 				64E6120723D6B5FA00C3F1B7 /* LoginViewModel.swift in Sources */,
 				F78C8CFB22A431040035D5A2 /* CreateNetworkService.swift in Sources */,
@@ -545,6 +563,7 @@
 				F78C8CF522A420310035D5A2 /* GatherServiceModels.swift in Sources */,
 				F729D28E22CF3124009D7195 /* GatherViewController.swift in Sources */,
 				F7034C4722890E340003F506 /* UserDefaultsWrapper.swift in Sources */,
+				648DA94C23DEC8B1001CECD7 /* GatherTimeHandler.swift in Sources */,
 				F7BF3B4F2280575E00F33913 /* KeychainWrapper.swift in Sources */,
 				F75BFFA122C3E8BD00F1E55D /* PlayerDetailViewController.swift in Sources */,
 				F738782122A956FD001B9097 /* LoginViewController.swift in Sources */,
@@ -560,6 +579,7 @@
 				F762CA9122619C5C00947AED /* AppDelegate.swift in Sources */,
 				F78C8CF322A408730035D5A2 /* NetworkService.swift in Sources */,
 				6497A72D23D958CC0061418A /* PlayerAddViewModel.swift in Sources */,
+				648DA94623DE8F4D001CECD7 /* PlayerEditViewModel.swift in Sources */,
 				F7BF3B4D227ED0C600F33913 /* KeyValueStorage.swift in Sources */,
 				F78C8D0722A43AD30035D5A2 /* LoginServiceModels.swift in Sources */,
 			);
@@ -587,11 +607,11 @@
 				F75CE931228E6BDA00871C47 /* ApplicationKeychainMock.swift in Sources */,
 				F75CE937228EB04300871C47 /* CreateGatherServiceTests.swift in Sources */,
 				F75CE92D228DF1B800871C47 /* EndpointMock.swift in Sources */,
-				6406F40523CC1CA100722037 /* GatherViewControllerTests.swift in Sources */,
 				F75CE93B228EFA5100871C47 /* GetGathersServiceTests.swift in Sources */,
 				F7034C76228920AD0003F506 /* KeychainWrapperTests.swift in Sources */,
 				F75CE947228F4F1900871C47 /* GetPlayersForGatherServiceTests.swift in Sources */,
 				F75CE933228E717800871C47 /* Models.swift in Sources */,
+				640F6A7D23DFF45C004B7F47 /* GatherViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

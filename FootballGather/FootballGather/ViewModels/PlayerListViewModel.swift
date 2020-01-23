@@ -27,7 +27,7 @@ final class PlayerListViewModel {
     }
     
     private(set) var selectedPlayersDictionary: [Int: PlayerResponseModel] = [:]
-    private(set) var selectedPlayer: PlayerResponseModel?
+    private(set) var selectedPlayerForDetails: PlayerResponseModel?
     
     // MARK: - Public API
     init(playersService: StandardNetworkService = StandardNetworkService(resourcePath: "/api/players", authenticated: true),
@@ -155,6 +155,10 @@ final class PlayerListViewModel {
         selectedPlayersDictionary[indexPath.row] = players[indexPath.row]
     }
     
+    func selectPlayerForDisplayingDetails(at indexPath: IndexPath) {
+        selectedPlayerForDetails = players[indexPath.row]
+    }
+    
     func updateSelectedPlayers(isSelected: Bool, at indexPath: IndexPath) {
         if isSelected {
             selectedPlayersDictionary[indexPath.row] = players[indexPath.row]
@@ -199,7 +203,7 @@ fileprivate extension PlayerListViewModel {
     
     struct ListViewStateDetails: LoginViewStateDetails {
         var barButtonItemTitle: String {
-            return "Cancel"
+            return "Select"
         }
         
         var actionButtonIsEnabled: Bool {
@@ -217,7 +221,7 @@ fileprivate extension PlayerListViewModel {
 
     struct SelectionViewStateDetails: LoginViewStateDetails {
         var barButtonItemTitle: String {
-            return "Select"
+            return "Cancel"
         }
         
         var actionButtonIsEnabled: Bool {

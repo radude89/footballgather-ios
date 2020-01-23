@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ScoreStepperDelegate: AnyObject {
-    func stepper(_ stepper: UIStepper, didChangeValueForTeam team: Team, newValue: Double)
+    func stepper(_ stepper: UIStepper, didChangeValueForTeam team: TeamSection, newValue: Double)
 }
 
 class ScoreStepper: UIStackView {

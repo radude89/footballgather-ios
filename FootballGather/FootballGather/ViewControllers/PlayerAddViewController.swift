@@ -14,7 +14,7 @@ protocol AddPlayerDelegate: AnyObject {
 }
 
 // MARK: - PlayerAddViewController
-class PlayerAddViewController: UIViewController, Loadable {
+final class PlayerAddViewController: UIViewController, Loadable {
     
     // MARK: - Properties
     @IBOutlet weak var playerNameTextField: UITextField!
@@ -22,7 +22,7 @@ class PlayerAddViewController: UIViewController, Loadable {
     lazy var loadingView = LoadingView.initToView(self.view)
     
     weak var delegate: AddPlayerDelegate?
-    var viewModel = PlayerAddViewModel()
+    private let viewModel = PlayerAddViewModel()
     
     // MARK: - Setup
     override func viewDidLoad() {

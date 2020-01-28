@@ -304,6 +304,7 @@
 				F75CE92B228DF14000871C47 /* Networking */,
 				F7034C48228918700003F506 /* Storage */,
 				640F6A7B23DFF42B004B7F47 /* ViewModels */,
+				6406F40323CC1C8800722037 /* ViewControllers */,
 				F762CAAA22619C5E00947AED /* Info.plist */,
 			);
 			path = FootballGatherTests;

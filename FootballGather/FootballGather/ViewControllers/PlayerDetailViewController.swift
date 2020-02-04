@@ -20,10 +20,7 @@ final class PlayerDetailViewController: UIViewController {
     @IBOutlet weak var playerDetailTableView: UITableView!
 
     weak var delegate: PlayerDetailViewControllerDelegate?
-    
-    var player: PlayerResponseModel?
-    private lazy var sections = makeSections()
-    private var selectedPlayerRow: PlayerRow?
+    var viewModel: PlayerDetailViewModel!
 
     // MARK: - View life cycle
     override func viewDidLoad() {
@@ -37,7 +34,7 @@ final class PlayerDetailViewController: UIViewController {
     }
 
     private func setupTitle() {
-        title = player?.name ?? ""
+        title = viewModel.title
     }
 
     private func reloadData() {
@@ -46,78 +43,12 @@ final class PlayerDetailViewController: UIViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard segue.identifier == SegueIdentifier.editPlayer.rawValue,
-            let destinationViewController = segue.destination as? PlayerEditViewController,
-            let player = player,
-            let selectedPlayerRow = selectedPlayerRow else {
+            let destinationViewController = segue.destination as? PlayerEditViewController else {
                 return
         }
-        
-        destinationViewController.delegate = self
-        destinationViewController.viewType = shouldEditSelectionTypeField ? .selection : .text
-        destinationViewController.playerEditModel = PlayerEditModel(player: player, playerRow: selectedPlayerRow)
-        
-        if shouldEditSelectionTypeField {
-            let itemsEditModel = PlayerItemsEditModel(items: editableItems, selectedItemIndex: indexOfSelectedItem ?? -1)
-            destinationViewController.playerItemsEditModel = itemsEditModel
-        }
-        
-    }
 
-    private var shouldEditSelectionTypeField: Bool {
-        guard let selectedPlayerRow = selectedPlayerRow else { return false }
-        
-        return  selectedPlayerRow.editableField == .position || selectedPlayerRow.editableField == .skill
-    }
-    
-    private var indexOfSelectedItem: Int? {
-        guard let selectedPlayerRow = selectedPlayerRow else { return nil }
-        
-        return editableItems.firstIndex(of: selectedPlayerRow.value.lowercased())
-    }
-    
-    private var editableItems: [String] {
-        guard let selectedPlayerRow = selectedPlayerRow else { return [] }
-        
-        if selectedPlayerRow.editableField == .position {
-            return PlayerPosition.allCases.map { $0.rawValue }
-        }
-        
-        return PlayerSkill.allCases.map { $0.rawValue }
-    }
-    
-    private func makeSections() -> [PlayerSection] {
-        return [
-            PlayerSection(
-                title: "Personal",
-                rows: [
-                    PlayerRow(title: "Name",
-                              value: player?.name ?? "",
-                              editableField: .name),
-                    PlayerRow(title: "Age",
-                              value: player?.age != nil ? "\(player!.age!)" : "",
-                              editableField: .age)
-                ]
-            ),
-            PlayerSection(
-                title: "Play",
-                rows: [
-                    PlayerRow(title: "Preferred position",
-                              value: player?.preferredPosition?.rawValue.capitalized ?? "",
-                              editableField: .position),
-                    PlayerRow(title: "Skill",
-                              value: player?.skill?.rawValue.capitalized ?? "",
-                              editableField: .skill)
-                ]
-            ),
-            PlayerSection(
-                title: "Likes",
-                rows: [
-                    PlayerRow(title: "Favourite team",
-                              value: player?.favouriteTeam ?? "",
-                              editableField: .favouriteTeam)
-                ]
-            )
-        ]
+        destinationViewController.viewModel = viewModel.makeEditViewModel()
+        destinationViewController.delegate = self
     }
 
 }
@@ -125,32 +56,30 @@ final class PlayerDetailViewController: UIViewController {
 // MARK: - UITableViewDelegate | UITableViewDataSource
 extension PlayerDetailViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return sections.count
+        return viewModel.numberOfSections
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sections[section].rows.count
+        return viewModel.numberOfRowsInSection(section)
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "PlayerDetailTableViewCell") as? PlayerDetailTableViewCell else {
             return UITableViewCell()
         }
-        
-        let row = sections[indexPath.section].rows[indexPath.row]
 
-        cell.leftLabel.text = row.title
-        cell.rightLabel.text = row.value
+        cell.leftLabel.text = viewModel.rowTitleDescription(for: indexPath)
+        cell.rightLabel.text = viewModel.rowValueDescription(for: indexPath)
 
         return cell
     }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sections[section].title.uppercased()
+        return viewModel.titleForHeaderInSection(section)
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedPlayerRow = sections[indexPath.section].rows[indexPath.row]
+        viewModel.selectPlayerRow(at: indexPath)
         performSegue(withIdentifier: SegueIdentifier.editPlayer.rawValue, sender: nil)
     }
 }
@@ -159,46 +88,9 @@ extension PlayerDetailViewController: UITableViewDelegate, UITableViewDataSource
 extension PlayerDetailViewController: PlayerEditViewControllerDelegate {
     func didFinishEditing(player: PlayerResponseModel) {
         setupTitle()
-        self.player = player
-        sections = makeSections()
+        viewModel.updatePlayer(player)
+        viewModel.reloadSections()
         reloadData()
         delegate?.didEdit(player: player)
-    }
-}
-
-// MARK: - Models
-struct PlayerSection {
-    let title: String
-    let rows: [PlayerRow]
-}
-
-struct PlayerRow {
-    let title: String
-    let value: String
-    let editableField: PlayerEditableFieldOption
-}
-
-enum PlayerEditableFieldOption {
-    case name, age, skill, position, favouriteTeam
-}
-
-extension PlayerResponseModel {
-    mutating func update(usingField field: PlayerEditableFieldOption, value: String) {
-        switch field {
-        case .name:
-            name = value
-        case .age:
-            age = Int(value)
-        case .position:
-            if let position = PlayerPosition(rawValue: value) {
-                preferredPosition = position
-            }
-        case .skill:
-            if let skill = PlayerSkill(rawValue: value) {
-                self.skill = skill
-            }
-        case .favouriteTeam:
-            favouriteTeam = value
-        }
     }
 }

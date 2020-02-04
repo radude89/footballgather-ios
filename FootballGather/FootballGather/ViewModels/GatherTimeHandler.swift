@@ -10,10 +10,11 @@ import Foundation
 
 // MARK: - GatherTimeHandler
 struct GatherTimeHandler {
-    var timer: Timer
     var selectedTime: GatherTime
-    var state: State
-        
+    
+    private(set) var state: State
+    private var timer: Timer
+    
     init(timer: Timer = Timer(), selectedTime: GatherTime = .defaultTime, state: State = .stopped) {
         self.timer = timer
         self.selectedTime = selectedTime

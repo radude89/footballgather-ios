@@ -18,11 +18,7 @@ final class LoginViewController: UIViewController, Loadable {
 
     // MARK: - Variables
     lazy var loadingView = LoadingView.initToView(self.view)
-    
-    private let loginService = LoginService()
-    private let usersService = StandardNetworkService(resourcePath: "/api/users")
-    private let userDefaults = FootballGatherUserDefaults.shared
-    private let keychain = FootbalGatherKeychain.shared
+    private let viewModel = LoginViewModel()
 
     // MARK: - View life cycle
     override func viewDidLoad() {
@@ -32,11 +28,10 @@ final class LoginViewController: UIViewController, Loadable {
 
     // MARK: - Private methods
     private func configureRememberMe() {
-        let rememberMe = userDefaults.rememberUsername ?? true
-        rememberMeSwitch.isOn = rememberMe
+        rememberMeSwitch.isOn = viewModel.rememberUsername
 
-        if rememberMe {
-            usernameTextField.text = keychain.username
+        if viewModel.rememberUsername {
+            usernameTextField.text = viewModel.username
         }
     }
     
@@ -46,21 +41,21 @@ final class LoginViewController: UIViewController, Loadable {
     }
 
     private func storeUsernameAndRememberMe() {
-        setRememberUsername(rememberMeSwitch.isOn)
+        viewModel.setRememberUsername(rememberMeSwitch.isOn)
 
         if rememberMeSwitch.isOn {
-            setUsername(usernameTextField.text)
+            viewModel.setUsername(usernameTextField.text)
         } else {
-            setUsername(nil)
+            viewModel.setUsername(nil)
         }
     }
-    
-    private func setRememberUsername(_ value: Bool) {
-        userDefaults.rememberUsername = value
-    }
-    
-    private func setUsername(_ username: String?) {
-        keychain.username = username
+
+    private func handleServiceResponse(error: Error?) {
+        if let error = error {
+            AlertHelper.present(in: self, title: "Error", message: String(describing: error))
+        } else {
+            handleSuccessResponse()
+        }
     }
 
     // MARK: - Actions
@@ -72,21 +67,11 @@ final class LoginViewController: UIViewController, Loadable {
         }
 
         showLoadingView()
-        
-        let requestModel = UserRequestModel(username: userText, password: passwordText)
-        loginService.login(user: requestModel) { [weak self] result in
-            guard let self = self else { return }
-            
+
+        viewModel.performLogin(withUsername: userText, andPassword: passwordText) { [weak self] error in
             DispatchQueue.main.async {
-                self.hideLoadingView()
-                
-                switch result {
-                case .failure(let error):
-                    AlertHelper.present(in: self, title: "Error", message: String(describing: error))
-                    
-                case .success(_):
-                    self.handleSuccessResponse()
-                }
+                self?.hideLoadingView()
+                self?.handleServiceResponse(error: error)
             }
         }
     }
@@ -97,28 +82,13 @@ final class LoginViewController: UIViewController, Loadable {
                 AlertHelper.present(in: self, title: "Error", message: "Both fields are mandatory.")
                 return
         }
-        
-        guard let hashedPasssword = Crypto.hash(message: passwordText) else {
-            fatalError("Unable to hash password")
-        }
-        
+
         showLoadingView()
-        
-        let requestModel = UserRequestModel(username: userText, password: hashedPasssword)
-        usersService.create(requestModel) { [weak self] result in
-            guard let self = self else { return }
-            
+
+        viewModel.performRegister(withUsername: userText, andPassword: passwordText) { [weak self] error in
             DispatchQueue.main.async {
-                self.hideLoadingView()
-                
-                switch result {
-                case .failure(let error):
-                    AlertHelper.present(in: self, title: "Error", message: String(describing: error))
-                    
-                case .success(let resourceId):
-                    print("Created user: \(resourceId)")
-                    self.handleSuccessResponse()
-                }
+                self?.hideLoadingView()
+                self?.handleServiceResponse(error: error)
             }
         }
     }

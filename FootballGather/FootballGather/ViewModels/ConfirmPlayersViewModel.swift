@@ -1,0 +1,206 @@
+//
+//  ConfirmPlayersViewModel.swift
+//  FootballGather
+//
+//  Created by Radu Dan on 27/01/2020.
+//  Copyright © 2020 Radu Dan. All rights reserved.
+//
+
+import Foundation
+
+// MARK: - ConfirmPlayersViewModel
+final class ConfirmPlayersViewModel {
+    
+    // MARK: - Properties
+    private var playersDictionary: [TeamSection: [PlayerResponseModel]]
+    private var addPlayerService: AddPlayerToGatherService
+    private let gatherService: StandardNetworkService
+    
+    private let dispatchGroup = DispatchGroup()
+    private var gatherUUID: UUID?
+    
+    // MARK: - Public API
+    init(playersDictionary: [TeamSection: [PlayerResponseModel]] = [:],
+         addPlayerService: AddPlayerToGatherService = AddPlayerToGatherService(),
+         gatherService: StandardNetworkService = StandardNetworkService(resourcePath: "/api/gathers", authenticated: true)) {
+        self.playersDictionary = playersDictionary
+        self.addPlayerService = addPlayerService
+        self.gatherService = gatherService
+    }
+    
+    var playerTableViewIsEditing: Bool { true }
+    
+    var startGatherButtonIsEnabled: Bool {
+        if playersDictionary[.teamA]?.isEmpty == false &&
+            playersDictionary[.teamB]?.isEmpty == false {
+            return true
+        }
+        
+        return false
+    }
+    
+    var gatherModel: GatherModel? {
+        guard let gatherUUID = gatherUUID else { return nil }
+        
+        return GatherModel(players: playerTeamArray, gatherUUID: gatherUUID)
+    }
+    
+    var numberOfSections: Int {
+        return TeamSection.allCases.count
+    }
+    
+    func titleForHeaderInSection(_ section: Int) -> String? {
+        return TeamSection(rawValue: section)?.headerTitle
+    }
+    
+    func numberOfRowsInSection(_ section: Int) -> Int {
+        guard let team = TeamSection(rawValue: section), let players = playersDictionary[team] else { return 0 }
+        
+        return players.count
+
+    }
+    
+    func rowTitle(at indexPath: IndexPath) -> String? {
+        guard let team = TeamSection(rawValue: indexPath.section), let players = playersDictionary[team] else { return nil }
+        
+        return players[indexPath.row].name
+    }
+    
+    func rowDescription(at indexPath: IndexPath) -> String? {
+        guard let team = TeamSection(rawValue: indexPath.section), let players = playersDictionary[team] else { return nil }
+        
+        return players[indexPath.row].preferredPosition?.acronym
+    }
+    
+    func moveRowAt(sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        guard let sourceTeam = TeamSection(rawValue: sourceIndexPath.section),
+            let sourcePlayer = playersDictionary[sourceTeam]?[sourceIndexPath.row],
+            let destinationTeam = TeamSection(rawValue: destinationIndexPath.section) else {
+                fatalError("Unable to move players")
+        }
+        
+        playersDictionary[sourceTeam]?.remove(at: sourceIndexPath.row)
+        
+        if playersDictionary[destinationTeam]?.isEmpty == false {
+            playersDictionary[destinationTeam]?.insert(sourcePlayer, at: destinationIndexPath.row)
+        } else {
+            playersDictionary[destinationTeam] = [sourcePlayer]
+        }
+    }
+    
+    // MARK: - Services
+    func startGather(completion: @escaping (Bool) -> ()) {
+        createGather { [weak self] uuid in
+            guard let gatherUUID = uuid else {
+                completion(false)
+                return
+            }
+            
+            self?.gatherUUID = gatherUUID
+            self?.addPlayersToGather(havingUUID: gatherUUID, completion: completion)
+        }
+    }
+    
+    private func createGather(completion: @escaping (UUID?) -> Void) {
+        gatherService.create(GatherCreateModel()) { result in
+            if case let .success(ResourceID.uuid(gatherUUID)) = result {
+                completion(gatherUUID)
+            } else {
+                completion(nil)
+            }
+        }
+    }
+    
+    private func addPlayersToGather(havingUUID gatherUUID: UUID, completion: @escaping (Bool) -> ()) {
+        var serviceFailed = false
+        
+        playerTeamArray.forEach { playerTeam in
+            dispatchGroup.enter()
+            
+            self.addPlayer(playerTeam.player, toGatherHavingUUID: gatherUUID, team: playerTeam.team) { [weak self] playerWasAdded in
+                if !playerWasAdded {
+                    serviceFailed = true
+                }
+                
+                self?.dispatchGroup.leave()
+            }
+        }
+        
+        dispatchGroup.notify(queue: DispatchQueue.main) {
+            completion(serviceFailed)
+        }
+    }
+    
+    private var playerTeamArray: [PlayerTeamModel] {
+        var players: [PlayerTeamModel] = []
+        players += self.playersDictionary
+            .filter { $0.key == .teamA }
+            .flatMap { $0.value }
+            .map { PlayerTeamModel(team: .teamA, player: $0) }
+        
+        players += self.playersDictionary
+            .filter { $0.key == .teamB }
+            .flatMap { $0.value }
+            .map { PlayerTeamModel(team: .teamB, player: $0) }
+        
+        return players
+    }
+    
+    private func addPlayer(_ player: PlayerResponseModel,
+                           toGatherHavingUUID gatherUUID: UUID,
+                           team: TeamSection,
+                           completion: @escaping (Bool) -> Void) {
+        addPlayerService.addPlayer(
+            havingServerId: player.id,
+            toGatherWithId: gatherUUID,
+            team: PlayerGatherTeam(team: team.headerTitle)) { result in
+                if case let .success(resultValue) = result {
+                    completion(resultValue)
+                } else {
+                    completion(false)
+                }
+        }
+    }
+    
+}
+
+// MARK: - TeamSection
+enum TeamSection: Int, CaseIterable {
+    case bench = 0, teamA, teamB
+    
+    var headerTitle: String {
+        switch self {
+        case .bench: return "Bench"
+        case .teamA: return "Team A"
+        case .teamB: return "Team B"
+        }
+    }
+}
+
+// MARK: - PlayerTeamModel
+struct PlayerTeamModel {
+    let team: TeamSection
+    let player: PlayerResponseModel
+}
+
+extension PlayerTeamModel: Equatable {
+    static func ==(lhs: PlayerTeamModel, rhs: PlayerTeamModel) -> Bool {
+        return lhs.team == rhs.team && lhs.player == rhs.player
+    }
+}
+
+extension PlayerTeamModel: Hashable {}
+
+// MARK: - GatherModel
+struct GatherModel {
+    let players: [PlayerTeamModel]
+    let gatherUUID: UUID
+}
+
+extension GatherModel: Hashable {}
+
+extension GatherModel: Equatable {
+    static func ==(lhs: GatherModel, rhs: GatherModel) -> Bool {
+        return lhs.gatherUUID == rhs.gatherUUID && lhs.players == rhs.players
+    }
+}

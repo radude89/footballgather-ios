@@ -22,13 +22,13 @@ final class PlayerAddViewController: UIViewController, Loadable {
     lazy var loadingView = LoadingView.initToView(self.view)
 
     weak var delegate: AddPlayerDelegate?
-    private let service = StandardNetworkService(resourcePath: "/api/players", authenticated: true)
+    private let viewModel = PlayerAddViewModel()
 
     // MARK: - Setup
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "Add Player"
+        title = viewModel.title
         setupNavigationItems()
         setupPlayerNameTextField()
     }
@@ -48,16 +48,14 @@ final class PlayerAddViewController: UIViewController, Loadable {
         guard let playerName = playerNameTextField.text else { return }
 
         showLoadingView()
-        
-        let player = PlayerCreateModel(name: playerName)
-        service.create(player) { [weak self] result in
+        viewModel.requestCreatePlayer(name: playerName) { [weak self] playerWasCreated in
             DispatchQueue.main.async {
                 self?.hideLoadingView()
-                
-                if case .success(_) = result {
-                    self?.handleServiceSuccess()
-                } else {
+
+                if !playerWasCreated {
                     self?.handleServiceFailure()
+                } else {
+                    self?.handleServiceSuccess()
                 }
             }
         }
@@ -73,7 +71,7 @@ final class PlayerAddViewController: UIViewController, Loadable {
     }
 
     @objc func textFieldDidChange(textField: UITextField) {
-        doneButton.isEnabled = textField.text?.isEmpty == false
+        doneButton.isEnabled = viewModel.doneButtonIsEnabled(forText: textField.text)
     }
 
 }

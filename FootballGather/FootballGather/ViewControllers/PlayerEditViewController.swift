@@ -24,11 +24,7 @@ final class PlayerEditViewController: UIViewController, Loadable {
     lazy var loadingView = LoadingView.initToView(self.view)
 
     weak var delegate: PlayerEditViewControllerDelegate?
-    var playerEditModel: PlayerEditModel!
-    var viewType: PlayerEditViewType = .text
-    var playerItemsEditModel: PlayerItemsEditModel?
-    
-    private var service = StandardNetworkService(resourcePath: "/api/players", authenticated: true)
+    var viewModel: PlayerEditViewModel!
 
     // MARK: - Setup
     override func viewDidLoad() {
@@ -40,33 +36,33 @@ final class PlayerEditViewController: UIViewController, Loadable {
     }
 
     private func setupNavigationBar() {
-        title = playerEditModel.playerRow.title
+        title = viewModel.title
         navigationItem.rightBarButtonItem = doneButton
         doneButton.isEnabled = false
     }
 
     private func setupPlayerEditTextField() {
-        playerEditTextField.placeholder = playerEditModel.playerRow.value
-        playerEditTextField.text = playerEditModel.playerRow.value
+        playerEditTextField.placeholder = viewModel.playerRowValue
+        playerEditTextField.text = viewModel.playerRowValue
         playerEditTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-        playerEditTextField.isHidden = viewType == .selection
+        playerEditTextField.isHidden = viewModel.isSelectionViewType
     }
 
     private func setupTableView() {
-        playerTableView.isHidden = viewType != .selection
+        playerTableView.isHidden = !viewModel.isSelectionViewType
     }
 
     // MARK: - Selectors
     @objc private func textFieldDidChange(textField: UITextField) {
-        doneButton.isEnabled = doneButtonIsEnabled(newValue: playerEditTextField.text)
+        doneButton.isEnabled = viewModel.doneButtonIsEnabled(newValue: playerEditTextField.text)
     }
 
     @objc private func doneAction(sender: UIBarButtonItem) {
-        guard shouldUpdatePlayer(inputFieldValue: playerEditTextField.text) else { return }
+        guard viewModel.shouldUpdatePlayer(inputFieldValue: playerEditTextField.text) else { return }
 
         showLoadingView()
 
-        updatePlayerBasedOnViewType(inputFieldValue: playerEditTextField.text) { [weak self] updated in
+        viewModel.updatePlayerBasedOnViewType(inputFieldValue: playerEditTextField.text) { [weak self] updated in
             DispatchQueue.main.async {
                 self?.hideLoadingView()
 
@@ -78,76 +74,9 @@ final class PlayerEditViewController: UIViewController, Loadable {
             }
         }
     }
-    
-    // MARK: - Private methods
-    private func updatePlayerBasedOnViewType(inputFieldValue: String?, completion: @escaping (Bool) -> ()) {
-        if viewType == .selection {
-            updatePlayer(newFieldValue: selectedItemValue, completion: completion)
-        } else {
-            updatePlayer(newFieldValue: inputFieldValue, completion: completion)
-        }
-    }
-    
-    private func updatePlayer(newFieldValue: String?, completion: @escaping (Bool) -> ()) {
-        guard let newFieldValue = newFieldValue else {
-            completion(false)
-            return
-        }
-        
-        playerEditModel.player.update(usingField: playerEditModel.playerRow.editableField, value: newFieldValue)
-        requestUpdatePlayer(completion: completion)
-    }
-
-    private func requestUpdatePlayer(completion: @escaping (Bool) -> ()) {
-        let player = playerEditModel.player
-        service.update(PlayerCreateModel(player), resourceID: ResourceID.integer(player.id)) { [weak self] result in
-            if case .success(let updated) = result {
-                self?.playerEditModel.player = player
-                completion(updated)
-            } else {
-                completion(false)
-            }
-        }
-    }
-    
-    private func doneButtonIsEnabled(selectedIndexPath: IndexPath) -> Bool {
-        if let newValue = playerItemsEditModel?.items[selectedIndexPath.row], playerEditModel.playerRow.value != newValue {
-            return true
-        }
-        
-        return false
-    }
-    
-    private func doneButtonIsEnabled(newValue: String?) -> Bool {
-        if let newValue = newValue, playerEditModel.playerRow.value != newValue {
-            return true
-        }
-        
-        return false
-    }
-    
-    private func shouldUpdatePlayer(inputFieldValue: String?) -> Bool {
-        if viewType == .selection {
-            return newValueIsDifferentFromOldValue(newFieldValue: selectedItemValue)
-        }
-        
-        return newValueIsDifferentFromOldValue(newFieldValue: inputFieldValue)
-    }
-    
-    private var selectedItemValue: String? {
-        guard let playerItemsEditModel = playerItemsEditModel else { return nil}
-        
-        return playerItemsEditModel.items[playerItemsEditModel.selectedItemIndex]
-    }
-
-    private func newValueIsDifferentFromOldValue(newFieldValue: String?) -> Bool {
-        guard let newFieldValue = newFieldValue else { return false }
-        
-        return playerEditModel.playerRow.value.lowercased() != newFieldValue.lowercased()
-    }
 
     private func handleSuccessfulPlayerUpdate() {
-        delegate?.didFinishEditing(player: playerEditModel.player)
+        delegate?.didFinishEditing(player: viewModel.editablePlayer)
         navigationController?.popViewController(animated: true)
     }
 
@@ -159,7 +88,7 @@ final class PlayerEditViewController: UIViewController, Loadable {
 // MARK: - UITableViewDelegate | UITableViewDataSource
 extension PlayerEditViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return playerItemsEditModel?.items.count ?? 0
+        return viewModel.numberOfRows
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -167,21 +96,21 @@ extension PlayerEditViewController: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
 
-        cell.textLabel?.text = playerItemsEditModel?.items[indexPath.row].capitalized
-        cell.accessoryType = playerItemsEditModel?.selectedItemIndex == indexPath.row ? .checkmark : .none
+        cell.textLabel?.text = viewModel.itemRowTextDescription(indexPath: indexPath)
+        cell.accessoryType = viewModel.isSelectedIndexPath(indexPath) ? .checkmark : .none
 
         return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let selectedItemIndex = playerItemsEditModel?.selectedItemIndex {
+        if let selectedItemIndex = viewModel.selectedItemIndex {
             clearAccessoryType(forSelectedIndex: selectedItemIndex)
         }
 
-        playerItemsEditModel?.selectedItemIndex = indexPath.row
+        viewModel.updateSelectedItemIndex(indexPath.row)
         tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
 
-        doneButton.isEnabled = doneButtonIsEnabled(selectedIndexPath: indexPath)
+        doneButton.isEnabled = viewModel.doneButtonIsEnabled(selectedIndexPath: indexPath)
     }
 
     private func clearAccessoryType(forSelectedIndex selectedItemIndex: Int) {
@@ -192,21 +121,4 @@ extension PlayerEditViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         tableView.cellForRow(at: indexPath)?.accessoryType = .none
     }
-}
-
-// MARK: - PlayerEditViewType
-enum PlayerEditViewType {
-    case text, selection
-}
-
-// MARK: - PlayerEditModel
-struct PlayerEditModel {
-    var player: PlayerResponseModel
-    let playerRow: PlayerRow
-}
-
-// MARK: -
-struct PlayerItemsEditModel {
-    let items: [String]
-    var selectedItemIndex: Int
 }

@@ -23,37 +23,32 @@ final class PlayerListViewController: UIViewController, Loadable {
 
     lazy var loadingView = LoadingView.initToView(self.view)
     private var barButtonItem: UIBarButtonItem!
-    
+
     lazy var emptyView: EmptyView = {
         let emptyView = EmptyView.initToView(self.view, infoText: "There aren't any players for your user.")
         emptyView.delegate = self
         return emptyView
     }()
-    
-    private let playersService = StandardNetworkService(resourcePath: "/api/players", authenticated: true)
-    private var players: [PlayerResponseModel] = []
-    private var viewState: ViewState = .list
-    private var viewStateDetails: LoginViewStateDetails {
-        return ViewStateDetailsFactory.makeViewStateDetails(from: viewState)
-    }
-    
-    private(set) var selectedPlayersDictionary: [Int: PlayerResponseModel] = [:]
-    private(set) var selectedPlayerForDetails: PlayerResponseModel?
-    
-    fileprivate let minimumPlayersToPlay = 2
+
+    private let viewModel = PlayerListViewModel()
 
     // MARK: - Setup methods
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setupViewModel()
         setupTitle()
         setupBarButtonItem()
         setupTableView()
         loadPlayers()
     }
+
+    private func setupViewModel() {
+        viewModel.delegate = self
+    }
     
     private func setupTitle() {
-        title = "Players"
+        title = viewModel.title
     }
 
     private func setupBarButtonItem() {
@@ -71,23 +66,20 @@ final class PlayerListViewController: UIViewController, Loadable {
     }
 
     @IBAction private func confirmOrAddPlayers(_ sender: Any) {
-        performSegue(withIdentifier: viewStateDetails.segueIdentifier, sender: nil)
+        performSegue(withIdentifier: viewModel.segueIdentifier, sender: nil)
     }
 
     // MARK: - Service methods
     private func loadPlayers() {
         view.isUserInteractionEnabled = false
-        
-        playersService.get { [weak self] (result: Result<[PlayerResponseModel], Error>) in
+
+        viewModel.fetchPlayers { [weak self] error in
             DispatchQueue.main.async {
                 self?.view.isUserInteractionEnabled = true
-                
-                switch result {
-                case .failure(let error):
+
+                if let error = error {
                     self?.handleServiceFailures(withError: error)
-                    
-                case .success(let players):
-                    self?.players = players
+                } else {
                     self?.handleLoadPlayersSuccessfulResponse()
                 }
             }
@@ -99,7 +91,7 @@ final class PlayerListViewController: UIViewController, Loadable {
     }
 
     private func handleLoadPlayersSuccessfulResponse() {
-        if players.isEmpty {
+        if viewModel.playersCollectionIsEmpty {
             showEmptyView()
         } else {
             hideEmptyView()
@@ -109,17 +101,14 @@ final class PlayerListViewController: UIViewController, Loadable {
     }
 
     private func requestDeletePlayer(at indexPath: IndexPath, completion: @escaping (Bool) -> Void) {
-        let player = players[indexPath.row]
-        var service = playersService
-        
-        service.delete(withID: ResourceID.integer(player.id)) { [weak self] result in
+        viewModel.requestDeletePlayer(at: indexPath) { [weak self] error in
             DispatchQueue.main.async {
-                switch result {
-                case .failure(let error):
+                self?.hideLoadingView()
+
+                if let error = error {
                     self?.handleServiceFailures(withError: error)
                     completion(false)
-                    
-                case .success(_):
+                } else {
                     completion(true)
                 }
             }
@@ -136,17 +125,13 @@ final class PlayerListViewController: UIViewController, Loadable {
         switch segue.identifier {
         case SegueIdentifier.confirmPlayers.rawValue:
             if let confirmPlayersViewController = segue.destination as? ConfirmPlayersViewController {
-                var playersDictionary: [TeamSection: [PlayerResponseModel]] = [:]
-                playersDictionary[.bench] = Array(selectedPlayersDictionary.values)
-                
-                confirmPlayersViewController.playersDictionary = playersDictionary
+                confirmPlayersViewController.viewModel = viewModel.makeConfirmPlayersViewModel()
             }
 
         case SegueIdentifier.playerDetails.rawValue:
-            if let playerDetailsViewController = segue.destination as? PlayerDetailViewController,
-                let player = selectedPlayerForDetails {
+            if let playerDetailsViewController = segue.destination as? PlayerDetailViewController, let player = viewModel.selectedPlayerForDetails {
                 playerDetailsViewController.delegate = self
-                playerDetailsViewController.player = player
+                playerDetailsViewController.viewModel = PlayerDetailViewModel(player: player)
             }
 
         case SegueIdentifier.addPlayer.rawValue:
@@ -162,9 +147,9 @@ final class PlayerListViewController: UIViewController, Loadable {
 // MARK: - PlayerDetailViewControllerDelegate
 extension PlayerListViewController: PlayerDetailViewControllerDelegate {
     func didEdit(player: PlayerResponseModel) {
-        guard let index = players.firstIndex(of: player) else { return }
+        guard let index = viewModel.index(of: player) else { return }
 
-        players[index] = player
+        viewModel.didEdit(player: player)
         reloadRow(index)
     }
 }
@@ -172,7 +157,7 @@ extension PlayerListViewController: PlayerDetailViewControllerDelegate {
 // MARK: - UITableViewDelegate | UITableViewDataSource
 extension PlayerListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return players.count
+        return viewModel.numberOfRows
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -180,39 +165,26 @@ extension PlayerListViewController: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
 
-        if viewState == .list {
-            selectedPlayersDictionary[indexPath.row] = nil
+        if viewModel.isInListViewMode {
+            viewModel.clearSelectedPlayerIfNeeded(at: indexPath)
             cell.setupDefaultView()
         } else {
             cell.setupSelectionView()
         }
-        
-        let player = players[indexPath.row]
 
-        cell.nameLabel.text = player.name
-        
-        if let position = player.preferredPosition {
-            cell.positionLabel.text = "Position: \(position.rawValue)"
-        } else {
-            cell.positionLabel.text = "Position: -"
-        }
-                
-        if let skill = player.skill {
-            cell.skillLabel.text = "Skill: \(skill.rawValue)"
-        } else {
-            cell.skillLabel.text = "Skill: -"
-        }
-
-        cell.playerIsSelected = selectedPlayersDictionary[indexPath.row] != nil
+        cell.nameLabel.text = viewModel.playerNameDescription(at: indexPath)
+        cell.positionLabel.text = viewModel.playerPositionDescription(at: indexPath)
+        cell.skillLabel.text = viewModel.playerSkillDescription(at: indexPath)
+        cell.playerIsSelected = viewModel.playerIsSelected(at: indexPath)
 
         return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard !players.isEmpty else { return }
+        guard !viewModel.playersCollectionIsEmpty else { return }
 
-        if viewState == .list {
-            selectedPlayerForDetails = players[indexPath.row]
+        if viewModel.isInListViewMode {
+            viewModel.selectPlayerForDisplayingDetails(at: indexPath)
             navigateToPlayerDetails(forRowAt: indexPath)
         } else {
             toggleCellSelection(at: indexPath)
@@ -221,7 +193,7 @@ extension PlayerListViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     private func navigateToPlayerDetails(forRowAt indexPath: IndexPath) {
-        selectedPlayersDictionary[indexPath.row] = players[indexPath.row]
+        viewModel.selectPlayer(at: indexPath)
         performSegue(withIdentifier: SegueIdentifier.playerDetails.rawValue, sender: nil)
     }
 
@@ -229,23 +201,16 @@ extension PlayerListViewController: UITableViewDelegate, UITableViewDataSource {
         guard let cell = playerTableView.cellForRow(at: indexPath) as? PlayerTableViewCell else { return }
 
         cell.playerIsSelected.toggle()
-                
-        if cell.playerIsSelected {
-            selectedPlayersDictionary[indexPath.row] = players[indexPath.row]
-        } else {
-            selectedPlayersDictionary[indexPath.row] = nil
-        }
+        viewModel.updateSelectedPlayers(isSelected: cell.playerIsSelected, at: indexPath)
     }
-    
-    private func updateViewForPlayerSelection() {
-        let selectedPlayersCount = selectedPlayersDictionary.values.count
-        title = selectedPlayersCount > 0 ? "\(selectedPlayersCount) selected" : "Players"
 
-        bottomActionButton.isEnabled = selectedPlayersDictionary.values.count >= minimumPlayersToPlay
+    private func updateViewForPlayerSelection() {
+        title = viewModel.selectedPlayersTitle
+        bottomActionButton.isEnabled = viewModel.playersCanPlay
     }
 
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return viewState == .list
+        return viewModel.isInListViewMode
     }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -269,11 +234,11 @@ extension PlayerListViewController: UITableViewDelegate, UITableViewDataSource {
             guard result, let self = self else { return }
 
             self.playerTableView.beginUpdates()
-            self.players.remove(at: indexPath.row)
+            self.viewModel.deleteLocallyPlayer(at: indexPath)
             self.playerTableView.deleteRows(at: [indexPath], with: .fade)
             self.playerTableView.endUpdates()
 
-            if self.players.isEmpty {
+            if self.viewModel.playersCollectionIsEmpty {
                 self.showEmptyView()
             }
         }
@@ -305,83 +270,27 @@ extension PlayerListViewController: AddPlayerDelegate {
     }
 }
 
-// MARK: - PlayerListToggable
-extension PlayerListViewController: PlayerListTogglable {
-    func toggleViewState() {
-        viewState.toggle()
-        barButtonItem.title = viewStateDetails.barButtonItemTitle
-        bottomActionButton.setTitle(viewStateDetails.actionButtonTitle, for: .normal)
-        bottomActionButton.isEnabled = viewStateDetails.actionButtonIsEnabled
+// MARK: - PlayerListViewModelDelegate
+extension PlayerListViewController: PlayerListViewModelDelegate {
+    func viewStateDidChange() {
+        title = viewModel.title
+        barButtonItem.title = viewModel.barButtonItemTitle
+
+        bottomActionButton.setTitle(viewModel.actionButtonTitle, for: .normal)
+        bottomActionButton.isEnabled = viewModel.actionButtonIsEnabled
+
         playerTableView.reloadData()
     }
 }
 
-// MARK: - Models
-protocol LoginViewStateDetails {
-    var barButtonItemTitle: String { get }
-    var actionButtonIsEnabled: Bool { get }
-    var actionButtonTitle: String { get }
-    var segueIdentifier: String { get }
-}
-
-extension PlayerListViewController {
-    enum ViewState {
-        case list
-        case selection
-        
-        mutating func toggle() {
-            self = self == .list ? .selection : .list
-        }
-    }
-}
-
-fileprivate extension PlayerListViewController {
-    
-    struct ListViewStateDetails: LoginViewStateDetails {
-        var barButtonItemTitle: String {
-            return "Select"
-        }
-        
-        var actionButtonIsEnabled: Bool {
-            return false
-        }
-        
-        var segueIdentifier: String {
-            return SegueIdentifier.addPlayer.rawValue
-        }
-        
-        var actionButtonTitle: String {
-            return "Add player"
-        }
-    }
-
-    struct SelectionViewStateDetails: LoginViewStateDetails {
-        var barButtonItemTitle: String {
-            return "Cancel"
-        }
-        
-        var actionButtonIsEnabled: Bool {
-            return true
-        }
-        
-        var segueIdentifier: String {
-            return SegueIdentifier.confirmPlayers.rawValue
-        }
-        
-        var actionButtonTitle: String {
-            return "Confirm players"
-        }
-    }
-
-    enum ViewStateDetailsFactory {
-        static func makeViewStateDetails(from viewState: ViewState) -> LoginViewStateDetails {
-            switch viewState {
-            case .list:
-                return ListViewStateDetails()
-                
-            case .selection:
-                return SelectionViewStateDetails()
-            }
-        }
+// MARK: - PlayerListToggable
+extension PlayerListViewController: PlayerListTogglable {
+    func toggleViewState() {
+        viewModel.toggleViewState()
+        setupTitle()
+        barButtonItem.title = viewModel.barButtonItemTitle
+        bottomActionButton.setTitle(viewModel.actionButtonTitle, for: .normal)
+        bottomActionButton.isEnabled = viewModel.actionButtonIsEnabled
+        playerTableView.reloadData()
     }
 }

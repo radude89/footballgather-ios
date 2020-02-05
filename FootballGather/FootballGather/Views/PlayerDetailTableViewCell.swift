@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PlayerDetailTableViewCell: UITableViewCell {
+final class PlayerDetailTableViewCell: UITableViewCell {
     @IBOutlet weak var leftLabel: UILabel!
     @IBOutlet weak var rightLabel: UILabel!
 }

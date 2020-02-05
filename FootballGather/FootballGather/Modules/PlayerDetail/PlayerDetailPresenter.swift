@@ -1,15 +1,33 @@
 //
-//  PlayerDetailViewModel.swift
+//  PlayerDetailPresenter.swift
 //  FootballGather
 //
-//  Created by Radu Dan on 23/01/2020.
+//  Created by Radu Dan on 24/02/2020.
 //  Copyright © 2020 Radu Dan. All rights reserved.
 //
 
 import Foundation
 
-// MARK: - PlayerDetailViewModel
-final class PlayerDetailViewModel {
+// MARK: - PlayerDetailPresenterProtocol
+protocol PlayerDetailPresenterProtocol: AnyObject {
+    var player: PlayerResponseModel { get }
+    var title: String { get }
+    var numberOfSections: Int { get }
+    var destinationViewType: PlayerEditViewType { get }
+    var playerEditModel: PlayerEditModel? { get }
+    var playerItemsEditModel: PlayerItemsEditModel? { get }
+    
+    func numberOfRowsInSection(_ section: Int) -> Int
+    func rowTitleDescription(for indexPath: IndexPath) -> String
+    func rowValueDescription(for indexPath: IndexPath) -> String
+    func titleForHeaderInSection(_ section: Int) -> String?
+    func selectPlayerRow(at indexPath: IndexPath)
+    func updatePlayer(_ player: PlayerResponseModel)
+    func reloadSections()
+}
+
+// MARK: - PlayerDetailPresenter
+final class PlayerDetailPresenter: PlayerDetailPresenterProtocol {
     
     // MARK: - Properties
     private(set) var player: PlayerResponseModel
@@ -42,11 +60,7 @@ final class PlayerDetailViewModel {
         let row = sections[indexPath.section].rows[indexPath.row]
         return row.value
     }
-    
-    func reloadSections() {
-        sections = makeSections()
-    }
-    
+
     func titleForHeaderInSection(_ section: Int) -> String? {
         return sections[section].title.uppercased()
     }
@@ -54,13 +68,16 @@ final class PlayerDetailViewModel {
     func selectPlayerRow(at indexPath: IndexPath) {
         selectedPlayerRow = sections[indexPath.section].rows[indexPath.row]
     }
-    
-    var shouldEditSelectionTypeField: Bool {
-        guard let selectedPlayerRow = selectedPlayerRow else { return false }
-        
-        return  selectedPlayerRow.editableField == .position || selectedPlayerRow.editableField == .skill
+
+    func updatePlayer(_ player: PlayerResponseModel) {
+        self.player = player
     }
     
+    func reloadSections() {
+        sections = makeSections()
+    }
+    
+    // MARK: - Edit methods
     var destinationViewType: PlayerEditViewType {
         if shouldEditSelectionTypeField {
             return .selection
@@ -69,7 +86,26 @@ final class PlayerDetailViewModel {
         return .text
     }
     
-    var editableItems: [String] {
+    var playerEditModel: PlayerEditModel? {
+        guard let selectedPlayerRow = selectedPlayerRow else { return nil }
+        
+        return PlayerEditModel(player: player, playerRow: selectedPlayerRow)
+    }
+    
+    var playerItemsEditModel: PlayerItemsEditModel? {
+        guard shouldEditSelectionTypeField else { return nil }
+        
+        return PlayerItemsEditModel(items: editableItems, selectedItemIndex: indexOfSelectedItem ?? -1)
+    }
+    
+    // MARK: - Private methods
+    private var shouldEditSelectionTypeField: Bool {
+        guard let selectedPlayerRow = selectedPlayerRow else { return false }
+        
+        return  selectedPlayerRow.editableField == .position || selectedPlayerRow.editableField == .skill
+    }
+    
+    private var editableItems: [String] {
         guard let selectedPlayerRow = selectedPlayerRow else { return [] }
         
         if selectedPlayerRow.editableField == .position {
@@ -79,31 +115,12 @@ final class PlayerDetailViewModel {
         return PlayerSkill.allCases.map { $0.rawValue }
     }
     
-    var indexOfSelectedItem: Int? {
+    private var indexOfSelectedItem: Int? {
         guard let selectedPlayerRow = selectedPlayerRow else { return nil }
         
         return editableItems.firstIndex(of: selectedPlayerRow.value.lowercased())
     }
     
-    func updatePlayer(_ player: PlayerResponseModel) {
-        self.player = player
-    }
-    
-    func makeEditViewModel() -> PlayerEditViewModel? {
-        guard let selectedPlayerRow = selectedPlayerRow else { return nil }
-        
-        let editViewModel = PlayerEditViewModel(viewType: destinationViewType,
-                                                playerEditModel: PlayerEditModel(player: player, playerRow: selectedPlayerRow))
-        
-        if shouldEditSelectionTypeField {
-            let itemsEditModel = PlayerItemsEditModel(items: editableItems, selectedItemIndex: indexOfSelectedItem ?? -1)
-            editViewModel.updatePlayerItemsEditModel(newItemsEditModel: itemsEditModel)
-        }
-        
-        return editViewModel
-    }
-    
-    // MARK: - Private methods
     private func makeSections() -> [PlayerSection] {
         return [
             PlayerSection(

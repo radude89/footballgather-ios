@@ -27,3 +27,16 @@ extension Loadable where Self: UIViewController {
         loadingView.hide()
     }
 }
+
+extension Loadable where Self: UIView {
+    func showLoadingView() {
+        isUserInteractionEnabled = false
+        loadingView.show()
+    }
+    
+    func hideLoadingView() {
+        isUserInteractionEnabled = true
+        endEditing(true)
+        loadingView.hide()
+    }
+}

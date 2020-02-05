@@ -1,17 +1,32 @@
 //
-//  ConfirmPlayersViewModel.swift
+//  ConfirmPlayersPresenter.swift
 //  FootballGather
 //
-//  Created by Radu Dan on 27/01/2020.
+//  Created by Radu Dan on 26/02/2020.
 //  Copyright © 2020 Radu Dan. All rights reserved.
 //
 
 import Foundation
 
-// MARK: - ConfirmPlayersViewModel
-final class ConfirmPlayersViewModel {
+// MARK: - ConfirmPlayersPresenterProtocol
+protocol ConfirmPlayersPresenterProtocol: AnyObject {
+    var gatherModel: GatherModel? { get }
+    var startGatherButtonIsEnabled: Bool { get }
+    var numberOfSections: Int { get }
+    
+    func titleForHeaderInSection(_ section: Int) -> String?
+    func numberOfRowsInSection(_ section: Int) -> Int
+    func rowTitle(at indexPath: IndexPath) -> String?
+    func rowDescription(at indexPath: IndexPath) -> String?
+    func moveRowAt(sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
+    func initiateStartGather()
+}
+
+// MARK: - ConfirmPlayersPresenter
+final class ConfirmPlayersPresenter: ConfirmPlayersPresenterProtocol {
     
     // MARK: - Properties
+    private weak var view: ConfirmPlayersViewProtocol?
     private var playersDictionary: [TeamSection: [PlayerResponseModel]]
     private var addPlayerService: AddPlayerToGatherService
     private let gatherService: StandardNetworkService
@@ -20,15 +35,21 @@ final class ConfirmPlayersViewModel {
     private var gatherUUID: UUID?
     
     // MARK: - Public API
-    init(playersDictionary: [TeamSection: [PlayerResponseModel]] = [:],
+    init(view: ConfirmPlayersViewProtocol? = nil,
+         playersDictionary: [TeamSection: [PlayerResponseModel]] = [:],
          addPlayerService: AddPlayerToGatherService = AddPlayerToGatherService(),
          gatherService: StandardNetworkService = StandardNetworkService(resourcePath: "/api/gathers", authenticated: true)) {
+        self.view = view
         self.playersDictionary = playersDictionary
         self.addPlayerService = addPlayerService
         self.gatherService = gatherService
     }
     
-    var playerTableViewIsEditing: Bool { true }
+    var gatherModel: GatherModel? {
+        guard let gatherUUID = gatherUUID else { return nil }
+        
+        return GatherModel(players: playerTeamArray, gatherUUID: gatherUUID)
+    }
     
     var startGatherButtonIsEnabled: Bool {
         if playersDictionary[.teamA]?.isEmpty == false &&
@@ -37,12 +58,6 @@ final class ConfirmPlayersViewModel {
         }
         
         return false
-    }
-    
-    var gatherModel: GatherModel? {
-        guard let gatherUUID = gatherUUID else { return nil }
-        
-        return GatherModel(players: playerTeamArray, gatherUUID: gatherUUID)
     }
     
     var numberOfSections: Int {
@@ -57,7 +72,6 @@ final class ConfirmPlayersViewModel {
         guard let team = TeamSection(rawValue: section), let players = playersDictionary[team] else { return 0 }
         
         return players.count
-
     }
     
     func rowTitle(at indexPath: IndexPath) -> String? {
@@ -88,8 +102,24 @@ final class ConfirmPlayersViewModel {
         }
     }
     
-    // MARK: - Services
-    func startGather(completion: @escaping (Bool) -> ()) {
+    // MARK: - Service
+    func initiateStartGather() {
+        view?.showLoadingView()
+
+        startGather { [weak self] result in
+            DispatchQueue.main.async {
+                self?.view?.hideLoadingView()
+
+                if !result {
+                    self?.view?.handleError(title: "Error", message: "Unable to create gather.")
+                } else {
+                    self?.view?.handleSuccessfulStartGather()
+                }
+            }
+        }
+    }
+    
+    private func startGather(completion: @escaping (Bool) -> ()) {
         createGather { [weak self] uuid in
             guard let gatherUUID = uuid else {
                 completion(false)
@@ -162,45 +192,4 @@ final class ConfirmPlayersViewModel {
         }
     }
     
-}
-
-// MARK: - TeamSection
-enum TeamSection: Int, CaseIterable {
-    case bench = 0, teamA, teamB
-    
-    var headerTitle: String {
-        switch self {
-        case .bench: return "Bench"
-        case .teamA: return "Team A"
-        case .teamB: return "Team B"
-        }
-    }
-}
-
-// MARK: - PlayerTeamModel
-struct PlayerTeamModel {
-    let team: TeamSection
-    let player: PlayerResponseModel
-}
-
-extension PlayerTeamModel: Equatable {
-    static func ==(lhs: PlayerTeamModel, rhs: PlayerTeamModel) -> Bool {
-        return lhs.team == rhs.team && lhs.player == rhs.player
-    }
-}
-
-extension PlayerTeamModel: Hashable {}
-
-// MARK: - GatherModel
-struct GatherModel {
-    let players: [PlayerTeamModel]
-    let gatherUUID: UUID
-}
-
-extension GatherModel: Hashable {}
-
-extension GatherModel: Equatable {
-    static func ==(lhs: GatherModel, rhs: GatherModel) -> Bool {
-        return lhs.gatherUUID == rhs.gatherUUID && lhs.players == rhs.players
-    }
 }

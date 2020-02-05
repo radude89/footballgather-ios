@@ -19,9 +19,9 @@ This repo contains the iOS App logic. For the server side version, please check 
 ## TODOs
 
 - [x] MVC - Write the iOS app using MVC
-- [ ] MVVM - Rewrite the iOS app using MVVM with manual binding
-- [ ] MVVM with Coordinators - Clone the MVVM branch and add Coordinators
-- [ ] MVP - Rewrite the iOS  app using MVP
+- [x] MVVM - Rewrite the iOS app using MVVM with one way manual binding
+- [x] MVP - Rewrite the iOS  app using MVP
+- [ ] Coordinators - MVP with Coordinators
 - [ ] VIPER - Rewrite the iOS  app using VIPER
 - [ ] VIP - Rewrite the iOS  app using VIP (Clean Swift)
 

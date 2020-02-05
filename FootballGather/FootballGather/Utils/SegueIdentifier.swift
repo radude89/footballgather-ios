@@ -9,10 +9,10 @@
 import Foundation
 
 enum SegueIdentifier: String {
-    case confirmPlayers = "confirmPlayers"
+    case confirmPlayers
     case playerDetails = "showPlayerDetails"
-    case addPlayer = "addPlayer"
-    case editPlayer = "editPlayer"
+    case addPlayer
+    case editPlayer
     case gather = "startGather"
     case playerList = "showPlayerList"
 }

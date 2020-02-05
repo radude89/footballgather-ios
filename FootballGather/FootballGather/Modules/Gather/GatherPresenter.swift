@@ -1,40 +1,61 @@
 //
-//  GatherViewModel.swift
+//  GatherPresenter.swift
 //  FootballGather
 //
-//  Created by Radu Dan on 27/01/2020.
+//  Created by Radu Dan on 26/02/2020.
 //  Copyright © 2020 Radu Dan. All rights reserved.
 //
 
 import Foundation
 
-// MARK: - GatherViewModelDelegate
-protocol GatherViewModelDelegate: AnyObject {
-    func didUpdateGatherTime()
+// MARK: - GatherPresenterProtocol
+protocol GatherPresenterProtocol: AnyObject {
+    var formattedCountdownTimerLabelText: String { get }
+    var minutesComponent: Int { get }
+    var selectedMinutes: Int { get }
+    var secondsComponent: Int { get }
+    var selectedSeconds: Int { get }
+    var formattedActionTitleText: String { get }
+    var numberOfSections: Int { get }
+    var numberOfPickerComponents: Int { get }
+    
+    func formatStepperValue(_ value: Double) -> String
+    func shouldUpdateTeamALabel(section: TeamSection) -> Bool
+    func shouldUpdateTeamBLabel(section: TeamSection) -> Bool
+    func toggleTimer()
+    func stopTimer()
+    func resetTimer()
+    func setTimerMinutes(_ minutes: Int)
+    func setTimerSeconds(_ seconds: Int)
+    func endGather(teamAScoreLabelText: String, teamBScoreLabelText: String)
+    func titleForHeaderInSection(_ section: Int) -> String?
+    func numberOfRowsInSection(_ section: Int) -> Int
+    func rowDescription(at indexPath: IndexPath) -> (title: String, details: String?)
+    func numberOfRowsInPickerComponent(_ component: Int) -> Int
+    func titleForPickerRow(_ row: Int, forComponent component: Int) -> String?
 }
 
-// MARK: - GatherViewModel
-final class GatherViewModel {
+// MARK: - GatherPresenter
+final class GatherPresenter: GatherPresenterProtocol {
     
     // MARK: - Properties
+    private weak var view: GatherViewProtocol?
     private let model: GatherModel
     private var timeHandler: GatherTimeHandler
     private var updateGatherService: StandardNetworkService
-    
-    weak var delegate: GatherViewModelDelegate?
-    
+        
     // MARK: - Public API
-    init(gatherModel: GatherModel,
+    init(view: GatherViewProtocol? = nil,
+         gatherModel: GatherModel,
          timeHandler: GatherTimeHandler = GatherTimeHandler(),
          updateGatherService: StandardNetworkService = StandardNetworkService(resourcePath: "/api/gathers", authenticated: true)) {
+        self.view = view
         self.model = gatherModel
         self.timeHandler = timeHandler
         self.updateGatherService = updateGatherService
     }
-
-    // MARK: - UI decorators
-    var title: String { "Gather in progress" }
     
+    // MARK: - UI decorators
     var formattedCountdownTimerLabelText: String { "\(formattedMinutesDescription):\(formattedSecondsDescription)" }
     
     var formattedActionTitleText: String {
@@ -79,7 +100,7 @@ final class GatherViewModel {
     
     @objc private func updateTimer(_ timer: Timer) {
         timeHandler.decrementTime()
-        delegate?.didUpdateGatherTime()
+        view?.configureSelectedTime()
     }
     
     var minutesComponent: Int { GatherTimeHandler.Component.minutes.rawValue }
@@ -163,12 +184,24 @@ final class GatherViewModel {
     }
     
     // MARK: - Service
-    func endGather(teamAScoreLabelText: String, teamBScoreLabelText: String, completion: @escaping (Bool) -> ()) {
+    func endGather(teamAScoreLabelText: String, teamBScoreLabelText: String) {
+        view?.showLoadingView()
+        
         let score = scoreFormattedDescription(teamAScoreLabelText: teamAScoreLabelText, teamBScoreLabelText: teamBScoreLabelText)
         let winnerTeam = winnerTeamFormattedDescription(teamAScoreLabelText: teamAScoreLabelText, teamBScoreLabelText: teamBScoreLabelText)
         let gatherCreateModel = GatherCreateModel(score: score, winnerTeam: winnerTeam)
         
-        requestUpdateGather(gatherCreateModel, completion: completion)
+        requestUpdateGather(gatherCreateModel) { [weak self] updated in
+            DispatchQueue.main.async {
+                self?.view?.hideLoadingView()
+
+                if !updated {
+                    self?.view?.handleError(title: "Error update", message: "Unable to update gather. Please try again.")
+                } else {
+                    self?.view?.handleSuccessfulEndGather()
+                }
+            }
+        }
     }
     
     private func scoreFormattedDescription(teamAScoreLabelText: String, teamBScoreLabelText: String) -> String {

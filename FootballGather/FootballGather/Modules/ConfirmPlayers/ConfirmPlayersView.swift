@@ -20,7 +20,7 @@ protocol ConfirmPlayersViewProtocol: AnyObject {
 // MARK: - ConfirmPlayersViewDelegate
 protocol ConfirmPlayersViewDelegate: AnyObject {
     func presentAlert(title: String, message: String)
-    func didStartGather()
+    func didStartGather(_ gather: GatherModel)
 }
 
 // MARK: - ConfirmPlayersView
@@ -59,7 +59,7 @@ extension ConfirmPlayersView: ConfirmPlayersViewProtocol {
     }
     
     func handleSuccessfulStartGather() {
-        delegate?.didStartGather()
+        delegate?.didStartGather(presenter.gatherModel!)
     }
 }
 

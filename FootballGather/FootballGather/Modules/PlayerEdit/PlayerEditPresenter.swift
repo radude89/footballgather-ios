@@ -140,7 +140,7 @@ final class PlayerEditPresenter: PlayerEditPresenterProtocol {
     
     private func handleUpdatedPlayerResult(_ playerWasUpdated: Bool) {
         if playerWasUpdated {
-            view?.handleSuccessfulPlayerUpdate()
+            view?.handleSuccessfulPlayerUpdate(editablePlayer)
         } else {
             view?.handleError(title: "Error update", message: "Unable to update player. Please try again.")
         }

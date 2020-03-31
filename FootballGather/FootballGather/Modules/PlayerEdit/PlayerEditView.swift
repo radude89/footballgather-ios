@@ -16,14 +16,14 @@ protocol PlayerEditViewProtocol: AnyObject {
     func showLoadingView()
     func hideLoadingView()
     func handleError(title: String, message: String)
-    func handleSuccessfulPlayerUpdate()
+    func handleSuccessfulPlayerUpdate(_ player: PlayerResponseModel)
 }
 
 // MARK: - PlayerEditViewDelegate
 protocol PlayerEditViewDelegate: AnyObject {
     func addRightBarButtonItem(_ barButtonItem: UIBarButtonItem)
     func presentAlert(title: String, message: String)
-    func didFinishEditingPlayer()
+    func didFinishEditingPlayer(_ player: PlayerResponseModel)
 }
 
 // MARK: - PlayerEditView
@@ -83,8 +83,8 @@ extension PlayerEditView: PlayerEditViewProtocol {
         delegate?.presentAlert(title: title, message: message)
     }
     
-    func handleSuccessfulPlayerUpdate() {
-        delegate?.didFinishEditingPlayer()
+    func handleSuccessfulPlayerUpdate(_ player: PlayerResponseModel) {
+        delegate?.didFinishEditingPlayer(player)
     }
 }
 

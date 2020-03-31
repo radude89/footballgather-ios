@@ -8,16 +8,14 @@
 
 import UIKit
 
-// MARK: - PlayerListTogglable
-protocol PlayerListTogglable: AnyObject {
-    func toggleViewState()
-}
-
 // MARK: - PlayerListViewController
-final class PlayerListViewController: UIViewController {
+final class PlayerListViewController: UIViewController, Coordinatable {
 
     // MARK: - Properties
     @IBOutlet weak var playerListView: PlayerListView!
+    
+    weak var coordinator: Coordinator?
+    private var listCoordinator: PlayerListCoordinator? { coordinator as? PlayerListCoordinator }
 
     // MARK: - Setup methods
     override func viewDidLoad() {
@@ -25,33 +23,22 @@ final class PlayerListViewController: UIViewController {
         setupView()
     }
     
+    func reloadView() {
+        playerListView.loadPlayers()
+    }
+    func didEdit(player: PlayerResponseModel) {
+        playerListView.didEdit(player: player)
+    }
+    
+    func toggleViewState() {
+        playerListView.toggleViewState()
+    }
+    
     private func setupView() {
         let presenter = PlayerListPresenter(view: playerListView)
         playerListView.delegate = self
         playerListView.presenter = presenter
         playerListView.setupView()
-    }
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        switch segue.identifier {
-        case SegueIdentifier.confirmPlayers.rawValue:
-            if let confirmPlayersViewController = segue.destination as? ConfirmPlayersViewController {
-                confirmPlayersViewController.playersDictionary = playerListView.presenter.playersDictionary
-            }
-
-        case SegueIdentifier.playerDetails.rawValue:
-            if let playerDetailsViewController = segue.destination as? PlayerDetailViewController,
-                let player = playerListView.presenter.selectedPlayerForDetails {
-                playerDetailsViewController.delegate = self
-                playerDetailsViewController.player = player
-            }
-
-        case SegueIdentifier.addPlayer.rawValue:
-            (segue.destination as? PlayerAddViewController)?.delegate = self
-
-        default:
-            break
-        }
     }
 
 }
@@ -66,15 +53,20 @@ extension PlayerListViewController: PlayerListViewDelegate {
         navigationItem.rightBarButtonItem = barButtonItem
     }
     
-    func confirmOrAddPlayers(withSegueIdentifier segueIdentifier: String) {
-        performSegue(withIdentifier: segueIdentifier, sender: nil)
+    func viewPlayerDetails(_ player: PlayerResponseModel) {
+        listCoordinator?.navigateToPlayerDetails(player: player)
+    }
+    
+    func addPlayer() {
+        listCoordinator?.navigateToPlayerAddScreen()
+    }
+    
+    func confirmPlayers(with playersDictionary: [TeamSection: [PlayerResponseModel]]) {
+        listCoordinator?.navigateToConfirmPlayersScreen(with: playersDictionary)
     }
     
     func presentAlert(title: String, message: String) {
         AlertHelper.present(in: self, title: title, message: message)
-    }
-    func didRequestPlayerDetails() {
-        performSegue(withIdentifier: SegueIdentifier.playerDetails.rawValue, sender: nil)
     }
     
     func didRequestPlayerDeletion() {
@@ -90,26 +82,5 @@ extension PlayerListViewController: PlayerListViewDelegate {
         alertController.addAction(cancelAction)
 
         present(alertController, animated: true, completion: nil)
-    }
-}
-
-// MARK: - PlayerDetailViewControllerDelegate
-extension PlayerListViewController: PlayerDetailViewControllerDelegate {
-    func didEdit(player: PlayerResponseModel) {
-        playerListView.didEdit(player: player)
-    }
-}
-
-// MARK: - AddPlayerDelegate
-extension PlayerListViewController: AddPlayerDelegate {
-    func playerWasAdded() {
-        playerListView.loadPlayers()
-    }
-}
-
-// MARK: - PlayerListTogglable
-extension PlayerListViewController: PlayerListTogglable {
-    func toggleViewState() {
-        playerListView.toggleViewState()
     }
 }

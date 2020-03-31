@@ -6,13 +6,18 @@
 //  Copyright © 2020 Radu Dan. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
-enum SegueIdentifier: String {
-    case confirmPlayers
-    case playerDetails = "showPlayerDetails"
-    case addPlayer
-    case editPlayer
-    case gather = "startGather"
-    case playerList = "showPlayerList"
+enum Storyboard: String {
+    case main = "Main"
+    
+    static var defaultStoryboard: UIStoryboard {
+        return UIStoryboard(name: Storyboard.main.rawValue, bundle: nil)
+    }
+}
+
+extension UIStoryboard {
+    func instantiateViewController<T>(withIdentifier identifier: String = String(describing: T.self)) -> T {
+        return instantiateViewController(withIdentifier: identifier) as! T
+    }
 }

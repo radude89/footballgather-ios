@@ -8,18 +8,14 @@
 
 import UIKit
 
-// MARK: - AddPlayerDelegate
-protocol AddPlayerDelegate: AnyObject {
-    func playerWasAdded()
-}
-
 // MARK: - PlayerAddViewController
-final class PlayerAddViewController: UIViewController {
+final class PlayerAddViewController: UIViewController, Coordinatable {
 
     // MARK: - Properties
     @IBOutlet weak var playerAddView: PlayerAddView!
     
-    weak var delegate: AddPlayerDelegate?
+    weak var coordinator: Coordinator?
+    private var addCoordinator: PlayerAddCoordinator? { coordinator as? PlayerAddCoordinator }
 
     // MARK: - Setup
     override func viewDidLoad() {
@@ -53,7 +49,6 @@ extension PlayerAddViewController: PlayerAddViewDelegate {
     }
     
     func didAddPlayer() {
-        delegate?.playerWasAdded()
-        navigationController?.popViewController(animated: true)
+        addCoordinator?.playerWasAdded()
     }
 }

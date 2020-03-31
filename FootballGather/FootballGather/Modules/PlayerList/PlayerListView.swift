@@ -12,9 +12,10 @@ import UIKit
 protocol PlayerListViewDelegate: AnyObject {
     func didRequestToChangeTitle(_ title: String)
     func addRightBarButtonItem(_ barButtonItem: UIBarButtonItem)
-    func confirmOrAddPlayers(withSegueIdentifier segueIdentifier: String)
     func presentAlert(title: String, message: String)
-    func didRequestPlayerDetails()
+    func viewPlayerDetails(_ player: PlayerResponseModel)
+    func addPlayer()
+    func confirmPlayers(with playersDictionary: [TeamSection: [PlayerResponseModel]])
     func didRequestPlayerDeletion()
 }
 
@@ -79,7 +80,11 @@ final class PlayerListView: UIView, Loadable {
     }
     
     @IBAction private func confirmOrAddPlayers(_ sender: Any) {
-        delegate?.confirmOrAddPlayers(withSegueIdentifier: presenter.segueIdentifier)
+        if presenter.isInListViewMode {
+            delegate?.addPlayer()
+        } else {
+            delegate?.confirmPlayers(with: presenter.playersDictionary)
+        }
     }
     
 }
@@ -182,17 +187,12 @@ extension PlayerListView: UITableViewDelegate, UITableViewDataSource {
         guard !presenter.playersCollectionIsEmpty else { return }
 
         if presenter.isInListViewMode {
-            presenter.selectPlayerForDisplayingDetails(at: indexPath)
-            navigateToPlayerDetails(forRowAt: indexPath)
+            let player = presenter.selectPlayerForDisplayingDetails(at: indexPath)
+            delegate?.viewPlayerDetails(player)
         } else {
             toggleCellSelection(at: indexPath)
             updateViewForPlayerSelection()
         }
-    }
-
-    private func navigateToPlayerDetails(forRowAt indexPath: IndexPath) {
-        presenter.selectPlayer(at: indexPath)
-        delegate?.didRequestPlayerDetails()
     }
 
     private func toggleCellSelection(at indexPath: IndexPath) {

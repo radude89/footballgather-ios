@@ -1,8 +1,8 @@
 # Football Gather - iOS Side
 
 <p align="center">
-    <a href="https://swift.org"><img src="https://img.shields.io/badge/swift-5.1-orange.svg" alt="Swift 5.1" /></a>
-    <a href="https://developer.apple.com/xcode/"><img src="https://img.shields.io/badge/Xcode-11.3-blue.svg" alt="Xcode 11.3" /></a>
+    <a href="https://swift.org"><img src="https://img.shields.io/badge/swift-5.2-orange.svg" alt="Swift 5.2" /></a>
+    <a href="https://developer.apple.com/xcode/"><img src="https://img.shields.io/badge/Xcode-11.4-blue.svg" alt="Xcode 11.4" /></a>
 </p>
 
 FootballGather is a demo project for friends to get together and play football matches as quick as possible.
@@ -21,7 +21,7 @@ This repo contains the iOS App logic. For the server side version, please check 
 - [x] MVC - Write the iOS app using MVC
 - [x] MVVM - Rewrite the iOS app using MVVM with one way manual binding
 - [x] MVP - Rewrite the iOS  app using MVP
-- [ ] Coordinators - MVP with Coordinators
+- [x] Coordinators - MVP with Coordinators
 - [ ] VIPER - Rewrite the iOS  app using VIPER
 - [ ] VIP - Rewrite the iOS  app using VIP (Clean Swift)
 

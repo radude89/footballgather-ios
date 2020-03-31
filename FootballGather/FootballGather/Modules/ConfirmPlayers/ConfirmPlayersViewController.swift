@@ -9,34 +9,29 @@
 import UIKit
 
 // MARK: - ConfirmPlayersViewController
-final class ConfirmPlayersViewController: UIViewController {
-
+final class ConfirmPlayersViewController: UIViewController, Coordinatable {
+    
     // MARK: - Properties
     @IBOutlet weak var confirmPlayersView: ConfirmPlayersView!
-
+    
     var playersDictionary: [TeamSection: [PlayerResponseModel]]?
-
+    
+    weak var coordinator: Coordinator?
+    private var confirmCoordinator: ConfirmPlayersCoordinator? { coordinator as? ConfirmPlayersCoordinator }
+    
     // MARK: - Setup
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
     }
-
+    
     func setupView() {
         let presenter = ConfirmPlayersPresenter(view: confirmPlayersView, playersDictionary: playersDictionary ?? [:])
         confirmPlayersView.delegate = self
         confirmPlayersView.presenter = presenter
         confirmPlayersView.setupView()
     }
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == SegueIdentifier.gather.rawValue,
-            let gatherViewController = segue.destination as? GatherViewController,
-            let gatherModel = confirmPlayersView.presenter.gatherModel {
-            gatherViewController.gatherModel = gatherModel
-        }
-    }
-
+    
 }
 
 // MARK: - ConfirmPlayersViewDelegate
@@ -45,7 +40,7 @@ extension ConfirmPlayersViewController: ConfirmPlayersViewDelegate {
         AlertHelper.present(in: self, title: title, message: message)
     }
     
-    func didStartGather() {
-        performSegue(withIdentifier: SegueIdentifier.gather.rawValue, sender: nil)
+    func didStartGather(_ gather: GatherModel) {
+        confirmCoordinator?.navigateToGatherScreen(with: gather)
     }
 }

@@ -12,7 +12,6 @@ import Foundation
 protocol PlayerListViewStateDetails {
     var barButtonItemTitle: String { get }
     var actionButtonTitle: String { get }
-    var segueIdentifier: String { get }
 }
 
 // MARK: - PlayerListViewState
@@ -30,10 +29,6 @@ struct PlayerListStateDetails: PlayerListViewStateDetails {
     var barButtonItemTitle: String {
         return "Select"
     }
-
-    var segueIdentifier: String {
-        return SegueIdentifier.addPlayer.rawValue
-    }
     
     var actionButtonTitle: String {
         return "Add player"
@@ -44,10 +39,6 @@ struct PlayerListStateDetails: PlayerListViewStateDetails {
 struct PlayerSelectionStateDetails: PlayerListViewStateDetails {
     var barButtonItemTitle: String {
         return "Cancel"
-    }
-    
-    var segueIdentifier: String {
-        return SegueIdentifier.confirmPlayers.rawValue
     }
     
     var actionButtonTitle: String {

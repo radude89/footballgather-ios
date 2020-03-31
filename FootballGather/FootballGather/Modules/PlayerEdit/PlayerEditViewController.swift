@@ -8,22 +8,18 @@
 
 import UIKit
 
-// MARK: - PlayerEditViewControllerDelegate
-protocol PlayerEditViewControllerDelegate: AnyObject {
-    func didFinishEditing(player: PlayerResponseModel)
-}
-
 // MARK: - PlayerEditViewController
-final class PlayerEditViewController: UIViewController {
+final class PlayerEditViewController: UIViewController, Coordinatable {
 
     // MARK: - Properties
     @IBOutlet weak var playerEditView: PlayerEditView!
-
-    weak var delegate: PlayerEditViewControllerDelegate?
     
     var viewType: PlayerEditViewType = .text
     var playerEditModel: PlayerEditModel?
     var playerItemsEditModel: PlayerItemsEditModel?
+    
+    weak var coordinator: Coordinator?
+    private var editCoordinator: PlayerEditCoordinator? { coordinator as? PlayerEditCoordinator }
 
     // MARK: - Setup
     override func viewDidLoad() {
@@ -61,8 +57,7 @@ extension PlayerEditViewController: PlayerEditViewDelegate {
         AlertHelper.present(in: self, title: title, message: message)
     }
     
-    func didFinishEditingPlayer() {
-        delegate?.didFinishEditing(player: playerEditView.presenter.editablePlayer)
-        navigationController?.popViewController(animated: true)
+    func didFinishEditingPlayer(_ player: PlayerResponseModel) {
+        editCoordinator?.didFinishEditingPlayer(player)
     }
 }

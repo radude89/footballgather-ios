@@ -15,14 +15,12 @@ protocol PlayerListPresenterProtocol: AnyObject {
     var barButtonItemIsEnabled: Bool { get }
     var actionButtonIsEnabled: Bool { get }
     var actionButtonTitle: String { get }
-    var segueIdentifier: String { get }
     var playersCollectionIsEmpty: Bool { get }
     var numberOfRows: Int { get }
     var isInListViewMode: Bool { get }
     var playersCanPlay: Bool { get }
     var selectedPlayersTitle: String { get }
     var indexPathForDeletion: IndexPath? { get set }
-    var selectedPlayerForDetails: PlayerResponseModel? { get }
     var playersDictionary: [TeamSection: [PlayerResponseModel]] { get }
     
     func toggleViewState()
@@ -35,7 +33,7 @@ protocol PlayerListPresenterProtocol: AnyObject {
     func playerPositionDescription(at indexPath: IndexPath) -> String
     func playerSkillDescription(at indexPath: IndexPath) -> String
     func playerIsSelected(at indexPath: IndexPath) -> Bool
-    func selectPlayerForDisplayingDetails(at indexPath: IndexPath)
+    func selectPlayerForDisplayingDetails(at indexPath: IndexPath) -> PlayerResponseModel
     func selectPlayer(at indexPath: IndexPath)
     func updateSelectedPlayers(isSelected: Bool, at indexPath: IndexPath)
     func index(of player: PlayerResponseModel) -> Int?
@@ -55,7 +53,6 @@ final class PlayerListPresenter: PlayerListPresenterProtocol {
     }
     
     private(set) var selectedPlayersDictionary: [Int: PlayerResponseModel] = [:]
-    private(set) var selectedPlayerForDetails: PlayerResponseModel?
     
     var indexPathForDeletion: IndexPath?
     
@@ -92,10 +89,6 @@ final class PlayerListPresenter: PlayerListPresenterProtocol {
     
     var actionButtonTitle: String {
         return viewStateDetails.actionButtonTitle
-    }
-    
-    var segueIdentifier: String {
-        return viewStateDetails.segueIdentifier
     }
     
     var playersCollectionIsEmpty: Bool {
@@ -212,8 +205,8 @@ final class PlayerListPresenter: PlayerListPresenterProtocol {
         return selectedPlayersDictionary[indexPath.row] != nil
     }
     
-    func selectPlayerForDisplayingDetails(at indexPath: IndexPath) {
-        selectedPlayerForDetails = players[indexPath.row]
+    func selectPlayerForDisplayingDetails(at indexPath: IndexPath) -> PlayerResponseModel {
+        return players[indexPath.row]
     }
     
     func selectPlayer(at indexPath: IndexPath) {

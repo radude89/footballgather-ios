@@ -8,19 +8,16 @@
 
 import UIKit
 
-// MARK: - PlayerDetailViewControllerDelegate
-protocol PlayerDetailViewControllerDelegate: AnyObject {
-    func didEdit(player: PlayerResponseModel)
-}
-
 // MARK: - PlayerDetailViewController
-final class PlayerDetailViewController: UIViewController {
+final class PlayerDetailViewController: UIViewController, Coordinatable {
 
     // MARK: - Properties
     @IBOutlet weak var playerDetailView: PlayerDetailView!
-
-    weak var delegate: PlayerDetailViewControllerDelegate?
+    
     var player: PlayerResponseModel?
+    
+    weak var coordinator: Coordinator?
+    private var detailCoordinator: PlayerDetailCoordinator? { coordinator as? PlayerDetailCoordinator }
 
     // MARK: - View life cycle
     override func viewDidLoad() {
@@ -35,21 +32,8 @@ final class PlayerDetailViewController: UIViewController {
         reloadData()
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard segue.identifier == SegueIdentifier.editPlayer.rawValue,
-            let destinationViewController = segue.destination as? PlayerEditViewController else {
-                return
-        }
-        
-        let presenter = playerDetailView.presenter
-        destinationViewController.viewType = presenter?.destinationViewType ?? .text
-        destinationViewController.playerEditModel = presenter?.playerEditModel
-        destinationViewController.playerItemsEditModel = presenter?.playerItemsEditModel
-        destinationViewController.delegate = self
-    }
-
     // MARK: - Private methods
-    private func setupTitle() {
+    func setupTitle() {
         title = playerDetailView.title
     }
     
@@ -61,25 +45,24 @@ final class PlayerDetailViewController: UIViewController {
         playerDetailView.presenter = presenter
     }
 
-    private func reloadData() {
+    func reloadData() {
         playerDetailView.reloadData()
+    }
+    
+    func updateData(player: PlayerResponseModel) {
+        playerDetailView.updateData(player: player)
     }
 
 }
 
 // MARK: - PlayerDetailViewDelegate
 extension PlayerDetailViewController: PlayerDetailViewDelegate {
-    func didRequestEditView() {
-        performSegue(withIdentifier: SegueIdentifier.editPlayer.rawValue, sender: nil)
-    }
-}
-
-// MARK: - PlayerEditViewControllerDelegate
-extension PlayerDetailViewController: PlayerEditViewControllerDelegate {
-    func didFinishEditing(player: PlayerResponseModel) {
-        setupTitle()
-        playerDetailView.updateData(player: player)
-        reloadData()
-        delegate?.didEdit(player: player)
+    func didRequestEditView(with viewType: PlayerEditViewType,
+                            playerEditModel: PlayerEditModel?,
+                            playerItemsEditModel: PlayerItemsEditModel?) {
+        
+        detailCoordinator?.navigateToEditScreen(viewType: viewType,
+                                                playerEditModel: playerEditModel,
+                                                playerItemsEditModel: playerItemsEditModel)
     }
 }

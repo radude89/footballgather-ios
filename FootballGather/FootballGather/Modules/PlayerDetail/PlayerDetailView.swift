@@ -18,7 +18,7 @@ protocol PlayerDetailViewProtocol: AnyObject {
 
 // MARK: - PlayerDetailViewDelegate
 protocol PlayerDetailViewDelegate: AnyObject {
-    func didRequestEditView()
+    func didRequestEditView(with viewType: PlayerEditViewType, playerEditModel: PlayerEditModel?, playerItemsEditModel: PlayerItemsEditModel?)
 }
 
 // MARK: - PlayerDetailView
@@ -72,6 +72,9 @@ extension PlayerDetailView: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         presenter.selectPlayerRow(at: indexPath)
-        delegate?.didRequestEditView()
+        
+        delegate?.didRequestEditView(with: presenter.destinationViewType,
+                                     playerEditModel: presenter.playerEditModel,
+                                     playerItemsEditModel: presenter.playerItemsEditModel)
     }
 }

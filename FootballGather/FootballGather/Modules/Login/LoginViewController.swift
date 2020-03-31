@@ -9,10 +9,13 @@
 import UIKit
 
 // MARK: - LoginViewController
-final class LoginViewController: UIViewController {
+final class LoginViewController: UIViewController, Coordinatable {
 
     @IBOutlet weak var loginView: LoginView!
-
+    
+    weak var coordinator: Coordinator?
+    private var loginCoordinator: LoginCoordinator? { coordinator as? LoginCoordinator }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -34,10 +37,10 @@ extension LoginViewController: LoginViewDelegate {
     }
     
     func didLogin() {
-        performSegue(withIdentifier: SegueIdentifier.playerList.rawValue, sender: nil)
+        loginCoordinator?.navigateToPlayerList()
     }
     
     func didRegister() {
-        performSegue(withIdentifier: SegueIdentifier.playerList.rawValue, sender: nil)
+        loginCoordinator?.navigateToPlayerList()
     }
 }

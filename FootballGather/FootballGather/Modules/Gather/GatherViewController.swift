@@ -9,12 +9,15 @@
 import UIKit
 
 // MARK: - GatherViewController
-final class GatherViewController: UIViewController {
+final class GatherViewController: UIViewController, Coordinatable {
 
     // MARK: - Properties
     @IBOutlet weak var gatherView: GatherView!
 
     var gatherModel: GatherModel?
+    
+    weak var coordinator: Coordinator?
+    private var gatherCoordinator: GatherCoordinator? { coordinator as? GatherCoordinator }
 
     // MARK: - Setup
     override func viewDidLoad() {
@@ -46,16 +49,7 @@ extension GatherViewController: GatherViewDelegate {
     }
     
     func didEndGather() {
-        guard let playerListTogglable = navigationController?.viewControllers.first(where: { $0 is PlayerListTogglable }) as? PlayerListTogglable else {
-            return
-        }
-
-        playerListTogglable.toggleViewState()
-
-        if let playerListViewController = playerListTogglable as? UIViewController {
-            navigationController?.popToViewController(playerListViewController, animated: true)
-        }
-
+        gatherCoordinator?.didEndGather()
     }
     
     func presentConfirmAlertEndGather() {

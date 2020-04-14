@@ -45,7 +45,6 @@ struct AddPlayerToGatherService: NetworkService {
             completion(.success(true))
         }
     }
-    
 }
 
 // MARK: - Model

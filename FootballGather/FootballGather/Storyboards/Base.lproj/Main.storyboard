@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -11,7 +11,7 @@
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController storyboardIdentifier="LoginViewController" id="BYZ-38-t0r" customClass="LoginViewController" customModule="FootballGather" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC" customClass="LoginView" customModule="FootballGather" customModuleProvider="target">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -35,7 +35,7 @@
                                                 <rect key="frame" x="0.0" y="84" width="335" height="30"/>
                                                 <state key="normal" title="Login"/>
                                                 <connections>
-                                                    <action selector="login:" destination="8bC-Xf-vdC" eventType="touchUpInside" id="PFB-Sd-XpF"/>
+                                                    <action selector="login:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Qb2-Yy-kcO"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -69,7 +69,7 @@
                                         <rect key="frame" x="0.0" y="36.333333333333371" width="335" height="30"/>
                                         <state key="normal" title="Register"/>
                                         <connections>
-                                            <action selector="register:" destination="8bC-Xf-vdC" eventType="touchUpInside" id="Zjw-0Z-7gs"/>
+                                            <action selector="register:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ab1-IB-3P2"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -87,15 +87,12 @@
                             <constraint firstItem="h9n-nU-Mbs" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="qhO-G3-UAm"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <connections>
-                            <outlet property="passwordTextField" destination="fer-q6-FM5" id="Pio-Uv-Syy"/>
-                            <outlet property="rememberMeSwitch" destination="wAb-xZ-fbb" id="5gs-3f-l0Z"/>
-                            <outlet property="usernameTextField" destination="W60-nE-cdb" id="tZt-fh-bCH"/>
-                        </connections>
                     </view>
                     <navigationItem key="navigationItem" id="lTb-RA-SHE"/>
                     <connections>
-                        <outlet property="loginView" destination="8bC-Xf-vdC" id="Yny-Ln-kEd"/>
+                        <outlet property="passwordTextField" destination="fer-q6-FM5" id="RXx-lt-aLN"/>
+                        <outlet property="rememberMeSwitch" destination="wAb-xZ-fbb" id="J9q-di-P1s"/>
+                        <outlet property="usernameTextField" destination="W60-nE-cdb" id="3Ic-0e-4nF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -106,7 +103,7 @@
         <scene sceneID="OMz-A9-vvV">
             <objects>
                 <viewController storyboardIdentifier="PlayerListViewController" id="wzm-VA-DL5" customClass="PlayerListViewController" customModule="FootballGather" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="xLf-jt-P28" customClass="PlayerListView" customModule="FootballGather" customModuleProvider="target">
+                    <view key="view" contentMode="scaleToFill" id="xLf-jt-P28">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -173,8 +170,8 @@
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
-                                    <outlet property="dataSource" destination="xLf-jt-P28" id="U6W-y0-GXr"/>
-                                    <outlet property="delegate" destination="xLf-jt-P28" id="mmX-kz-Fau"/>
+                                    <outlet property="dataSource" destination="wzm-VA-DL5" id="KI4-7P-n1t"/>
+                                    <outlet property="delegate" destination="wzm-VA-DL5" id="EEh-My-y5e"/>
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lpY-ht-MEh">
@@ -191,7 +188,7 @@
                                         <rect key="frame" x="150.66666666666666" y="25" width="74" height="30"/>
                                         <state key="normal" title="Add Player"/>
                                         <connections>
-                                            <action selector="confirmOrAddPlayers:" destination="xLf-jt-P28" eventType="touchUpInside" id="NIJ-i2-Sxv"/>
+                                            <action selector="confirmOrAddPlayers:" destination="wzm-VA-DL5" eventType="touchUpInside" id="Bl1-sh-B8e"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -217,13 +214,10 @@
                             <constraint firstItem="lpY-ht-MEh" firstAttribute="trailing" secondItem="zLJ-xj-MU5" secondAttribute="trailing" id="rzX-AE-fq9"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="zLJ-xj-MU5"/>
-                        <connections>
-                            <outlet property="bottomActionButton" destination="Tj5-Yq-gmB" id="hKH-cP-7IQ"/>
-                            <outlet property="playerTableView" destination="CiU-2R-yXK" id="Oyj-IO-cPv"/>
-                        </connections>
                     </view>
                     <connections>
-                        <outlet property="playerListView" destination="xLf-jt-P28" id="yIM-9x-MxQ"/>
+                        <outlet property="bottomActionButton" destination="Tj5-Yq-gmB" id="e72-3k-1AE"/>
+                        <outlet property="playerTableView" destination="CiU-2R-yXK" id="hnK-7S-NPl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sGj-qk-t1v" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -234,7 +228,7 @@
         <scene sceneID="fCc-Iq-Qlk">
             <objects>
                 <viewController storyboardIdentifier="PlayerDetailViewController" id="gwz-hl-jIY" customClass="PlayerDetailViewController" customModule="FootballGather" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="3xa-x6-lgY" customClass="PlayerDetailView" customModule="FootballGather" customModuleProvider="target">
+                    <view key="view" contentMode="scaleToFill" id="3xa-x6-lgY">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -281,8 +275,8 @@
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
-                                    <outlet property="dataSource" destination="3xa-x6-lgY" id="PSD-ez-kjj"/>
-                                    <outlet property="delegate" destination="3xa-x6-lgY" id="SOd-be-nnb"/>
+                                    <outlet property="dataSource" destination="gwz-hl-jIY" id="yLp-lf-3fp"/>
+                                    <outlet property="delegate" destination="gwz-hl-jIY" id="g19-Yl-erU"/>
                                 </connections>
                             </tableView>
                         </subviews>
@@ -294,12 +288,9 @@
                             <constraint firstItem="gE3-ts-FU9" firstAttribute="trailing" secondItem="Esa-zQ-05e" secondAttribute="trailing" id="ezS-x3-Daz"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Esa-zQ-05e"/>
-                        <connections>
-                            <outlet property="playerDetailTableView" destination="gE3-ts-FU9" id="QeD-zJ-nAd"/>
-                        </connections>
                     </view>
                     <connections>
-                        <outlet property="playerDetailView" destination="3xa-x6-lgY" id="nab-A1-NMx"/>
+                        <outlet property="playerDetailTableView" destination="gE3-ts-FU9" id="tKi-Wr-SSB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AFU-Ah-pgM" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -310,7 +301,7 @@
         <scene sceneID="MbB-Bc-3JU">
             <objects>
                 <viewController storyboardIdentifier="PlayerEditViewController" id="ZMX-s1-dEC" customClass="PlayerEditViewController" customModule="FootballGather" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Umm-iS-YAf" customClass="PlayerEditView" customModule="FootballGather" customModuleProvider="target">
+                    <view key="view" contentMode="scaleToFill" id="Umm-iS-YAf">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -333,8 +324,8 @@
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
-                                    <outlet property="dataSource" destination="Umm-iS-YAf" id="gHS-4O-Wic"/>
-                                    <outlet property="delegate" destination="Umm-iS-YAf" id="Pme-h7-K79"/>
+                                    <outlet property="dataSource" destination="ZMX-s1-dEC" id="vco-fL-QJ7"/>
+                                    <outlet property="delegate" destination="ZMX-s1-dEC" id="Flu-0w-NBu"/>
                                 </connections>
                             </tableView>
                         </subviews>
@@ -349,13 +340,10 @@
                             <constraint firstItem="Md0-63-tZk" firstAttribute="leading" secondItem="6da-RJ-Ye5" secondAttribute="leading" constant="20" id="qn2-6T-ME4"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6da-RJ-Ye5"/>
-                        <connections>
-                            <outlet property="playerEditTextField" destination="Md0-63-tZk" id="Imp-dE-lAH"/>
-                            <outlet property="playerTableView" destination="PjW-pS-m9a" id="5i0-TW-oHD"/>
-                        </connections>
                     </view>
                     <connections>
-                        <outlet property="playerEditView" destination="Umm-iS-YAf" id="lwR-Pl-gdg"/>
+                        <outlet property="playerEditTextField" destination="Md0-63-tZk" id="p8j-1m-HZP"/>
+                        <outlet property="playerTableView" destination="PjW-pS-m9a" id="rmH-G1-C1W"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wax-4A-g6f" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -366,7 +354,7 @@
         <scene sceneID="lvj-3W-q6x">
             <objects>
                 <viewController storyboardIdentifier="ConfirmPlayersViewController" id="7zc-k2-1Q8" customClass="ConfirmPlayersViewController" customModule="FootballGather" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="ZVa-y0-fKQ" customClass="ConfirmPlayersView" customModule="FootballGather" customModuleProvider="target">
+                    <view key="view" contentMode="scaleToFill" id="ZVa-y0-fKQ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -384,8 +372,8 @@
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
-                                    <outlet property="dataSource" destination="ZVa-y0-fKQ" id="zVK-2w-UtG"/>
-                                    <outlet property="delegate" destination="ZVa-y0-fKQ" id="jv3-BO-lZU"/>
+                                    <outlet property="dataSource" destination="7zc-k2-1Q8" id="kMv-Vr-qWI"/>
+                                    <outlet property="delegate" destination="7zc-k2-1Q8" id="rwA-E8-wjB"/>
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="63Q-xO-a9g">
@@ -403,7 +391,7 @@
                                         <rect key="frame" x="145" y="25" width="85" height="30"/>
                                         <state key="normal" title="Start Gather"/>
                                         <connections>
-                                            <action selector="startGather:" destination="ZVa-y0-fKQ" eventType="touchUpInside" id="GyZ-c2-vet"/>
+                                            <action selector="startGather:" destination="7zc-k2-1Q8" eventType="touchUpInside" id="IoN-LH-6G8"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -429,13 +417,10 @@
                             <constraint firstItem="63Q-xO-a9g" firstAttribute="leading" secondItem="m4k-1l-8YX" secondAttribute="leading" id="z2x-Wl-luu"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="m4k-1l-8YX"/>
-                        <connections>
-                            <outlet property="playerTableView" destination="ZZy-2t-eD5" id="9gF-pe-UYi"/>
-                            <outlet property="startGatherButton" destination="buT-w8-HY0" id="il3-E5-r0H"/>
-                        </connections>
                     </view>
                     <connections>
-                        <outlet property="confirmPlayersView" destination="ZVa-y0-fKQ" id="t1a-YL-Q4v"/>
+                        <outlet property="playerTableView" destination="ZZy-2t-eD5" id="tJH-ia-94F"/>
+                        <outlet property="startGatherButton" destination="buT-w8-HY0" id="I71-s7-gVB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="loM-UE-DCc" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -446,7 +431,7 @@
         <scene sceneID="m6m-lG-Fbr">
             <objects>
                 <viewController storyboardIdentifier="GatherViewController" id="oda-mr-oOx" customClass="GatherViewController" customModule="FootballGather" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="fh5-u7-cj4" customClass="GatherView" customModule="FootballGather" customModuleProvider="target">
+                    <view key="view" contentMode="scaleToFill" id="fh5-u7-cj4">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -547,7 +532,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="125" height="50"/>
                                                 <state key="normal" title="Cancel"/>
                                                 <connections>
-                                                    <action selector="cancelTimer:" destination="fh5-u7-cj4" eventType="touchDragInside" id="8Uu-F2-zPj"/>
+                                                    <action selector="cancelTimer:" destination="oda-mr-oOx" eventType="touchUpInside" id="wpQ-cc-0jY"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jqw-1K-VFz" userLabel="Set">
@@ -555,14 +540,14 @@
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                 <state key="normal" title="Set"/>
                                                 <connections>
-                                                    <action selector="setTimer:" destination="fh5-u7-cj4" eventType="touchUpInside" id="NJX-ne-0W9"/>
+                                                    <action selector="setTimer:" destination="oda-mr-oOx" eventType="touchUpInside" id="dbR-ey-ZfY"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yZ9-Y3-DWj">
                                                 <rect key="frame" x="250" y="0.0" width="125" height="50"/>
                                                 <state key="normal" title="Start"/>
                                                 <connections>
-                                                    <action selector="actionTimer:" destination="fh5-u7-cj4" eventType="touchUpInside" id="lg6-Bj-DpA"/>
+                                                    <action selector="actionTimer:" destination="oda-mr-oOx" eventType="touchUpInside" id="F3N-pc-Jdu"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -608,8 +593,8 @@
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
-                                    <outlet property="dataSource" destination="fh5-u7-cj4" id="aLq-kR-Ai6"/>
-                                    <outlet property="delegate" destination="fh5-u7-cj4" id="ByH-Sr-cYI"/>
+                                    <outlet property="dataSource" destination="oda-mr-oOx" id="mgb-dX-e91"/>
+                                    <outlet property="delegate" destination="oda-mr-oOx" id="4gt-5M-U1n"/>
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nw4-AY-fUy">
@@ -626,7 +611,7 @@
                                         <rect key="frame" x="149" y="25" width="77" height="30"/>
                                         <state key="normal" title="End Gather"/>
                                         <connections>
-                                            <action selector="endGather:" destination="fh5-u7-cj4" eventType="touchDragInside" id="8vT-hr-Bdv"/>
+                                            <action selector="endGather:" destination="oda-mr-oOx" eventType="touchUpInside" id="1RX-HF-hOi"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -649,8 +634,8 @@
                                             <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xxJ-l9-Zck">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="278"/>
                                                 <connections>
-                                                    <outlet property="dataSource" destination="fh5-u7-cj4" id="QJg-f7-oAM"/>
-                                                    <outlet property="delegate" destination="fh5-u7-cj4" id="CAG-n3-rYq"/>
+                                                    <outlet property="dataSource" destination="oda-mr-oOx" id="zA9-lG-2N1"/>
+                                                    <outlet property="delegate" destination="oda-mr-oOx" id="hJf-rw-YgG"/>
                                                 </connections>
                                             </pickerView>
                                         </subviews>
@@ -671,13 +656,13 @@
                                         <items>
                                             <barButtonItem systemItem="cancel" id="pYs-NA-fcy">
                                                 <connections>
-                                                    <action selector="timerCancel:" destination="fh5-u7-cj4" id="ATL-Nd-HZ3"/>
+                                                    <action selector="timerCancel:" destination="oda-mr-oOx" id="pSv-ex-Esn"/>
                                                 </connections>
                                             </barButtonItem>
                                             <barButtonItem style="plain" systemItem="flexibleSpace" id="Nmb-ZA-vvR"/>
                                             <barButtonItem systemItem="done" id="3ig-MY-sAj">
                                                 <connections>
-                                                    <action selector="timerDone:" destination="fh5-u7-cj4" id="QYZ-6p-HDO"/>
+                                                    <action selector="timerDone:" destination="oda-mr-oOx" id="FEN-Dw-Bbp"/>
                                                 </connections>
                                             </barButtonItem>
                                         </items>
@@ -712,18 +697,15 @@
                             <constraint firstItem="etp-ft-rrR" firstAttribute="trailing" secondItem="70F-R0-BzY" secondAttribute="trailing" id="zbg-lp-tHf"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="etp-ft-rrR"/>
-                        <connections>
-                            <outlet property="actionTimerButton" destination="yZ9-Y3-DWj" id="Mmt-OU-3WC"/>
-                            <outlet property="playerTableView" destination="CQH-B3-PgQ" id="pr8-1F-6U8"/>
-                            <outlet property="scoreLabelView" destination="vEV-uy-VTg" id="6TV-4F-WqC"/>
-                            <outlet property="scoreStepper" destination="Tmw-MR-HQY" id="0zE-00-jpP"/>
-                            <outlet property="timePickerView" destination="xxJ-l9-Zck" id="g4M-6N-Xzw"/>
-                            <outlet property="timerLabel" destination="Nzh-0z-jVZ" id="Ple-Gf-0Kf"/>
-                            <outlet property="timerView" destination="CXw-UX-JfJ" id="HEe-Yk-NhL"/>
-                        </connections>
                     </view>
                     <connections>
-                        <outlet property="gatherView" destination="fh5-u7-cj4" id="BbP-qj-RUP"/>
+                        <outlet property="actionTimerButton" destination="yZ9-Y3-DWj" id="N1C-Nt-WJp"/>
+                        <outlet property="playerTableView" destination="CQH-B3-PgQ" id="bWU-Cs-Tf7"/>
+                        <outlet property="scoreLabelView" destination="vEV-uy-VTg" id="p1U-ZP-xIP"/>
+                        <outlet property="scoreStepper" destination="Tmw-MR-HQY" id="M0p-pg-sPJ"/>
+                        <outlet property="timePickerView" destination="xxJ-l9-Zck" id="y7a-dI-Ms8"/>
+                        <outlet property="timerLabel" destination="Nzh-0z-jVZ" id="wSf-xt-dzM"/>
+                        <outlet property="timerView" destination="CXw-UX-JfJ" id="VaK-AV-WHd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PNS-2i-lI7" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -734,7 +716,7 @@
         <scene sceneID="5qF-P6-UDr">
             <objects>
                 <viewController storyboardIdentifier="PlayerAddViewController" id="Uyo-Ur-tjf" customClass="PlayerAddViewController" customModule="FootballGather" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="MmW-fk-lui" customClass="PlayerAddView" customModule="FootballGather" customModuleProvider="target">
+                    <view key="view" contentMode="scaleToFill" id="MmW-fk-lui">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -742,9 +724,6 @@
                                 <rect key="frame" x="20" y="89" width="335" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no" textContentType="name"/>
-                                <connections>
-                                    <outlet property="delegate" destination="MmW-fk-lui" id="PwH-Ro-JqI"/>
-                                </connections>
                             </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -754,12 +733,9 @@
                             <constraint firstItem="hZn-qt-H4u" firstAttribute="trailing" secondItem="eeX-pJ-rrj" secondAttribute="trailing" constant="20" id="ovp-ND-IF2"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="hZn-qt-H4u"/>
-                        <connections>
-                            <outlet property="playerNameTextField" destination="eeX-pJ-rrj" id="3iR-rL-Qf5"/>
-                        </connections>
                     </view>
                     <connections>
-                        <outlet property="playerAddView" destination="MmW-fk-lui" id="AOZ-50-pfN"/>
+                        <outlet property="playerNameTextField" destination="eeX-pJ-rrj" id="XgV-hE-RsQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Uqm-vQ-w1I" userLabel="First Responder" sceneMemberID="firstResponder"/>

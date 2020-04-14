@@ -8,104 +8,106 @@
 
 import Foundation
 
-protocol LoginPresenterProtocol: AnyObject {
-    var rememberUsername: Bool { get }
-    var username: String? { get }
+// MARK:- LoginPresenter
+final class LoginPresenter: LoginPresentable {
     
-    func setRememberUsername(_ value: Bool)
-    func setUsername(_ username: String?)
-    func performLogin(withUsername username: String?, andPassword password: String?)
-    func performRegister(withUsername username: String?, andPassword password: String?)
+    // MARK: - Properties
+    weak var view: LoginViewProtocol?
+    var interactor: LoginInteractorProtocol
+    var router: LoginRouterProtocol
+    
+    // MARK: - Public API
+    init(view: LoginViewProtocol? = nil,
+         interactor: LoginInteractorProtocol = LoginInteractor(),
+         router: LoginRouterProtocol = LoginRouter()) {
+        self.view = view
+        self.interactor = interactor
+        self.router = router
+    }
+    
 }
 
-final class LoginPresenter: LoginPresenterProtocol {
-    private weak var view: LoginViewProtocol?
-    private let loginService: LoginService
-    private let usersService: StandardNetworkService
-    private let userDefaults: FootballGatherUserDefaults
-    private let keychain: FootbalGatherKeychain
-    
-    init(view: LoginViewProtocol? = nil,
-         loginService: LoginService = LoginService(),
-         usersService: StandardNetworkService = StandardNetworkService(resourcePath: "/api/users"),
-         userDefaults: FootballGatherUserDefaults = .shared,
-         keychain: FootbalGatherKeychain = .shared) {
-        self.view = view
-        self.loginService = loginService
-        self.usersService = usersService
-        self.userDefaults = userDefaults
-        self.keychain = keychain
-    }
-    
-    var rememberUsername: Bool {
-        return userDefaults.rememberUsername ?? true
-    }
-    
-    var username: String? {
-        return keychain.username
-    }
-    
-    func setRememberUsername(_ value: Bool) {
-        userDefaults.rememberUsername = value
-    }
-    
-    func setUsername(_ username: String?) {
-        keychain.username = username
-    }
-    
-    func performLogin(withUsername username: String?, andPassword password: String?) {
-        guard let userText = username, userText.isEmpty == false,
-            let passwordText = password, passwordText.isEmpty == false else {
-                view?.handleError(title: "Error", message: "Both fields are mandatory.")
-                return
-        }
-
-        view?.showLoadingView()
-    
-        let requestModel = UserRequestModel(username: userText, password: passwordText)
-        loginService.login(user: requestModel) { [weak self] result in
-            DispatchQueue.main.async {
-                self?.view?.hideLoadingView()
-                
-                switch result {
-                case .failure(let error):
-                    self?.view?.handleError(title: "Error", message: String(describing: error))
-                    
-                case .success(_):
-                    self?.view?.handleLoginSuccessful()
-                }
-            }
-        }
-    }
-    
-    func performRegister(withUsername username: String?, andPassword password: String?) {
-        guard let userText = username, userText.isEmpty == false,
-            let passwordText = password, passwordText.isEmpty == false else {
-                view?.handleError(title: "Error", message: "Both fields are mandatory.")
-                return
-        }
+// MARK: - View Configuration
+extension LoginPresenter: LoginPresenterViewConfiguration {
+    func viewDidLoad() {
+        let rememberUsername = interactor.rememberUsername
         
-        guard let hashedPasssword = Crypto.hash(message: passwordText) else {
-            fatalError("Unable to hash password")
+        view?.setRememberMeSwitch(isOn: rememberUsername)
+        
+        if rememberUsername {
+            view?.setUsername(interactor.username)
         }
+    }
+}
 
+// MARK: - Interactor
+extension LoginPresenter: LoginPresenterServiceInteractable {
+    func performLogin() {
+        guard validateCredentials() else { return }
+        
         view?.showLoadingView()
         
-        let requestModel = UserRequestModel(username: userText, password: hashedPasssword)
-        usersService.create(requestModel) { [weak self] result in
-            DispatchQueue.main.async {
-                self?.view?.hideLoadingView()
-                
-                switch result {
-                case .failure(let error):
-                    self?.view?.handleError(title: "Error", message: String(describing: error))
-                    
-                case .success(let resourceId):
-                    print("Created user: \(resourceId)")
-                    self?.view?.handleRegisterSuccessful()
-                }
-            }
-        }
+        interactor.login(username: username!, password: password!)
     }
     
+    func performRegister() {
+        guard validateCredentials() else { return }
+        
+        view?.showLoadingView()
+        
+        interactor.register(username: username!, password: password!)
+    }
+    
+    private func validateCredentials() -> Bool {
+        guard credentialsAreValid else {
+            view?.handleError(title: "Error", message: "Both fields are mandatory.")
+            return false
+        }
+        
+        return true
+    }
+    
+    private var credentialsAreValid: Bool {
+        username?.isEmpty == false && password?.isEmpty == false
+    }
+    
+    private var username: String? {
+        view?.usernameText
+    }
+    
+    private var password: String? {
+        view?.passwordText
+    }
+}
+
+// MARK: - Service Handler
+extension LoginPresenter: LoginPresenterServiceHandler {
+    func serviceFailedWithError(_ error: Error) {
+        view?.hideLoadingView()
+        view?.handleError(title: "Error", message: String(describing: error))
+    }
+    
+    func didLogin() {
+        handleAuthCompletion()
+    }
+    
+    func didRegister() {
+        handleAuthCompletion()
+    }
+    
+    private func handleAuthCompletion() {
+        storeUsernameAndRememberMe()
+        view?.hideLoadingView()
+        router.showPlayerList()
+    }
+    
+    private func storeUsernameAndRememberMe() {
+        let rememberMe = view?.rememberMeIsOn ?? true
+        
+        if rememberMe {
+            interactor.setUsername(view?.usernameText)
+        } else {
+            interactor.setUsername(nil)
+        }
+    }
 }

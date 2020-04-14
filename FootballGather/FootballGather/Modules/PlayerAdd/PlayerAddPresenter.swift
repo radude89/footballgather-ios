@@ -8,45 +8,69 @@
 
 import Foundation
 
-// MARK: - PlayerAddPresenterProtocol
-protocol PlayerAddPresenterProtocol: AnyObject {
-    func addPlayer(withName name: String?)
-    func doneButtonIsEnabled(forText text: String?) -> Bool
+// MARK: - PlayerAddPresenter
+final class PlayerAddPresenter: PlayerAddPresentable {
+    
+    // MARK: - Properties
+    weak var view: PlayerAddViewProtocol?
+    var interactor: PlayerAddInteractorProtocol
+    var router: PlayerAddRouterProtocol
+    weak var delegate: PlayerAddDelegate?
+    
+    // MARK: - Init
+    init(view: PlayerAddViewProtocol? = nil,
+         interactor: PlayerAddInteractorProtocol = PlayerAddInteractor(),
+         router: PlayerAddRouterProtocol = PlayerAddRouter(),
+         delegate: PlayerAddDelegate? = nil) {
+        self.view = view
+        self.interactor = interactor
+        self.router = router
+        self.delegate = delegate
+    }
+    
 }
 
-// MARK: - PlayerAddPresenter
-final class PlayerAddPresenter: PlayerAddPresenterProtocol {
-    
-    private weak var view: PlayerAddViewProtocol?
-    private let service: StandardNetworkService
-    
-    init(view: PlayerAddViewProtocol? = nil,
-         service: StandardNetworkService = StandardNetworkService(resourcePath: "/api/players", authenticated: true)) {
-        self.view = view
-        self.service = service
+// MARK: - View Configuration
+extension PlayerAddPresenter: PlayerAddPresenterViewConfiguration {
+    func viewDidLoad() {
+        view?.configureTitle("Add Player")
+        view?.setupBarButtonItem(title: "Done")
+        view?.setBarButtonState(isEnabled: false)
+        view?.setupTextField(placeholder: "Enter name of the player")
     }
-    
-    func addPlayer(withName name: String?) {
-        guard let name = name else { return }
+}
+
+// MARK: - TextField Handler
+extension PlayerAddPresenter: PlayerAddPresenterTextFieldHandler {
+    func textFieldDidChange() {
+        let isEnabled = view?.textFieldText?.isEmpty == false
+        view?.setBarButtonState(isEnabled: isEnabled)
+    }
+}
+
+// MARK: - Interactor
+extension PlayerAddPresenter: PlayerAddPresenterServiceInteractable {
+    func endEditing() {
+        guard let playerName = view?.textFieldText else {
+            return
+        }
         
         view?.showLoadingView()
-        
-        let player = PlayerCreateModel(name: name)
-        service.create(player) { [weak self] result in
-            DispatchQueue.main.async {
-                self?.view?.hideLoadingView()
-                
-                if case .success(_) = result {
-                    self?.view?.handlePlayerAddedSuccessfully()
-                } else {
-                    self?.view?.handleError(title: "Error update", message: "Unable to create player. Please try again.")
-                }
-            }
-        }
+        interactor.addPlayer(name: playerName)
+    }
+}
+
+// MARK: - Service Handler
+extension PlayerAddPresenter: PlayerAddPresenterServiceHandler {
+    func playerWasAdded() {
+        view?.hideLoadingView()
+        delegate?.didAddPlayer()
+        router.dismissAddView()
+
     }
     
-    func doneButtonIsEnabled(forText text: String?) -> Bool {
-        return text?.isEmpty == false
+    func serviceFailedToAddPlayer() {
+        view?.hideLoadingView()
+        view?.handleError(title: "Error", message: "Unable to create player. Please try again.")
     }
-    
 }

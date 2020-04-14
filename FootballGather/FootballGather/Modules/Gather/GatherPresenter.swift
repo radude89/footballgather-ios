@@ -8,58 +8,67 @@
 
 import Foundation
 
-// MARK: - GatherPresenterProtocol
-protocol GatherPresenterProtocol: AnyObject {
-    var formattedCountdownTimerLabelText: String { get }
-    var minutesComponent: Int { get }
-    var selectedMinutes: Int { get }
-    var secondsComponent: Int { get }
-    var selectedSeconds: Int { get }
-    var formattedActionTitleText: String { get }
-    var numberOfSections: Int { get }
-    var numberOfPickerComponents: Int { get }
-    
-    func formatStepperValue(_ value: Double) -> String
-    func shouldUpdateTeamALabel(section: TeamSection) -> Bool
-    func shouldUpdateTeamBLabel(section: TeamSection) -> Bool
-    func toggleTimer()
-    func stopTimer()
-    func resetTimer()
-    func setTimerMinutes(_ minutes: Int)
-    func setTimerSeconds(_ seconds: Int)
-    func endGather(teamAScoreLabelText: String, teamBScoreLabelText: String)
-    func titleForHeaderInSection(_ section: Int) -> String?
-    func numberOfRowsInSection(_ section: Int) -> Int
-    func rowDescription(at indexPath: IndexPath) -> (title: String, details: String?)
-    func numberOfRowsInPickerComponent(_ component: Int) -> Int
-    func titleForPickerRow(_ row: Int, forComponent component: Int) -> String?
-}
-
 // MARK: - GatherPresenter
-final class GatherPresenter: GatherPresenterProtocol {
+final class GatherPresenter: GatherPresentable {
     
     // MARK: - Properties
-    private weak var view: GatherViewProtocol?
-    private let model: GatherModel
-    private var timeHandler: GatherTimeHandler
-    private var updateGatherService: StandardNetworkService
-        
-    // MARK: - Public API
+    weak var view: GatherViewProtocol?
+    var interactor: GatherInteractorProtocol
+    var router: GatherRouterProtocol
+    weak var delegate: GatherDelegate?
+    
+    // MARK: - Init
     init(view: GatherViewProtocol? = nil,
-         gatherModel: GatherModel,
-         timeHandler: GatherTimeHandler = GatherTimeHandler(),
-         updateGatherService: StandardNetworkService = StandardNetworkService(resourcePath: "/api/gathers", authenticated: true)) {
+         interactor: GatherInteractorProtocol,
+         router: GatherRouterProtocol = GatherRouter(),
+         delegate: GatherDelegate? = nil) {
         self.view = view
-        self.model = gatherModel
-        self.timeHandler = timeHandler
-        self.updateGatherService = updateGatherService
+        self.interactor = interactor
+        self.router = router
+        self.delegate = delegate
     }
     
-    // MARK: - UI decorators
-    var formattedCountdownTimerLabelText: String { "\(formattedMinutesDescription):\(formattedSecondsDescription)" }
+}
+
+// MARK: - View Configuration
+extension GatherPresenter: GatherPresenterViewConfiguration {
+    func viewDidLoad() {
+        view?.configureTitle("Gather in progress")
+        view?.setTimerViewVisibility(isHidden: true)
+        selectRows()
+        view?.setTimerLabelText(formattedTime)
+        view?.setActionButtonTitle(actionButtonTitle)
+        view?.setupScoreStepper()
+        view?.reloadData()
+    }
     
-    var formattedActionTitleText: String {
-        switch timeHandler.state {
+    private func selectRows() {
+        selectMinutes()
+        selectSeconds()
+    }
+    
+    private func selectMinutes() {
+        guard let minutesComponent = interactor.minutesComponent?.rawValue else {
+            return
+        }
+        
+        let selectedMinutes = interactor.selectedTime.minutes
+        
+        view?.selectRow(selectedMinutes, inComponent: minutesComponent, animated: false)
+    }
+    
+    private func selectSeconds() {
+        guard let secondsComponent = interactor.secondsComponent?.rawValue else {
+            return
+        }
+        
+        let selectedSeconds = interactor.selectedTime.seconds
+        
+        view?.selectRow(selectedSeconds, inComponent: secondsComponent, animated: false)
+    }
+    
+    private var actionButtonTitle: String {
+        switch interactor.timerState {
         case .paused:
             return "Resume"
             
@@ -70,168 +79,156 @@ final class GatherPresenter: GatherPresenterProtocol {
             return "Start"
         }
     }
-    
-    private var formattedMinutesDescription: String {
-        let selectedTime = timeHandler.selectedTime
-        return selectedTime.minutes < 10 ? "0\(selectedTime.minutes)" : "\(selectedTime.minutes)"
-    }
-    
-    private var formattedSecondsDescription: String {
-        let selectedTime = timeHandler.selectedTime
-        return selectedTime.seconds < 10 ? "0\(selectedTime.seconds)" : "\(selectedTime.seconds)"
-    }
-    
-    // MARK: - Timer interaction
-    func toggleTimer() {
-        guard selectedTimeIsValid else { return }
-        
-        timeHandler.toggleTimer(target: self, selector: #selector(updateTimer(_:)))
-    }
-    
-    func stopTimer() {
-        timeHandler.stopTimer()
-    }
-    
-    func resetTimer() {
-        timeHandler.resetSelectedTime()
-    }
-    
-    private var selectedTimeIsValid: Bool { timeHandler.selectedTime.minutes > 0 || timeHandler.selectedTime.seconds > 0 }
-    
-    @objc private func updateTimer(_ timer: Timer) {
-        timeHandler.decrementTime()
-        view?.configureSelectedTime()
-    }
-    
-    var minutesComponent: Int { GatherTimeHandler.Component.minutes.rawValue }
-    var selectedMinutes: Int { timeHandler.selectedTime.minutes }
-    
-    var secondsComponent: Int { GatherTimeHandler.Component.seconds.rawValue }
-    var selectedSeconds: Int { timeHandler.selectedTime.seconds }
-    
-    func setTimerMinutes(_ minutes: Int) {
-        timeHandler.selectedTime.minutes = minutes
-    }
-    
-    func setTimerSeconds(_ seconds: Int) {
-        timeHandler.selectedTime.seconds = seconds
-    }
-    
-    // MARK: - TableView methods
-    var numberOfSections: Int { TeamSection.allCases.filter { $0 != .bench }.count }
-    
-    func titleForHeaderInSection(_ section: Int) -> String? {
-        if section == 0 {
-            return TeamSection.teamA.headerTitle
-        }
-            
-        return TeamSection.teamB.headerTitle
+}
+
+// MARK: - Table Data Source
+extension GatherPresenter: GatherTableDataSource {
+    var numberOfSections: Int {
+        interactor.teamSections.count
     }
     
     func numberOfRowsInSection(_ section: Int) -> Int {
-        let team: TeamSection = makeTeamSection(from: section)
-        return playerTeams(forTeamSection: team).count
+        let teamSection = interactor.teamSection(at: section)
+        return interactor.players(in: teamSection).count
     }
     
-    private func makeTeamSection(from sectionIndex: Int) -> TeamSection {
-        if sectionIndex == 0 {
-            return .teamA
-        }
+    func rowTitle(at indexPath: IndexPath) -> String {
+        let teamSection = interactor.teamSection(at: indexPath.section)
+        let players = interactor.players(in: teamSection)
+        let player = players[indexPath.row]
         
-        return .teamB
+        return player.name
     }
     
-    private func playerTeams(forTeamSection teamSection: TeamSection) -> [PlayerTeamModel] {
-        model.players.filter { $0.team == teamSection }
-    }
-    
-    // MARK: - PickerView methods
-    func rowDescription(at indexPath: IndexPath) -> (title: String, details: String?) {
-        let team: TeamSection = makeTeamSection(from: indexPath.section)
-        let playerTeams = self.playerTeams(forTeamSection: team)
-        let player = playerTeams[indexPath.row].player
+    func rowDescription(at indexPath: IndexPath) -> String? {
+        let teamSection = interactor.teamSection(at: indexPath.section)
+        let players = interactor.players(in: teamSection)
+        let player = players[indexPath.row]
         
-        return (title: player.name, details: player.preferredPosition?.acronym)
+        return player.preferredPosition?.acronym
     }
     
-    func formatStepperValue(_ value: Double) -> String { "\(Int(value))" }
-    
-    func shouldUpdateTeamALabel(section: TeamSection) -> Bool { section == .teamA }
-    
-    func shouldUpdateTeamBLabel(section: TeamSection) -> Bool { section == .teamB }
-    
-    var numberOfPickerComponents: Int { GatherTimeHandler.Component.allCases.count }
+    func titleForHeaderInSection(_ section: Int) -> String? {
+        interactor.teamSection(at: section).headerTitle
+    }
+}
+
+// MARK: - Picker Data Source
+extension GatherPresenter: GatherPickerDataSource {
+    var numberOfPickerComponents: Int {
+        interactor.timeComponents.count
+    }
     
     func numberOfRowsInPickerComponent(_ component: Int) -> Int {
-        if let _ = GatherTimeHandler.Component(rawValue: component) {
-            return 60
-        }
-        
-        return 0
+        interactor.timeComponent(at: component).numberOfSteps
     }
     
-    func titleForPickerRow(_ row: Int, forComponent component: Int) -> String? {
-        guard let gatherCounterComponent = GatherTimeHandler.Component(rawValue: component) else {
-            return nil
-        }
-        
-        switch gatherCounterComponent {
-        case .minutes:
-            return "\(row) min"
-        case .seconds:
-            return "\(row) sec"
-        }
+    func titleForPickerRow(_ row: Int, forComponent component: Int) -> String {
+        let timeComponent = interactor.timeComponent(at: component)
+        return "\(row) \(timeComponent.short)"
     }
-    
-    // MARK: - Service
-    func endGather(teamAScoreLabelText: String, teamBScoreLabelText: String) {
-        view?.showLoadingView()
-        
-        let score = scoreFormattedDescription(teamAScoreLabelText: teamAScoreLabelText, teamBScoreLabelText: teamBScoreLabelText)
-        let winnerTeam = winnerTeamFormattedDescription(teamAScoreLabelText: teamAScoreLabelText, teamBScoreLabelText: teamBScoreLabelText)
-        let gatherCreateModel = GatherCreateModel(score: score, winnerTeam: winnerTeam)
-        
-        requestUpdateGather(gatherCreateModel) { [weak self] updated in
-            DispatchQueue.main.async {
-                self?.view?.hideLoadingView()
+}
 
-                if !updated {
-                    self?.view?.handleError(title: "Error update", message: "Unable to update gather. Please try again.")
-                } else {
-                    self?.view?.handleSuccessfulEndGather()
-                }
-            }
+// MARK: - Stepper Handler
+extension GatherPresenter: GatherStepperHandler {
+    func updateValue(for team: TeamSection, with newValue: Double) {
+        if team == .teamA {
+            view?.setTeamALabelText("\(Int(newValue))")
+        } else {
+            view?.setTeamBLabelText("\(Int(newValue))")
         }
     }
-    
-    private func scoreFormattedDescription(teamAScoreLabelText: String, teamBScoreLabelText: String) -> String {
-        return "\(teamAScoreLabelText)-\(teamBScoreLabelText)"
+}
+
+// MARK: - Actions
+extension GatherPresenter: GatherPresenterActionable {
+    func requestToEndGather() {
+        view?.displayConfirmationAlert()
     }
     
-    private func winnerTeamFormattedDescription(teamAScoreLabelText: String, teamBScoreLabelText: String) -> String {
-        guard let scoreTeamA = Int(teamAScoreLabelText),
-            let scoreTeamB = Int(teamBScoreLabelText) else {
-                return "None"
+    func setTimer() {
+        selectRows()
+        view?.setTimerViewVisibility(isHidden: false)
+    }
+    
+    func cancelTimer() {
+        interactor.stopTimer()
+        interactor.resetTimer()
+        view?.setTimerLabelText(formattedTime)
+        view?.setActionButtonTitle(actionButtonTitle)
+        view?.setTimerViewVisibility(isHidden: true)
+    }
+    
+    private var formattedTime: String {
+        let minutes = formatTime(interactor.selectedTime.minutes)
+        let seconds = formatTime(interactor.selectedTime.seconds)
+        
+        return "\(minutes):\(seconds)"
+    }
+    
+    private func formatTime(_ time: Int) -> String {
+        time < 10 ? "0\(time)" : "\(time)"
+    }
+    
+    func actionTimer() {
+        interactor.toggleTimer()
+        view?.setActionButtonTitle(actionButtonTitle)
+    }
+    
+    func timerCancel() {
+        view?.setTimerViewVisibility(isHidden: true)
+    }
+    
+    func timerDone() {
+        interactor.stopTimer()
+        
+        updateTime()
+
+        view?.setTimerLabelText(formattedTime)
+        view?.setActionButtonTitle(actionButtonTitle)
+        view?.setTimerViewVisibility(isHidden: true)
+    }
+    
+    private func updateTime() {
+        guard let minutesComponent = interactor.minutesComponent?.rawValue,
+            let selectedMinutes = view?.selectedRow(in: minutesComponent),
+            let secondsComponent = interactor.secondsComponent?.rawValue,
+            let selectedSeconds = view?.selectedRow(in: secondsComponent) else {
+                return
         }
         
-        var winnerTeam: String = "None"
-        if scoreTeamA > scoreTeamB {
-            winnerTeam = "Team A"
-        } else if scoreTeamA < scoreTeamB {
-            winnerTeam = "Team B"
+        let time = GatherTime(minutes: selectedMinutes, seconds: selectedSeconds)
+        interactor.updateTime(time)
+    }
+}
+
+// MARK: - Interactor
+extension GatherPresenter: GatherPresenterServiceInteractable {
+    func endGather() {
+        guard let winnerTeam = view?.winnerTeamDescription,
+            let score = view?.scoreDescription else {
+                return
         }
         
-        return winnerTeam
+        view?.showLoadingView()
+        interactor.endGather(score: score, winnerTeam: winnerTeam)
+    }
+}
+
+// MARK: - Service Handler
+extension GatherPresenter: GatherPresenterServiceHandler {
+    func gatherEnded() {
+        view?.hideLoadingView()
+        delegate?.didEndGather()
+        router.popToPlayerListView()
     }
     
-    private func requestUpdateGather(_ gather: GatherCreateModel, completion: @escaping (Bool) -> Void) {
-        updateGatherService.update(gather, resourceID: ResourceID.uuid(model.gatherUUID)) { result in
-            if case .success(let updated) = result {
-                completion(updated)
-            } else {
-                completion(false)
-            }
-        }
+    func serviceFailedToEndGather() {
+        view?.hideLoadingView()
+        view?.handleError(title: "Error", message: "Unable to end gather. Please try again.")
     }
     
+    func timerDecremented() {
+        view?.setTimerLabelText(formattedTime)
+    }
 }

@@ -26,24 +26,16 @@ enum PlayerListViewState {
 
 // MARK: - List State
 struct PlayerListStateDetails: PlayerListViewStateDetails {
-    var barButtonItemTitle: String {
-        return "Select"
-    }
+    var barButtonItemTitle: String { "Select" }
     
-    var actionButtonTitle: String {
-        return "Add player"
-    }
+    var actionButtonTitle: String { "Add player" }
 }
 
 // MARK: - Selection State
 struct PlayerSelectionStateDetails: PlayerListViewStateDetails {
-    var barButtonItemTitle: String {
-        return "Cancel"
-    }
+    var barButtonItemTitle: String { "Cancel" }
     
-    var actionButtonTitle: String {
-        return "Confirm players"
-    }
+    var actionButtonTitle: String { "Confirm players" }
 }
 
 // MARK: - Factory

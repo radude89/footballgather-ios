@@ -8,78 +8,129 @@
 
 import Foundation
 
-// MARK: - PlayerListPresenterProtocol
-protocol PlayerListPresenterProtocol: AnyObject {
-    var title: String { get }
-    var barButtonItemTitle: String { get }
-    var barButtonItemIsEnabled: Bool { get }
-    var actionButtonIsEnabled: Bool { get }
-    var actionButtonTitle: String { get }
-    var playersCollectionIsEmpty: Bool { get }
-    var numberOfRows: Int { get }
-    var isInListViewMode: Bool { get }
-    var playersCanPlay: Bool { get }
-    var selectedPlayersTitle: String { get }
-    var indexPathForDeletion: IndexPath? { get set }
-    var playersDictionary: [TeamSection: [PlayerResponseModel]] { get }
-    
-    func toggleViewState()
-    func loadPlayers()
-    func performPlayerDeleteRequest()
-    func cancelPlayerDeletion()
-    func deleteLocallyPlayer(at indexPath: IndexPath)
-    func clearSelectedPlayerIfNeeded(at indexPath: IndexPath)
-    func playerNameDescription(at indexPath: IndexPath) -> String
-    func playerPositionDescription(at indexPath: IndexPath) -> String
-    func playerSkillDescription(at indexPath: IndexPath) -> String
-    func playerIsSelected(at indexPath: IndexPath) -> Bool
-    func selectPlayerForDisplayingDetails(at indexPath: IndexPath) -> PlayerResponseModel
-    func selectPlayer(at indexPath: IndexPath)
-    func updateSelectedPlayers(isSelected: Bool, at indexPath: IndexPath)
-    func index(of player: PlayerResponseModel) -> Int?
-    func didEdit(player: PlayerResponseModel)
-}
-
 // MARK: - PlayerListPresenter
-final class PlayerListPresenter: PlayerListPresenterProtocol {
+final class PlayerListPresenter: PlayerListPresentable {
     
     // MARK: - Properties
-    private weak var view: PlayerListViewProtocol?
-    private let playersService: StandardNetworkService
-    private var players: [PlayerResponseModel]
+    weak var view: PlayerListViewProtocol?
+    var interactor: PlayerListInteractorProtocol
+    var router: PlayerListRouterProtocol
+    
     private var viewState: PlayerListViewState
     private var viewStateDetails: PlayerListViewStateDetails {
-        return PlayerListViewStateDetailsFactory.makeViewStateDetails(from: viewState)
+        PlayerListViewStateDetailsFactory.makeViewStateDetails(from: viewState)
     }
     
-    private(set) var selectedPlayersDictionary: [Int: PlayerResponseModel] = [:]
-    
-    var indexPathForDeletion: IndexPath?
+    private var cellPresenters: [Int: PlayerTableViewCellPresenterProtocol] = [:]
+    private var selectedRows: Set<Int> = []
     
     // MARK: - Public API
     init(view: PlayerListViewProtocol? = nil,
-         playersService: StandardNetworkService = StandardNetworkService(resourcePath: "/api/players", authenticated: true),
-         players: [PlayerResponseModel] = [],
+         interactor: PlayerListInteractorProtocol = PlayerListInteractor(),
+         router: PlayerListRouterProtocol = PlayerListRouter(),
          viewState: PlayerListViewState = .list) {
         self.view = view
-        self.playersService = playersService
-        self.players = players
+        self.interactor = interactor
+        self.router = router
         self.viewState = viewState
     }
     
-    var title: String {
-        return "Players"
+}
+
+// MARK: - View Configuration
+extension PlayerListPresenter: PlayerListPresenterViewConfiguration {
+    func viewDidLoad() {
+        view?.configureTitle(title)
+        view?.setupBarButtonItem(title: "Select")
+        view?.setBarButtonState(isEnabled: !playersCollectionIsEmpty)
+        view?.setupTableView()
+        loadPlayers()
     }
     
-    var barButtonItemTitle: String {
-        return viewStateDetails.barButtonItemTitle
+    private var title: String {
+        if viewState == .list {
+            return "Players"
+        }
+        
+        return "\(selectedRows.count) selected"
     }
     
-    var barButtonItemIsEnabled: Bool {
-        return !playersCollectionIsEmpty
+    private var playersCollectionIsEmpty: Bool {
+        interactor.players.isEmpty
     }
     
-    var actionButtonIsEnabled: Bool {
+    func viewWillAppear() {
+        view?.reloadData()
+    }
+}
+
+// MARK: - Interactor
+extension PlayerListPresenter: PlayerListPresenterServiceInteractable {
+    func loadPlayers() {
+        view?.setViewInteraction(false)
+        interactor.loadPlayers()
+    }
+}
+
+// MARK: - Retry
+extension PlayerListPresenter: PlayerListPresenterRetryable {
+    func retry() {
+        view?.hideEmptyView()
+        loadPlayers()
+    }
+}
+
+// MARK: - Service Handler
+extension PlayerListPresenter: PlayerListPresenterServiceHandler {
+    func serviceFailedWithError(_ error: Error) {
+        view?.setViewInteraction(true)
+        view?.handleError(title: "Error", message: String(describing: error))
+    }
+    
+    func playerListDidLoad() {
+        view?.setViewInteraction(true)
+        showEmptyViewIfRequired()
+        view?.setBarButtonState(isEnabled: !playersCollectionIsEmpty)
+        view?.reloadData()
+    }
+    
+    private func showEmptyViewIfRequired() {
+        if playersCollectionIsEmpty {
+            view?.showEmptyView()
+        } else {
+            view?.hideEmptyView()
+        }
+    }
+    
+    func playerWasDeleted(at index: Int) {
+        view?.hideLoadingView()
+        view?.beginTableUpdates()
+        
+        interactor.players.remove(at: index)
+        
+        view?.deleteRows(at: index)
+        view?.endTableUpdates()
+        showEmptyViewIfRequired()
+    }
+}
+
+// MARK: - Actions
+extension PlayerListPresenter: PlayerListPresenterActionable {
+    func selectPlayers() {
+        viewState.toggle()
+        configureView()
+        clearSelection()
+        view?.reloadData()
+    }
+    
+    private func configureView() {
+        view?.configureTitle(title)
+        view?.setBarButtonTitle(viewStateDetails.barButtonItemTitle)
+        view?.setBottomActionButtonTitle(viewStateDetails.actionButtonTitle)
+        view?.setBottomActionButtonState(isEnabled: actionButtonIsEnabled)
+    }
+    
+    private var actionButtonIsEnabled: Bool {
         if viewState == .selection {
             return playersCanPlay
         }
@@ -87,166 +138,124 @@ final class PlayerListPresenter: PlayerListPresenterProtocol {
         return true
     }
     
-    var actionButtonTitle: String {
-        return viewStateDetails.actionButtonTitle
+    private var playersCanPlay: Bool {
+        selectedRows.count >= interactor.minimumPlayersToPlay
     }
     
-    var playersCollectionIsEmpty: Bool {
-        return players.isEmpty
+    private func clearSelection() {
+        cellPresenters.values.forEach { $0.isSelected = false }
+        selectedRows.removeAll()
     }
     
-    func toggleViewState() {
-        viewState.toggle()
-    }
-    
-    // MARK: - Fetch players
-    func loadPlayers() {
-        DispatchQueue.main.async {
-            self.view?.setViewInteraction(false)
-        }
-        
-        playersService.get { [weak self] (result: Result<[PlayerResponseModel], Error>) in
-            DispatchQueue.main.async {
-                self?.view?.setViewInteraction(true)
-                
-                switch result {
-                case .failure(let error):
-                    self?.view?.handleError(title: "Error", message: String(describing: error))
-                    
-                case .success(let players):
-                    self?.players = players
-                    self?.view?.handleLoadPlayersSuccessfulResponse()
-                }
-            }
-        }
-    }
-    
-    // MARK: - Delete player
-    func performPlayerDeleteRequest() {
-        guard let indexPath = indexPathForDeletion else { return }
-        
-        view?.showLoadingView()
-        
-        requestDeletePlayer(at: indexPath) { [weak self] result in
-            if result {
-                self?.view?.handlePlayerDeletion(forRowAt: indexPath)
-            }
-        }
-    }
-    
-    func cancelPlayerDeletion() {
-        indexPathForDeletion = nil
-    }
-    
-    private func requestDeletePlayer(at indexPath: IndexPath, completion: @escaping (Bool) -> Void) {
-        let player = players[indexPath.row]
-        var service = playersService
-        
-        service.delete(withID: ResourceID.integer(player.id)) { [weak self] result in
-            DispatchQueue.main.async {
-                self?.view?.hideLoadingView()
-                
-                switch result {
-                case .failure(let error):
-                    self?.view?.handleError(title: "Error", message: String(describing: error))
-                    completion(false)
-
-                case .success(_):
-                    completion(true)
-                }
-            }
-        }
-    }
-    
-    func deleteLocallyPlayer(at indexPath: IndexPath) {
-        players.remove(at: indexPath.row)
-    }
-    
-    // MARK: - TableView Methods
-    var numberOfRows: Int {
-        return players.count
-    }
-    
-    var isInListViewMode: Bool {
-        return viewState == .list
-    }
-    
-    func clearSelectedPlayerIfNeeded(at indexPath: IndexPath) {
-        if viewState == .list {
-            selectedPlayersDictionary[indexPath.row] = nil
-        }
-    }
-    
-    func playerNameDescription(at indexPath: IndexPath) -> String {
-        return players[indexPath.row].name
-    }
-    
-    func playerPositionDescription(at indexPath: IndexPath) -> String {
-        let player = players[indexPath.row]
-        
-        if let position = player.preferredPosition {
-            return "Position: \(position.rawValue)"
-        }
-        
-        return "Position: -"
-    }
-    
-    func playerSkillDescription(at indexPath: IndexPath) -> String {
-        let player = players[indexPath.row]
-        
-        if let skill = player.skill {
-            return "Skill: \(skill.rawValue)"
-        }
-        
-        return "Skill: -"
-    }
-    
-    func playerIsSelected(at indexPath: IndexPath) -> Bool {
-        return selectedPlayersDictionary[indexPath.row] != nil
-    }
-    
-    func selectPlayerForDisplayingDetails(at indexPath: IndexPath) -> PlayerResponseModel {
-        return players[indexPath.row]
-    }
-    
-    func selectPlayer(at indexPath: IndexPath) {
-        selectedPlayersDictionary[indexPath.row] = players[indexPath.row]
-    }
-    
-    var selectedPlayersTitle: String {
-        let selectedPlayersCount = selectedPlayersDictionary.values.count
-        return selectedPlayersCount > 0 ? "\(selectedPlayersCount) selected" : "Players"
-    }
-    
-    func updateSelectedPlayers(isSelected: Bool, at indexPath: IndexPath) {
-        if isSelected {
-            selectedPlayersDictionary[indexPath.row] = players[indexPath.row]
+    func confirmOrAddPlayers() {
+        if isInListViewMode {
+            showAddPlayerView()
         } else {
-            selectedPlayersDictionary[indexPath.row] = nil
+            showConfirmPlayersView()
         }
     }
     
-    private let minimumPlayersToPlay = 2
-    
-    var playersCanPlay: Bool {
-        return selectedPlayersDictionary.values.count >= minimumPlayersToPlay
+    private var isInListViewMode: Bool {
+        viewState == .list
     }
     
-    var playersDictionary: [TeamSection: [PlayerResponseModel]] {
-        var playersDictionary: [TeamSection: [PlayerResponseModel]] = [:]
-        playersDictionary[.bench] = Array(selectedPlayersDictionary.values)
+    private func showAddPlayerView() {
+        router.showAddPlayer(delegate: self)
+    }
+    
+    private func showConfirmPlayersView() {
+        router.showConfirmPlayers(with: interactor.selectedPlayers(atRows: selectedRows), delegate: self)
+    }
+    
+    func deletePlayer(at index: Int) {
+        view?.showLoadingView()
+        interactor.deletePlayer(at: index)
+    }
+}
 
-        return playersDictionary
-    }
+// MARK: - Data Source
+extension PlayerListPresenter: PlayerListDataSource {
+    var numberOfRows: Int { interactor.players.count }
     
-    func index(of player: PlayerResponseModel) -> Int? {
-        return players.firstIndex(of: player)
-    }
+    var canEditRow: Bool { isInListViewMode }
     
-    func didEdit(player: PlayerResponseModel) {
-        guard let index = index(of: player) else { return }
+    func cellPresenter(at index: Int) -> PlayerTableViewCellPresenterProtocol {
+        if let cellPresenter = cellPresenters[index] {
+            cellPresenter.viewState = viewState
+            return cellPresenter
+        }
         
-        players[index] = player
+        let cellPresenter = PlayerTableViewCellPresenter(viewState: viewState)
+        cellPresenters[index] = cellPresenter
+        
+        return cellPresenter
     }
     
+    func player(at index: Int) -> PlayerResponseModel {
+        interactor.players[index]
+    }
+    
+    func selectRow(at index: Int) {
+        guard playersCollectionIsEmpty == false else {
+            return
+        }
+        
+        if isInListViewMode {
+            let player = interactor.players[index]
+            showDetailsView(for: player)
+        } else {
+            toggleRow(at: index)
+            updateSelectedRows(at: index)
+            reloadViewAfterRowSelection(at: index)
+        }
+    }
+    
+    private func showDetailsView(for player: PlayerResponseModel) {
+        router.showDetails(for: player, delegate: self)
+    }
+    
+    private func toggleRow(at index: Int) {
+        cellPresenter(at: index).toggle()
+    }
+    
+    private func updateSelectedRows(at index: Int) {
+        if cellPresenter(at: index).isSelected {
+            selectedRows.insert(index)
+        } else {
+            selectedRows.remove(index)
+        }
+    }
+    
+    private func reloadViewAfterRowSelection(at index: Int) {
+        view?.reloadRow(index)
+        view?.configureTitle(title)
+        view?.setBottomActionButtonState(isEnabled: actionButtonIsEnabled)
+    }
+    
+    func requestToDeletePlayer(at index: Int) {
+        view?.displayDeleteConfirmationAlert(at: index)
+    }
+}
+
+// MARK: - PlayerEditDelegate
+extension PlayerListPresenter: PlayerDetailDelegate {
+    func didUpdate(player: PlayerResponseModel) {
+        interactor.updatePlayer(player)
+    }
+}
+
+// MARK: - PlayerAddDelegate
+extension PlayerListPresenter: PlayerAddDelegate {
+    func didAddPlayer() {
+        loadPlayers()
+    }
+}
+
+// MARK: - ConfirmPlayersDelegate
+extension PlayerListPresenter: ConfirmPlayersDelegate {
+    func didEndGather() {
+        viewState = .list
+        configureView()
+        view?.reloadData()
+    }
 }

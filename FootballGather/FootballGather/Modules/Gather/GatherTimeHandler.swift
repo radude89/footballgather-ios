@@ -14,10 +14,12 @@ struct GatherTimeHandler {
     
     private(set) var state: State
     private var timer: Timer
+    private let initialTime: GatherTime
     
     init(timer: Timer = Timer(), selectedTime: GatherTime = .defaultTime, state: State = .stopped) {
         self.timer = timer
         self.selectedTime = selectedTime
+        self.initialTime = selectedTime
         self.state = state
     }
     
@@ -27,7 +29,7 @@ struct GatherTimeHandler {
     }
     
     mutating func resetSelectedTime() {
-        selectedTime = .defaultTime
+        selectedTime = initialTime
     }
     
     mutating func toggleTimer(target: AnyObject, selector: Selector) {
@@ -88,6 +90,24 @@ extension GatherTimeHandler {
     
     enum Component: Int, CaseIterable {
         case minutes = 0, seconds
+    }
+}
+
+extension GatherTimeHandler.Component {
+    var numberOfSteps: Int {
+        switch self {
+        case .minutes, .seconds:
+            return 60
+        }
+    }
+    
+    var short: String {
+        switch self {
+        case .minutes:
+            return "min"
+        case .seconds:
+            return "sec"
+        }
     }
 }
 

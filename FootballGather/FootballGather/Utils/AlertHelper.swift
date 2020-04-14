@@ -26,3 +26,13 @@ struct AlertHelper {
         parent.present(alertController, animated: true, completion: nil)
     }
 }
+
+protocol ErrorHandler {
+    func handleError(title: String, message: String)
+}
+
+extension ErrorHandler where Self: UIViewController {
+    func handleError(title: String, message: String) {
+        AlertHelper.present(in: self, title: title, message: message)
+    }
+}

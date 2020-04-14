@@ -2,45 +2,59 @@
 //  LoginViewController.swift
 //  FootballGather
 //
-//  Created by Dan, Radu-Ionut (RO - Bucharest) on 06/06/2019.
-//  Copyright © 2019 Radu Dan. All rights reserved.
+//  Created by Radu Dan on 05/02/2020.
+//  Copyright © 2020 Radu Dan. All rights reserved.
 //
 
 import UIKit
 
 // MARK: - LoginViewController
-final class LoginViewController: UIViewController, Coordinatable {
-
-    @IBOutlet weak var loginView: LoginView!
+final class LoginViewController: UIViewController, LoginViewable {
     
-    weak var coordinator: Coordinator?
-    private var loginCoordinator: LoginCoordinator? { coordinator as? LoginCoordinator }
+    // MARK: - Properties
+    @IBOutlet weak var usernameTextField: UITextField!
+    @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var rememberMeSwitch: UISwitch!
+    lazy var loadingView = LoadingView.initToView(view)
     
+    var presenter: LoginPresenterProtocol = LoginPresenter()
+    
+    // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
+        presenter.viewDidLoad()
+    }
+    
+    // MARK: - IBActions
+    @IBAction private func login(_ sender: Any) {
+        presenter.performLogin()
     }
 
-    private func setupView() {
-        let presenter = LoginPresenter(view: loginView)
-        loginView.delegate = self
-        loginView.presenter = presenter
-        loginView.setupView()
+    @IBAction private func register(_ sender: Any) {
+        presenter.performRegister()
     }
     
 }
 
-// MARK: - LoginViewDelegate
-extension LoginViewController: LoginViewDelegate {
-    func presentAlert(title: String, message: String) {
-        AlertHelper.present(in: self, title: title, message: message)
+// MARK: - Configuration
+extension LoginViewController: LoginViewConfigurable {
+    var rememberMeIsOn: Bool { rememberMeSwitch.isOn }
+    
+    var usernameText: String? { usernameTextField.text }
+    
+    var passwordText: String? { passwordTextField.text }
+
+    func setRememberMeSwitch(isOn: Bool) {
+        rememberMeSwitch.isOn = isOn
     }
     
-    func didLogin() {
-        loginCoordinator?.navigateToPlayerList()
-    }
-    
-    func didRegister() {
-        loginCoordinator?.navigateToPlayerList()
+    func setUsername(_ username: String?) {
+        usernameTextField.text = username
     }
 }
+
+// MARK: - Loadable
+extension LoginViewController: Loadable {}
+
+// MARK: - Error Handler
+extension LoginViewController: ErrorHandler {}

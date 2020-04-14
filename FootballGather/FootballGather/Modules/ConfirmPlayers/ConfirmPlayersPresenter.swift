@@ -8,188 +8,124 @@
 
 import Foundation
 
-// MARK: - ConfirmPlayersPresenterProtocol
-protocol ConfirmPlayersPresenterProtocol: AnyObject {
-    var gatherModel: GatherModel? { get }
-    var startGatherButtonIsEnabled: Bool { get }
-    var numberOfSections: Int { get }
-    
-    func titleForHeaderInSection(_ section: Int) -> String?
-    func numberOfRowsInSection(_ section: Int) -> Int
-    func rowTitle(at indexPath: IndexPath) -> String?
-    func rowDescription(at indexPath: IndexPath) -> String?
-    func moveRowAt(sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
-    func initiateStartGather()
-}
-
 // MARK: - ConfirmPlayersPresenter
-final class ConfirmPlayersPresenter: ConfirmPlayersPresenterProtocol {
+final class ConfirmPlayersPresenter: ConfirmPlayersPresentable {
     
     // MARK: - Properties
-    private weak var view: ConfirmPlayersViewProtocol?
-    private var playersDictionary: [TeamSection: [PlayerResponseModel]]
-    private var addPlayerService: AddPlayerToGatherService
-    private let gatherService: StandardNetworkService
+    weak var view: ConfirmPlayersViewProtocol?
+    var interactor: ConfirmPlayersInteractorProtocol
+    var router: ConfirmPlayersRouterProtocol
+    weak var delegate: ConfirmPlayersDelegate?
     
-    private let dispatchGroup = DispatchGroup()
-    private var gatherUUID: UUID?
-    
-    // MARK: - Public API
+    // MARK: - Init
     init(view: ConfirmPlayersViewProtocol? = nil,
-         playersDictionary: [TeamSection: [PlayerResponseModel]] = [:],
-         addPlayerService: AddPlayerToGatherService = AddPlayerToGatherService(),
-         gatherService: StandardNetworkService = StandardNetworkService(resourcePath: "/api/gathers", authenticated: true)) {
+         interactor: ConfirmPlayersInteractorProtocol = ConfirmPlayersInteractor(),
+         router: ConfirmPlayersRouterProtocol = ConfirmPlayersRouter(),
+         delegate: ConfirmPlayersDelegate? = nil) {
         self.view = view
-        self.playersDictionary = playersDictionary
-        self.addPlayerService = addPlayerService
-        self.gatherService = gatherService
+        self.interactor = interactor
+        self.router = router
+        self.delegate = delegate
     }
     
-    var gatherModel: GatherModel? {
-        guard let gatherUUID = gatherUUID else { return nil }
-        
-        return GatherModel(players: playerTeamArray, gatherUUID: gatherUUID)
+}
+
+// MARK: - View Configuration
+extension ConfirmPlayersPresenter: ConfirmPlayersPresenterViewConfiguration {
+    func viewDidLoad() {
+        view?.configureTitle("Confirm Players")
+        view?.tableViewIsEditing(true)
+        view?.setStartGatherButtonState(isEnabled: false)
     }
-    
-    var startGatherButtonIsEnabled: Bool {
-        if playersDictionary[.teamA]?.isEmpty == false &&
-            playersDictionary[.teamB]?.isEmpty == false {
-            return true
-        }
-        
-        return false
-    }
-    
+}
+
+// MARK: - Data Source
+extension ConfirmPlayersPresenter: ConfirmPlayersDataSource {
     var numberOfSections: Int {
-        return TeamSection.allCases.count
+        interactor.teamSections.count
     }
     
     func titleForHeaderInSection(_ section: Int) -> String? {
-        return TeamSection(rawValue: section)?.headerTitle
+        let teamSection = interactor.teamSections[section]
+        return teamSection.headerTitle
     }
     
     func numberOfRowsInSection(_ section: Int) -> Int {
-        guard let team = TeamSection(rawValue: section), let players = playersDictionary[team] else { return 0 }
+        guard let teamSection = TeamSection(rawValue: section) else {
+            return 0
+        }
         
+        let players = interactor.players(for: teamSection)
         return players.count
     }
     
     func rowTitle(at indexPath: IndexPath) -> String? {
-        guard let team = TeamSection(rawValue: indexPath.section), let players = playersDictionary[team] else { return nil }
+        guard let player = player(at: indexPath) else {
+            return nil
+        }
         
-        return players[indexPath.row].name
+        return player.name
+    }
+    
+    private func player(at indexPath: IndexPath) -> PlayerResponseModel? {
+        guard let teamSection = TeamSection(rawValue: indexPath.section) else {
+            return nil
+        }
+        
+        let players = interactor.players(for: teamSection)
+        
+        if players.isEmpty {
+            return nil
+        }
+        
+        return players[indexPath.row]
     }
     
     func rowDescription(at indexPath: IndexPath) -> String? {
-        guard let team = TeamSection(rawValue: indexPath.section), let players = playersDictionary[team] else { return nil }
+        guard let player = player(at: indexPath) else {
+            return nil
+        }
         
-        return players[indexPath.row].preferredPosition?.acronym
+        return player.preferredPosition?.acronym
     }
     
     func moveRowAt(sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         guard let sourceTeam = TeamSection(rawValue: sourceIndexPath.section),
-            let sourcePlayer = playersDictionary[sourceTeam]?[sourceIndexPath.row],
+            let player = player(at: sourceIndexPath),
             let destinationTeam = TeamSection(rawValue: destinationIndexPath.section) else {
                 fatalError("Unable to move players")
         }
         
-        playersDictionary[sourceTeam]?.remove(at: sourceIndexPath.row)
-        
-        if playersDictionary[destinationTeam]?.isEmpty == false {
-            playersDictionary[destinationTeam]?.insert(sourcePlayer, at: destinationIndexPath.row)
-        } else {
-            playersDictionary[destinationTeam] = [sourcePlayer]
-        }
+        interactor.removePlayer(from: sourceTeam, index: sourceIndexPath.row)
+        interactor.insertPlayer(player, at: destinationTeam, index: destinationIndexPath.row)
+        view?.setStartGatherButtonState(isEnabled: interactor.hasPlayersInBothTeams)
     }
-    
-    // MARK: - Service
-    func initiateStartGather() {
+}
+
+// MARK: - Interactor
+extension ConfirmPlayersPresenter: ConfirmPlayersPresenterServiceInteractable {
+    func startGather() {
         view?.showLoadingView()
+        interactor.startGather()
+    }
+}
 
-        startGather { [weak self] result in
-            DispatchQueue.main.async {
-                self?.view?.hideLoadingView()
+// MARK: - Service Handler
+extension ConfirmPlayersPresenter: ConfirmPlayersPresenterServiceHandler {
+    func createdGather(_ gather: GatherModel) {
+        view?.hideLoadingView()
+        router.showGatherView(for: gather, delegate: self)
+    }
+    
+    func serviceFailedToStartGather() {
+        view?.hideLoadingView()
+        view?.handleError(title: "Error", message: "Unable to create gather.")
+    }
+}
 
-                if !result {
-                    self?.view?.handleError(title: "Error", message: "Unable to create gather.")
-                } else {
-                    self?.view?.handleSuccessfulStartGather()
-                }
-            }
-        }
+// MARK: - GatherDelegate
+extension ConfirmPlayersPresenter: GatherDelegate {
+    func didEndGather() {
+        delegate?.didEndGather()
     }
-    
-    private func startGather(completion: @escaping (Bool) -> ()) {
-        createGather { [weak self] uuid in
-            guard let gatherUUID = uuid else {
-                completion(false)
-                return
-            }
-            
-            self?.gatherUUID = gatherUUID
-            self?.addPlayersToGather(havingUUID: gatherUUID, completion: completion)
-        }
-    }
-    
-    private func createGather(completion: @escaping (UUID?) -> Void) {
-        gatherService.create(GatherCreateModel()) { result in
-            if case let .success(ResourceID.uuid(gatherUUID)) = result {
-                completion(gatherUUID)
-            } else {
-                completion(nil)
-            }
-        }
-    }
-    
-    private func addPlayersToGather(havingUUID gatherUUID: UUID, completion: @escaping (Bool) -> ()) {
-        var serviceFailed = false
-        
-        playerTeamArray.forEach { playerTeam in
-            dispatchGroup.enter()
-            
-            self.addPlayer(playerTeam.player, toGatherHavingUUID: gatherUUID, team: playerTeam.team) { [weak self] playerWasAdded in
-                if !playerWasAdded {
-                    serviceFailed = true
-                }
-                
-                self?.dispatchGroup.leave()
-            }
-        }
-        
-        dispatchGroup.notify(queue: DispatchQueue.main) {
-            completion(serviceFailed)
-        }
-    }
-    
-    private var playerTeamArray: [PlayerTeamModel] {
-        var players: [PlayerTeamModel] = []
-        players += self.playersDictionary
-            .filter { $0.key == .teamA }
-            .flatMap { $0.value }
-            .map { PlayerTeamModel(team: .teamA, player: $0) }
-        
-        players += self.playersDictionary
-            .filter { $0.key == .teamB }
-            .flatMap { $0.value }
-            .map { PlayerTeamModel(team: .teamB, player: $0) }
-        
-        return players
-    }
-    
-    private func addPlayer(_ player: PlayerResponseModel,
-                           toGatherHavingUUID gatherUUID: UUID,
-                           team: TeamSection,
-                           completion: @escaping (Bool) -> Void) {
-        addPlayerService.addPlayer(
-            havingServerId: player.id,
-            toGatherWithId: gatherUUID,
-            team: PlayerGatherTeam(team: team.headerTitle)) { result in
-                if case let .success(resultValue) = result {
-                    completion(resultValue)
-                } else {
-                    completion(false)
-                }
-        }
-    }
-    
 }

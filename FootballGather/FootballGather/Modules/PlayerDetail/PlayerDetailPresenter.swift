@@ -8,188 +8,135 @@
 
 import Foundation
 
-// MARK: - PlayerDetailPresenterProtocol
-protocol PlayerDetailPresenterProtocol: AnyObject {
-    var player: PlayerResponseModel { get }
-    var title: String { get }
-    var numberOfSections: Int { get }
-    var destinationViewType: PlayerEditViewType { get }
-    var playerEditModel: PlayerEditModel? { get }
-    var playerItemsEditModel: PlayerItemsEditModel? { get }
-    
-    func numberOfRowsInSection(_ section: Int) -> Int
-    func rowTitleDescription(for indexPath: IndexPath) -> String
-    func rowValueDescription(for indexPath: IndexPath) -> String
-    func titleForHeaderInSection(_ section: Int) -> String?
-    func selectPlayerRow(at indexPath: IndexPath)
-    func updatePlayer(_ player: PlayerResponseModel)
-    func reloadSections()
-}
-
 // MARK: - PlayerDetailPresenter
-final class PlayerDetailPresenter: PlayerDetailPresenterProtocol {
+final class PlayerDetailPresenter: PlayerDetailPresentable {
     
     // MARK: - Properties
-    private(set) var player: PlayerResponseModel
+    weak var view: PlayerDetailViewProtocol?
+    var interactor: PlayerDetailInteractorProtocol
+    var router: PlayerDetailRouterProtocol
+    weak var delegate: PlayerDetailDelegate?
+    
     private lazy var sections = makeSections()
-    private(set) var selectedPlayerRow: PlayerRow?
     
-    // MARK: - Public API
-    init(player: PlayerResponseModel) {
-        self.player = player
-    }
-    
-    var title: String {
-        return player.name
-    }
-    
-    var numberOfSections: Int {
-        return sections.count
+    // MARK: - Init
+    init(view: PlayerDetailViewProtocol? = nil,
+         interactor: PlayerDetailInteractorProtocol,
+         router: PlayerDetailRouterProtocol = PlayerDetailRouter(),
+         delegate: PlayerDetailDelegate? = nil) {
+        self.view = view
+        self.interactor = interactor
+        self.router = router
+        self.delegate = delegate
     }
     
-    func numberOfRowsInSection(_ section: Int) -> Int {
-        return sections[section].rows.count
-    }
-    
-    func rowTitleDescription(for indexPath: IndexPath) -> String {
-        let row = sections[indexPath.section].rows[indexPath.row]
-        return row.title
-    }
-    
-    func rowValueDescription(for indexPath: IndexPath) -> String  {
-        let row = sections[indexPath.section].rows[indexPath.row]
-        return row.value
-    }
-
-    func titleForHeaderInSection(_ section: Int) -> String? {
-        return sections[section].title.uppercased()
-    }
-    
-    func selectPlayerRow(at indexPath: IndexPath) {
-        selectedPlayerRow = sections[indexPath.section].rows[indexPath.row]
-    }
-
-    func updatePlayer(_ player: PlayerResponseModel) {
-        self.player = player
-    }
-    
-    func reloadSections() {
-        sections = makeSections()
-    }
-    
-    // MARK: - Edit methods
-    var destinationViewType: PlayerEditViewType {
-        if shouldEditSelectionTypeField {
-            return .selection
-        }
-        
-        return .text
-    }
-    
-    var playerEditModel: PlayerEditModel? {
-        guard let selectedPlayerRow = selectedPlayerRow else { return nil }
-        
-        return PlayerEditModel(player: player, playerRow: selectedPlayerRow)
-    }
-    
-    var playerItemsEditModel: PlayerItemsEditModel? {
-        guard shouldEditSelectionTypeField else { return nil }
-        
-        return PlayerItemsEditModel(items: editableItems, selectedItemIndex: indexOfSelectedItem ?? -1)
-    }
-    
-    // MARK: - Private methods
-    private var shouldEditSelectionTypeField: Bool {
-        guard let selectedPlayerRow = selectedPlayerRow else { return false }
-        
-        return  selectedPlayerRow.editableField == .position || selectedPlayerRow.editableField == .skill
-    }
-    
-    private var editableItems: [String] {
-        guard let selectedPlayerRow = selectedPlayerRow else { return [] }
-        
-        if selectedPlayerRow.editableField == .position {
-            return PlayerPosition.allCases.map { $0.rawValue }
-        }
-        
-        return PlayerSkill.allCases.map { $0.rawValue }
-    }
-    
-    private var indexOfSelectedItem: Int? {
-        guard let selectedPlayerRow = selectedPlayerRow else { return nil }
-        
-        return editableItems.firstIndex(of: selectedPlayerRow.value.lowercased())
-    }
-    
-    private func makeSections() -> [PlayerSection] {
-        return [
-            PlayerSection(
+    private func makeSections() -> [PlayerDetailSection] {
+        [
+            PlayerDetailSection(
                 title: "Personal",
                 rows: [
-                    PlayerRow(title: "Name",
-                              value: player.name,
-                              editableField: .name),
-                    PlayerRow(title: "Age",
-                              value: player.age != nil ? "\(player.age!)" : "",
-                              editableField: .age)
+                    PlayerDetailRow(title: "Name",
+                                    value: interactor.player.name,
+                                    editableField: .name),
+                    PlayerDetailRow(title: "Age",
+                                    value: interactor.player.age != nil ? "\(interactor.player.age!)" : "",
+                                    editableField: .age)
                 ]
             ),
-            PlayerSection(
+            PlayerDetailSection(
                 title: "Play",
                 rows: [
-                    PlayerRow(title: "Preferred position",
-                              value: player.preferredPosition?.rawValue.capitalized ?? "",
-                              editableField: .position),
-                    PlayerRow(title: "Skill",
-                              value: player.skill?.rawValue.capitalized ?? "",
-                              editableField: .skill)
+                    PlayerDetailRow(title: "Preferred position",
+                                    value: interactor.player.preferredPosition?.rawValue.capitalized ?? "",
+                                    editableField: .position),
+                    PlayerDetailRow(title: "Skill",
+                                    value: interactor.player.skill?.rawValue.capitalized ?? "",
+                                    editableField: .skill)
                 ]
             ),
-            PlayerSection(
+            PlayerDetailSection(
                 title: "Likes",
                 rows: [
-                    PlayerRow(title: "Favourite team",
-                              value: player.favouriteTeam ?? "",
-                              editableField: .favouriteTeam)
+                    PlayerDetailRow(title: "Favourite team",
+                                    value: interactor.player.favouriteTeam ?? "",
+                                    editableField: .favouriteTeam)
                 ]
             )
         ]
     }
+    
 }
 
-// MARK: - Models
-struct PlayerSection {
-    let title: String
-    let rows: [PlayerRow]
+// MARK: - View Configuration
+extension PlayerDetailPresenter: PlayerDetailPresenterViewConfiguration {
+    func viewDidLoad() {
+        let title = interactor.player.name
+        view?.configureTitle(title)
+    }
+    
+    func viewWillAppear() {
+        view?.reloadData()
+    }
 }
 
-struct PlayerRow {
-    let title: String
-    let value: String
-    let editableField: PlayerEditableFieldOption
-}
-
-enum PlayerEditableFieldOption {
-    case name, age, skill, position, favouriteTeam
-}
-
-extension PlayerResponseModel {
-    mutating func update(usingField field: PlayerEditableFieldOption, value: String) {
-        switch field {
-        case .name:
-            name = value
-        case .age:
-            age = Int(value)
+// MARK: - Data Source
+extension PlayerDetailPresenter: PlayerDetailDataSource {
+    var numberOfSections: Int {
+        sections.count
+    }
+    
+    func numberOfRowsInSection(_ section: Int) -> Int {
+        sections[section].rows.count
+    }
+    
+    func rowDetails(at indexPath: IndexPath) -> PlayerDetailRow {
+        sections[indexPath.section].rows[indexPath.row]
+    }
+    
+    func titleForHeaderInSection(_ section: Int) -> String? {
+        sections[section].title.uppercased()
+    }
+    
+    func selectRow(at indexPath: IndexPath) {
+        let player = interactor.player
+        let rowDetails = sections[indexPath.section].rows[indexPath.row]
+        let items = self.items(for: rowDetails.editableField)
+        let selectedItemIndex = items.firstIndex(of: rowDetails.value.lowercased())
+        let editablePlayerDetails = PlayerEditable(player: player,
+                                                   items: items,
+                                                   selectedItemIndex: selectedItemIndex,
+                                                   rowDetails: rowDetails)
+        
+        router.showEditView(with: editablePlayerDetails, delegate: self)
+    }
+    
+    private func items(for editableField: PlayerEditableFieldOption) -> [String] {
+        switch editableField {
         case .position:
-            if let position = PlayerPosition(rawValue: value) {
-                preferredPosition = position
-            }
+            return PlayerPosition.allCases.map { $0.rawValue }
+            
         case .skill:
-            if let skill = PlayerSkill(rawValue: value) {
-                self.skill = skill
-            }
-        case .favouriteTeam:
-            favouriteTeam = value
+            return PlayerSkill.allCases.map { $0.rawValue }
+            
+        default:
+            return []
         }
+    }
+}
+
+// MARK: - Service Handler
+extension PlayerDetailPresenter: PlayerDetailPresenterServiceHandler {
+    func playerWasUpdated() {
+        sections = makeSections()
+        view?.configureTitle(interactor.player.name)
+        view?.reloadData()
+    }
+}
+
+// MARK: - PlayerEditDelegate
+extension PlayerDetailPresenter: PlayerEditDelegate {
+    func didUpdate(player: PlayerResponseModel) {
+        interactor.updatePlayer(player)
+        delegate?.didUpdate(player: player)
     }
 }

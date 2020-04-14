@@ -8,24 +8,12 @@
 
 import UIKit
 
-class PlayerTableViewCell: UITableViewCell {
-
+final class PlayerTableViewCell: UITableViewCell, PlayerTableViewCellProtocol {
     @IBOutlet weak var checkboxImageView: UIImageView!
     @IBOutlet weak var playerCellLeftConstraint: NSLayoutConstraint!
-    
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var positionLabel: UILabel!
     @IBOutlet weak var skillLabel: UILabel!
-    
-    var playerIsSelected: Bool = false {
-        didSet {
-            if playerIsSelected {
-                checkboxImageView.image = UIImage(named: "ticked")
-            } else {
-                checkboxImageView.image = UIImage(named: "unticked")
-            }
-        }
-    }
     
     private enum Constants {
         static let playerContentLeftPadding: CGFloat = 10.0
@@ -34,13 +22,31 @@ class PlayerTableViewCell: UITableViewCell {
     
     func setupDefaultView() {
         playerCellLeftConstraint.constant = Constants.playerContentAndIconLeftPadding
+        setupCheckBoxImage(isSelected: false)
         checkboxImageView.isHidden = true
-        playerIsSelected = false
     }
     
-    func setupSelectionView() {
+    func setupViewForSelection(isSelected: Bool) {
         playerCellLeftConstraint.constant = Constants.playerContentLeftPadding
         checkboxImageView.isHidden = false
+        setupCheckBoxImage(isSelected: isSelected)
+    }
+    
+    func setupCheckBoxImage(isSelected: Bool) {
+        let imageName = isSelected ? "ticked" : "unticked"
+        checkboxImageView.image = UIImage(named: imageName)
+    }
+    
+    func set(nameDescription: String) {
+        nameLabel.text = nameDescription
+    }
+    
+    func set(positionDescription: String) {
+        positionLabel.text = positionDescription
+    }
+    
+    func set(skillDescription: String) {
+        skillLabel.text = skillDescription
     }
     
 }

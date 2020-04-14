@@ -2,53 +2,67 @@
 //  PlayerAddViewController.swift
 //  FootballGather
 //
-//  Created by Dan, Radu-Ionut (RO - Bucharest) on 10/07/2019.
-//  Copyright © 2019 Radu Dan. All rights reserved.
+//  Created by Radu Dan on 24/02/2020.
+//  Copyright © 2020 Radu Dan. All rights reserved.
 //
 
 import UIKit
 
 // MARK: - PlayerAddViewController
-final class PlayerAddViewController: UIViewController, Coordinatable {
-
-    // MARK: - Properties
-    @IBOutlet weak var playerAddView: PlayerAddView!
+final class PlayerAddViewController: UIViewController, PlayerAddViewable {
     
-    weak var coordinator: Coordinator?
-    private var addCoordinator: PlayerAddCoordinator? { coordinator as? PlayerAddCoordinator }
+    // MARK: - Properties
+    @IBOutlet weak var playerNameTextField: UITextField!
+    
+    private var barButtonItem: UIBarButtonItem!
+    lazy var loadingView = LoadingView.initToView(view)
+    
+    var presenter: PlayerAddPresenterProtocol!
 
-    // MARK: - Setup
+    // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        setupView()
-        setupTitle()
+        presenter.viewDidLoad()
     }
     
-    private func setupTitle() {
-        title = "Add Player"
+    // MARK: - Selectors
+    @objc func textFieldDidChange(textField: UITextField) {
+        presenter.textFieldDidChange()
     }
     
-    private func setupView() {
-        let presenter = PlayerAddPresenter(view: playerAddView)
-        playerAddView.delegate = self
-        playerAddView.presenter = presenter
-        playerAddView.setupView()
+    @objc private func done(sender: UIBarButtonItem) {
+        presenter.endEditing()
     }
-
+    
 }
 
-// MARK: - PlayerAddViewDelegate
-extension PlayerAddViewController: PlayerAddViewDelegate {
-    func addRightBarButtonItem(_ barButtonItem: UIBarButtonItem) {
+// MARK: - Configuration
+extension PlayerAddViewController: PlayerAddViewConfigurable {
+    var textFieldText: String? {
+        playerNameTextField.text
+    }
+    
+    func configureTitle(_ title: String) {
+        self.title = title
+    }
+    
+    func setupBarButtonItem(title: String) {
+        barButtonItem = UIBarButtonItem(title: title, style: .plain, target: self, action: #selector(done))
         navigationItem.rightBarButtonItem = barButtonItem
     }
     
-    func presentAlert(title: String, message: String) {
-        AlertHelper.present(in: self, title: title, message: message)
+    func setBarButtonState(isEnabled: Bool) {
+        barButtonItem.isEnabled = isEnabled
     }
     
-    func didAddPlayer() {
-        addCoordinator?.playerWasAdded()
+    func setupTextField(placeholder: String) {
+        playerNameTextField.placeholder = placeholder
+        playerNameTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     }
 }
+
+// MARK: - Loadable
+extension PlayerAddViewController: Loadable {}
+
+// MARK: - Error Handler
+extension PlayerAddViewController: ErrorHandler {}

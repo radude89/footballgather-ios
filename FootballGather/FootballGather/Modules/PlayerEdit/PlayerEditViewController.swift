@@ -9,55 +9,98 @@
 import UIKit
 
 // MARK: - PlayerEditViewController
-final class PlayerEditViewController: UIViewController, Coordinatable {
-
+final class PlayerEditViewController: UIViewController, PlayerEditViewable {
+    
     // MARK: - Properties
-    @IBOutlet weak var playerEditView: PlayerEditView!
+    @IBOutlet weak var playerEditTextField: UITextField!
+    @IBOutlet weak var playerTableView: UITableView!
     
-    var viewType: PlayerEditViewType = .text
-    var playerEditModel: PlayerEditModel?
-    var playerItemsEditModel: PlayerItemsEditModel?
+    private var barButtonItem: UIBarButtonItem!
+    lazy var loadingView = LoadingView.initToView(view)
     
-    weak var coordinator: Coordinator?
-    private var editCoordinator: PlayerEditCoordinator? { coordinator as? PlayerEditCoordinator }
-
-    // MARK: - Setup
+    var presenter: PlayerEditPresenterProtocol!
+    
+    // MARK: - View life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        setupView()
-        setupTitle()
+        presenter.viewDidLoad()
     }
     
-    private func setupView() {
-        guard let playerEditModel = playerEditModel else { return }
-        
-        let presenter = PlayerEditPresenter(view: playerEditView,
-                                            viewType: viewType,
-                                            playerEditModel: playerEditModel,
-                                            playerItemsEditModel: playerItemsEditModel)
-        playerEditView.delegate = self
-        playerEditView.presenter = presenter
-        playerEditView.setupView()
+    // MARK: - Selectors
+    @objc private func textFieldDidChange(textField: UITextField) {
+        presenter.textFieldDidChange()
     }
     
-    private func setupTitle() {
-        title = playerEditView.title
+    @objc private func done(sender: UIBarButtonItem) {
+        presenter.endEditing()
     }
     
 }
 
-// MARK: - PlayerEditViewDelegate
-extension PlayerEditViewController: PlayerEditViewDelegate {
-    func addRightBarButtonItem(_ barButtonItem: UIBarButtonItem) {
+// MARK: - Configuration
+extension PlayerEditViewController: PlayerEditViewConfigurable {
+    var textFieldText: String? {
+        playerEditTextField.text
+    }
+    
+    func configureTitle(_ title: String) {
+        self.title = title
+    }
+    
+    func setupBarButtonItem(title: String) {
+        barButtonItem = UIBarButtonItem(title: title, style: .plain, target: self, action: #selector(done))
         navigationItem.rightBarButtonItem = barButtonItem
     }
     
-    func presentAlert(title: String, message: String) {
-        AlertHelper.present(in: self, title: title, message: message)
+    func setupTextField() {
+        playerEditTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     }
     
-    func didFinishEditingPlayer(_ player: PlayerResponseModel) {
-        editCoordinator?.didFinishEditingPlayer(player)
+    func setTextField(text: String?, placeholder: String?, isHidden: Bool) {
+        playerEditTextField.placeholder = placeholder
+        playerEditTextField.text = text
+        playerEditTextField.isHidden = isHidden
+    }
+    
+    func setTableViewVisibility(isHidden: Bool) {
+        playerTableView.isHidden = isHidden
+    }
+    
+    func setBarButtonState(isEnabled: Bool) {
+        barButtonItem.isEnabled = isEnabled
+    }
+    
+    func setSelected(_ selected: Bool, at indexPath: IndexPath) {
+        playerTableView.cellForRow(at: indexPath)?.accessoryType = selected ? .checkmark : .none
     }
 }
+
+// MARK: - UITableViewDelegate | UITableViewDataSource
+extension PlayerEditViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        presenter.numberOfRows
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ItemSelectionCellIdentifier") else {
+            return UITableViewCell()
+        }
+        
+        let row = presenter.itemRow(at: indexPath.row)
+
+        cell.textLabel?.text = row?.title
+        cell.accessoryType = row?.isSelected == true ? .checkmark : .none
+
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        presenter.selectRow(at: indexPath.row)
+    }
+}
+
+// MARK: - Loadable
+extension PlayerEditViewController: Loadable {}
+
+// MARK: - Error Handler
+extension PlayerEditViewController: ErrorHandler {}

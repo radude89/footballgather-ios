@@ -8,7 +8,15 @@
 
 import UIKit
 
-final class PlayerDetailTableViewCell: UITableViewCell {
+final class PlayerDetailTableViewCell: UITableViewCell, PlayerDetailTableViewCellProtocol {
     @IBOutlet weak var leftLabel: UILabel!
     @IBOutlet weak var rightLabel: UILabel!
+    
+    func setLeftLabelText(_ text: String) {
+        leftLabel.text = text
+    }
+    
+    func setRightLabelText(_ text: String) {
+        rightLabel.text = text
+    }
 }

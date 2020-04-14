@@ -11,11 +11,11 @@ import CoreData
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-    private lazy var appCoordinator = AppCoordinator()
+    
+    private lazy var loader = AppLoader()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        appCoordinator.start()
+        loader.build()
         return true
     }
 

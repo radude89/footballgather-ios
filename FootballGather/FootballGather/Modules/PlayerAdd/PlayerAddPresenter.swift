@@ -66,7 +66,6 @@ extension PlayerAddPresenter: PlayerAddPresenterServiceHandler {
         view?.hideLoadingView()
         delegate?.didAddPlayer()
         router.dismissAddView()
-
     }
     
     func serviceFailedToAddPlayer() {

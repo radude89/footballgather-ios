@@ -11,7 +11,6 @@ import XCTest
 
 final class GatherInteractorTests: XCTestCase {
     
-    
     func testTeamSections_whenInteractorIsAllocated_equalsTeamAandTeamB() {
         // given
         let sut = GatherInteractor(gather: GatherModel(players: [], gatherUUID: UUID()))

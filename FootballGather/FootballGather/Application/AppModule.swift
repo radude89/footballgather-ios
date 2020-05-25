@@ -48,8 +48,8 @@ struct ModuleFactory: ModuleFactoryProtocol {
                            delegate: PlayerDetailDelegate) -> PlayerDetailModule {
         let router = PlayerDetailRouter(navigationController: navigationController, moduleFactory: self)
         let view: PlayerDetailViewController = Storyboard.defaultStoryboard.instantiateViewController()
-        let interactor = PlayerDetailInteractor(player: player)
-        let presenter = PlayerDetailPresenter(interactor: interactor, delegate: delegate)
+        let presenter = PlayerDetailPresenter(view: view)
+        let interactor = PlayerDetailInteractor(presenter: presenter, player: player, delegate: delegate)
         
         return PlayerDetailModule(view: view, router: router, interactor: interactor, presenter: presenter)
     }
@@ -59,8 +59,8 @@ struct ModuleFactory: ModuleFactoryProtocol {
                         delegate: PlayerEditDelegate) -> PlayerEditModule {
         let router = PlayerEditRouter(navigationController: navigationController, moduleFactory: self)
         let view: PlayerEditViewController = Storyboard.defaultStoryboard.instantiateViewController()
-        let interactor = PlayerEditInteractor(playerEditable: playerEditable)
-        let presenter = PlayerEditPresenter(interactor: interactor, delegate: delegate)
+        let presenter = PlayerEditPresenter(view: view)
+        let interactor = PlayerEditInteractor(presenter: presenter, delegate: delegate, playerEditable: playerEditable)
         
         return PlayerEditModule(view: view, router: router, interactor: interactor, presenter: presenter)
     }
@@ -69,9 +69,10 @@ struct ModuleFactory: ModuleFactoryProtocol {
                        delegate: PlayerAddDelegate) -> PlayerAddModule {
         let router = PlayerAddRouter(navigationController: navigationController, moduleFactory: self)
         let view: PlayerAddViewController = Storyboard.defaultStoryboard.instantiateViewController()
-        let presenter = PlayerAddPresenter(delegate: delegate)
+        let presenter = PlayerAddPresenter(view: view)
+        let interactor = PlayerAddInteractor(presenter: presenter, delegate: delegate)
         
-        return PlayerAddModule(view: view, router: router, presenter: presenter)
+        return PlayerAddModule(view: view, router: router, interactor: interactor, presenter: presenter)
     }
     
     func makeConfirmPlayers(using navigationController: UINavigationController = UINavigationController(),
@@ -79,8 +80,8 @@ struct ModuleFactory: ModuleFactoryProtocol {
                             delegate: ConfirmPlayersDelegate) -> ConfirmPlayersModule {
         let router = ConfirmPlayersRouter(navigationController: navigationController, moduleFactory: self)
         let view: ConfirmPlayersViewController = Storyboard.defaultStoryboard.instantiateViewController()
-        let interactor = ConfirmPlayersInteractor(playersDictionary: playersDictionary)
-        let presenter = ConfirmPlayersPresenter(delegate: delegate)
+        let presenter = ConfirmPlayersPresenter(view: view)
+        let interactor = ConfirmPlayersInteractor(presenter: presenter, delegate: delegate, playersDictionary: playersDictionary)
         
         return ConfirmPlayersModule(view: view, router: router, interactor: interactor, presenter: presenter)
     }
@@ -90,8 +91,8 @@ struct ModuleFactory: ModuleFactoryProtocol {
                     delegate: GatherDelegate) -> GatherModule {
         let router = GatherRouter(navigationController: navigationController, moduleFactory: self)
         let view: GatherViewController = Storyboard.defaultStoryboard.instantiateViewController()
-        let interactor = GatherInteractor(gather: gather)
-        let presenter = GatherPresenter(interactor: interactor, delegate: delegate)
+        let presenter = GatherPresenter(view: view)
+        let interactor = GatherInteractor(presenter: presenter, delegate: delegate, gather: gather)
         
         return GatherModule(view: view, router: router, interactor: interactor, presenter: presenter)
     }

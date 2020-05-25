@@ -9,138 +9,150 @@
 import XCTest
 @testable import FootballGather
 
-// MARK: - View
-final class GatherMockView: GatherViewProtocol {
-    var presenter: GatherPresenterProtocol!
-    var loadingView = LoadingView()
+// MARK: - Presenter
+final class GatherMockPresenter: GatherPresenterProtocol {
+    var view: GatherViewProtocol?
     
-    private(set) var title: String?
-    private(set) var timerViewIsHidden = false
-    private(set) var selectionDictionary: [Int: Int] = [:]
-    private(set) var timerLabelText: String?
-    private(set) var actionButtonTitle: String?
-    private(set) var scoreStepperWasSetup = false
-    private(set) var viewWasReloaded = false
-    private(set) var teamALabelText: String?
-    private(set) var teamBLabelText: String?
-    private(set) var confirmationAlertWasDisplayed = false
-    private(set) var loadingViewWasShown = false
-    private(set) var loadingViewWasHidden = false
-    private(set) var errorWasHandled = false
+    weak var expectation: XCTestExpectation? = nil
     
-    var scoreDescription: String { "" }
+    var numberOfUpdateCalls = 1
+    private(set) var actualUpdateCalls = 0
     
-    var winnerTeamDescription: String { "" }
+    private(set) var selectedMinutesComponent: Int?
+    private(set) var selectedMinutes: Int?
+    private(set) var selectedSecondsComponent: Int?
+    private(set) var selectedSeconds: Int?
     
-    func configureTitle(_ title: String) {
-        self.title = title
-    }
-    
-    func setTimerViewVisibility(isHidden: Bool) {
-        timerViewIsHidden = isHidden
-    }
-    
-    func selectRow(_ row: Int, inComponent component: Int, animated: Bool) {
-        selectionDictionary[component] = row
-    }
-    
-    func setTimerLabelText(_ text: String) {
-        timerLabelText = text
-    }
-    
-    func setActionButtonTitle(_ title: String) {
-        actionButtonTitle = title
-    }
-    
-    func setupScoreStepper() {
-        scoreStepperWasSetup = true
-    }
-    
-    func reloadData() {
-        viewWasReloaded = true
-    }
-    
-    func setTeamALabelText(_ text: String) {
-        teamALabelText = text
-    }
-    
-    func setTeamBLabelText(_ text: String) {
-        teamBLabelText = text
-    }
-    
-    func displayConfirmationAlert() {
-        confirmationAlertWasDisplayed = true
-    }
-    
-    func showLoadingView() {
-        loadingViewWasShown = true
-    }
-    
-    func hideLoadingView() {
-        loadingViewWasHidden = true
-    }
-    
-    func handleError(title: String, message: String) {
-        errorWasHandled = true
-    }
-    
-    func selectedRow(in component: Int) -> Int { 0 }
-}
-
-// MARK: - Interactor
-final class GatherMockInteractor: GatherInteractorProtocol {
-    
-    var presenter: GatherPresenterServiceHandler?
-    var teamSections: [TeamSection] = TeamSection.allCases
-    
-    private(set) var timerState: GatherTimeHandler.State
-    private(set) var timerWasStopped = false
-    private(set) var timerWasResetted = false
+    private(set) var timeWasFormatted = false
+    private(set) var timerViewWasPresented = false
+    private(set) var timerWasCancelled = false
     private(set) var timerWasToggled = false
+    private(set) var timerIsHidden = false
     private(set) var timeWasUpdated = false
-    private(set) var gatherWasEnded = false
+    private(set) var alertWasPresented = false
+    private(set) var poppedToPlayerListView = false
+    private(set) var errorWasPresented = false
     
-    init(timerState: GatherTimeHandler.State = .stopped) {
-        self.timerState = timerState
+    private(set) var timerState: GatherTimeHandler.State?
+    private(set) var score: [TeamSection: Double] = [:]
+    private(set) var error: Error?
+    private(set) var numberOfSections = 0
+    private(set) var numberOfRows = 0
+    
+    func presentSelectedRows(response: Gather.SelectRows.Response) {
+        if let minutes = response.minutes {
+            selectedMinutes = minutes
+        }
+        
+        if let minutesComponent = response.minutesComponent {
+            selectedMinutesComponent = minutesComponent
+        }
+        
+        if let seconds = response.seconds {
+            selectedSeconds = seconds
+        }
+        
+        if let secondsComponent = response.secondsComponent {
+            selectedSecondsComponent = secondsComponent
+        }
     }
     
-    func stopTimer() {
-        timerWasStopped = true
+    func formatTime(response: Gather.FormatTime.Response) {
+        selectedMinutes = response.selectedTime.minutes
+        selectedSeconds = response.selectedTime.seconds
+        timeWasFormatted = true
+        
+        actualUpdateCalls += 1
+        
+        if let expectation = expectation,
+            numberOfUpdateCalls == actualUpdateCalls {
+            expectation.fulfill()
+        }
     }
     
-    func resetTimer() {
-        timerWasResetted = true
+    func presentActionButton(response: Gather.ConfigureActionButton.Response) {
+        timerState = response.timerState
     }
     
-    func teamSection(at index: Int) -> TeamSection {
-        teamSections[index]
+    func displayTeamScore(response: Gather.UpdateValue.Response) {
+        score[response.teamSection] = response.newValue
     }
     
-    func toggleTimer() {
+    func presentTimerView(response: Gather.SetTimer.Response) {
+        timerViewWasPresented = true
+    }
+    
+    func cancelTimer(response: Gather.CancelTimer.Response) {
+        selectedMinutes = response.selectedTime.minutes
+        selectedSeconds = response.selectedTime.seconds
+        timerState = response.timerState
+        
+        timerWasCancelled = true
+    }
+    
+    func presentToggledTimer(response: Gather.ActionTimer.Response) {
+        timerState = response.timerState
         timerWasToggled = true
     }
     
-    func updateTime(_ gatherTime: GatherTime) {
+    func hideTimer() {
+        timerIsHidden = true
+    }
+    
+    func presentUpdatedTime(response: Gather.TimerDidFinish.Response) {
+        selectedMinutes = response.selectedTime.minutes
+        selectedSeconds = response.selectedTime.seconds
+        timerState = response.timerState
+        
         timeWasUpdated = true
     }
     
-    func endGather(score: String, winnerTeam: String) {
-        gatherWasEnded = true
-    }
-        
-    var selectedTime: GatherTime { .defaultTime }
-    
-    var minutesComponent: GatherTimeHandler.Component? { .minutes }
-    
-    var secondsComponent: GatherTimeHandler.Component? { .seconds }
-    
-    var timeComponents: [GatherTimeHandler.Component] = GatherTimeHandler.Component.allCases
-    
-    func timeComponent(at index: Int) -> GatherTimeHandler.Component {
-        timeComponents[index]
+    func presentEndGatherConfirmationAlert(response: Gather.EndGather.Response) {
+        alertWasPresented = true
     }
     
-    func players(in team: TeamSection) -> [PlayerResponseModel] { [] }
+    func popToPlayerListView() {
+        poppedToPlayerListView = true
+        expectation?.fulfill()
+    }
+    
+    func presentError(response: Gather.ErrorResponse) {
+        errorWasPresented = true
+        error = response.error
+        expectation?.fulfill()
+    }
+    
+    func numberOfSections(response: Gather.SectionsCount.Response) -> Int {
+        numberOfSections = response.teamSections.count
+        return numberOfSections
+    }
+    
+    func numberOfRowsInSection(response: Gather.RowsCount.Response) -> Int {
+        numberOfRows = response.players.count
+        return numberOfRows
+    }
+    
+    func rowDetails(response: Gather.RowDetails.Response) -> Gather.RowDetails.ViewModel {
+        Gather.RowDetails.ViewModel(titleLabelText: response.player.name,
+                                    descriptionLabelText: response.player.preferredPosition?.acronym ?? "-")
+    }
+    
+    func titleForHeaderInSection(response: Gather.SectionTitle.Response) -> Gather.SectionTitle.ViewModel {
+        Gather.SectionTitle.ViewModel(title: response.teamSection.headerTitle)
+    }
+    
+    func numberOfPickerComponents(response: Gather.PickerComponents.Response) -> Int {
+        response.timeComponents.count
+    }
+    
+    func numberOfPickerRows(response: Gather.PickerRows.Response) -> Int {
+        response.timeComponent.numberOfSteps
+    }
+    
+    func titleForRow(response: Gather.PickerRowTitle.Response) -> Gather.PickerRowTitle.ViewModel {
+        let title = "\(response.row) \(response.timeComponent.short)"
+        return Gather.PickerRowTitle.ViewModel(title: title)
+    }
     
 }
 
@@ -154,45 +166,95 @@ final class GatherMockDelegate: GatherDelegate {
     
 }
 
-// MARK: - Router
-final class GatherMockRouter: GatherRouterProtocol {
-    private(set) var poppedToPlayerList = false
+// MARK: - View
+final class GatherMockView: GatherViewProtocol {
+    var interactor: GatherInteractorProtocol!
+    var router: GatherRouterProtocol = GatherRouter()
+    var loadingView = LoadingView()
+    
+    private(set) var pickerComponent: Int?
+    private(set) var pickerRow: Int?
+    private(set) var animated: Bool?
+    private(set) var formattedTime: String?
+    private(set) var actionButtonTitle: String?
+    private(set) var timerViewIsVisible: Bool?
+    private(set) var teamAText: String?
+    private(set) var teamBText: String?
+    
+    private(set) var selectedRowWasDisplayed = false
+    private(set) var timeWasFormatted = false
+    private(set) var confirmationAlertDisplayed = false
+    private(set) var updatedTimerIsDisplayed = false
+    private(set) var cancelTimerIsDisplayed = false
+    private(set) var loadingViewIsVisible = false
+    private(set) var poppedToPlayerListView = false
+    private(set) var errorWasHandled = true
+    
+    func displaySelectedRow(viewModel: Gather.SelectRows.ViewModel) {
+        pickerComponent = viewModel.pickerComponent
+        pickerRow = viewModel.pickerRow
+        animated = viewModel.animated
+        
+        selectedRowWasDisplayed = true
+    }
+    
+    func displayTime(viewModel: Gather.FormatTime.ViewModel) {
+        formattedTime = viewModel.formattedTime
+        timeWasFormatted = true
+    }
+    
+    func displayActionButtonTitle(viewModel: Gather.ConfigureActionButton.ViewModel) {
+        actionButtonTitle = viewModel.title
+    }
+    
+    func displayEndGatherConfirmationAlert() {
+        confirmationAlertDisplayed = true
+    }
+    
+    func configureTimerViewVisibility(viewModel: Gather.SetTimer.ViewModel) {
+        timerViewIsVisible = viewModel.timerViewIsVisible
+    }
+    
+    func displayUpdatedTimer(viewModel: Gather.TimerDidFinish.ViewModel) {
+        actionButtonTitle = viewModel.actionTitle
+        formattedTime = viewModel.formattedTime
+        timerViewIsVisible = viewModel.timerViewIsVisible
+        
+        updatedTimerIsDisplayed = true
+    }
+    
+    func showLoadingView() {
+        loadingViewIsVisible = true
+    }
+    
+    func hideLoadingView() {
+        loadingViewIsVisible = false
+    }
     
     func popToPlayerListView() {
-        poppedToPlayerList = true
+        poppedToPlayerListView = true
     }
     
-}
-
-// MARK: - Presenter
-final class GatherMockPresenter: GatherPresenterServiceHandler {
-    private(set) var gatherEndedCalled = false
-    private(set) var serviceFailedCalled = false
-    private(set) var timerDecrementedCalled = false
-    
-    weak var expectation: XCTestExpectation? = nil
-    
-    var numberOfUpdateCalls = 1
-    private(set) var actualUpdateCalls = 0
-    
-    func gatherEnded() {
-        gatherEndedCalled = true
-        expectation?.fulfill()
+    func handleError(title: String, message: String) {
+        errorWasHandled = true
     }
     
-    func serviceFailedToEndGather() {
-        serviceFailedCalled = true
-        expectation?.fulfill()
-    }
-    
-    func timerDecremented() {
-        timerDecrementedCalled = true
-        
-        actualUpdateCalls += 1
-        
-        if expectation != nil && numberOfUpdateCalls == actualUpdateCalls {
-            expectation?.fulfill()
+    func displayTeamScore(viewModel: Gather.UpdateValue.ViewModel) {
+        if let teamAText = viewModel.teamAText {
+            self.teamAText = teamAText
         }
+        
+        if let teamBText = viewModel.teamBText {
+            self.teamBText = teamBText
+        }
+    }
+    
+    func displayCancelTimer(viewModel: Gather.CancelTimer.ViewModel) {
+        actionButtonTitle = viewModel.actionTitle
+        formattedTime = viewModel.formattedTime
+        timerViewIsVisible = viewModel.timerViewIsVisible
+        
+        cancelTimerIsDisplayed = true
     }
     
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:MVC/FootballGather-mvc.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:MVVM/FootballGather-mvvm.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:MVP/FootballGather-mvp.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:VIP/../MVP-C/FootballGather-mvp-c.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:VIP/../VIPER/FootballGather-viper.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:MVC/../VIP/FootballGather-vip.xcodeproj">
+   </FileRef>
+</Workspace>

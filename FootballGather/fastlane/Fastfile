@@ -1,0 +1,48 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "CI lane that runs all unit tests"
+  lane :ci_ut do
+    scan(
+      workspace: ENV["WORKSPACE"],
+      scheme: "FootballGather-mvc-ci",
+      clean: true,
+      devices: ["iPhone 8"]
+    )
+
+    scan(
+      workspace: ENV["WORKSPACE"],
+      scheme: "FootballGather-mvvm-ci",
+      clean: true,
+      devices: ["iPhone 8"]
+    )
+
+    scan(
+      workspace: ENV["WORKSPACE"],
+      scheme: "FootballGather-mvp-ci",
+      clean: true,
+      devices: ["iPhone 8"]
+    )
+
+    scan(
+      workspace: ENV["WORKSPACE"],
+      scheme: "FootballGather-mvp-c-ci",
+      clean: true,
+      devices: ["iPhone 8"]
+    )
+
+    scan(
+      workspace: ENV["WORKSPACE"],
+      scheme: "FootballGather-viper-ci",
+      clean: true,
+      devices: ["iPhone 8"]
+    )
+
+    scan(
+      workspace: ENV["WORKSPACE"],
+      scheme: "FootballGather-vip-ci",
+      clean: true,
+      devices: ["iPhone 8"]
+    )
+  end
+end

@@ -1,3 +1,11 @@
+# Production version
+
+If you want to see the app fully powered by `SwiftUI`, you can download it from **App Store**. Link [here](https://apps.apple.com/ro/app/football-gather/id1607436439).
+
+Everything is open source. Check the production version with **SwiftUI** from the [repo here](https://github.com/radude89/footballgather-prod).
+
+Happy coding!
+
 # Football Gather - iOS Side
 
 <p align="center">
